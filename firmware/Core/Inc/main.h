@@ -58,6 +58,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SDCard_CS_Pin GPIO_PIN_10
+#define SDCard_CS_GPIO_Port GPIOB
+#define SDCard_Detect_Pin GPIO_PIN_11
+#define SDCard_Detect_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
