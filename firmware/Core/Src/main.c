@@ -24,6 +24,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "string.h"
+#include "stdio.h"
+#include "fatfs_sd.h"
+#include "sd_wr.h"
 
 /* USER CODE END Includes */
 
@@ -34,6 +38,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -70,6 +75,20 @@ static void MX_I2C1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+
+	FATFS fs;  // file system
+	FIL fil;  // file
+	FRESULT fresult;  // to store the result
+	char buffer[1024]; // to store data
+
+	UINT br, bw;   // file read/write count
+
+	/* capacity related variables */
+	FATFS *pfs;
+	DWORD fre_clust;
+	uint32_t total, free_space;
+
 
 /* USER CODE END 0 */
 
@@ -110,6 +129,17 @@ int main(void)
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
+  f_getfree("", &fre_clust, &pfs);
+
+
+
+  fresult=mount_card (&fs);
+  card_capacity (buffer, &free_space, &total, pfs, fre_clust);
+  fresult=create_file (buffer, "nome.txt", "BLA BLA BLA", &fil, &bw);
+  //fresult=read_file (buffer, "nome.txt", &fil, &br);
+  fresult=update_file(buffer, "nome.txt", "BLA2 BLA2 BLA2", &fil, &bw);
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -117,7 +147,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	  HAL_Delay(500);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -367,7 +398,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SDCard_CS_GPIO_Port, SDCard_CS_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : LED_Pin */
+  GPIO_InitStruct.Pin = LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SDCard_CS_Pin */
   GPIO_InitStruct.Pin = SDCard_CS_Pin;

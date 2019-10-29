@@ -1,0 +1,7 @@
+sd_wr.c:12:5:bufsize	24	static
+sd_wr.c:19:6:bufclear	24	static
+sd_wr.c:28:9:mount_card	16	static
+sd_wr.c:35:6:card_capacity	32	static
+sd_wr.c:50:9:create_file	32	static
+sd_wr.c:72:9:read_file	32	static
+sd_wr.c:92:9:update_file	32	static
