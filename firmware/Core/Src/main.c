@@ -129,7 +129,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   fresult=mount_card (&fs);
-  card_capacity (&free_space, &total, &fs, &fre_clust);
+  card_capacity(&free_space, &total, &fs, &fre_clust);
+  printf("Hello!\nFree Space: %lu", free_space);
   fresult=create_file ("nome.txt", "BLA BLA BLA", &fil, &bw);
   fresult=update_file("nome.txt", "BLA2 BLA2 BLA2", &fil, &bw);
   /* USER CODE END 2 */
@@ -419,7 +420,19 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+int __io_putchar(int ch){
+	ITM_SendChar(ch);
+	return ch;
+}
 
+int _write(int file, char *ptr, int len){
+	int DataIdx;
+
+	for(DataIdx = 0; DataIdx < len; DataIdx++){
+		__io_putchar(*ptr++);
+	}
+	return len;
+}
 /* USER CODE END 4 */
 
 /**
