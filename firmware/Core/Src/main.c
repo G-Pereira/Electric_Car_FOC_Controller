@@ -129,15 +129,18 @@ int main(void)
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
-  f_getfree("", &fre_clust, &pfs);
+  //f_getfree("", &fre_clust, &pfs);
 
 
 
   fresult=mount_card (&fs);
-  card_capacity (buffer, &free_space, &total, pfs, fre_clust);
+  card_capacity (buffer, &free_space, &total, &pfs, &fre_clust);
+  bufclear(buffer);
   fresult=create_file (buffer, "nome.txt", "BLA BLA BLA", &fil, &bw);
+  bufclear(buffer);
   //fresult=read_file (buffer, "nome.txt", &fil, &br);
   fresult=update_file(buffer, "nome.txt", "BLA2 BLA2 BLA2", &fil, &bw);
+  bufclear(buffer);
 
 
   /* USER CODE END 2 */

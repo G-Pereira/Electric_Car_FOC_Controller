@@ -32,17 +32,17 @@ FRESULT mount_card (FATFS *fs)
 }
 
 /*************** Card capacity details ********************/
-void card_capacity (char *buffer, uint32_t *free_space, uint32_t *total_space, FATFS *pfs, DWORD fre_clust)
+void card_capacity (char *buffer, uint32_t *free_space, uint32_t *total_space, FATFS **pfs, DWORD *fre_clust)
 {
 	/* Check free space */
-	f_getfree("", &fre_clust, &pfs);
+	f_getfree("", fre_clust, &(*pfs));
 
-	total_space = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
-	sprintf (buffer, "SD CARD Total Size: \t%lu\n", total_space);
+	*total_space = (uint32_t)(((*pfs)->n_fatent - 2) * ((*pfs)->csize) * 0.5);
+	sprintf (buffer, "SD CARD Total Size: \t%lu\n", *total_space);
 	bufclear(buffer);
-	free_space = (uint32_t)(fre_clust * pfs->csize * 0.5);
-	sprintf (buffer, "SD CARD Free Space: \t%lu\n",free_space);
-	bufclear(buffer);
+	*free_space = (uint32_t)(*fre_clust * ((*pfs)->csize) * 0.5);
+	sprintf (buffer, "SD CARD Free Space: \t%lu\n",*free_space);
+	//bufclear(buffer);
 }
 
 /**************** The following operation is using f_write and f_read **************************/
@@ -63,9 +63,6 @@ FRESULT create_file (char *buffer, char *filename, char *data, FIL *fil, UINT *b
 	/* Close file */
 	f_close(fil);
 
-	// clearing buffer to show that result obtained is from the file
-	bufclear(buffer);
-
 	return fresult;
 }
 
@@ -83,7 +80,7 @@ FRESULT read_file (char *buffer, char *filename, FIL *fil, UINT *br){
 	/* Close file */
 	f_close(fil);
 
-	bufclear(buffer);//é capaz de nem fazer sentido isto
+	//bufclear(buffer);//é capaz de nem fazer sentido isto
 
 	return fresult;
 }
@@ -104,7 +101,7 @@ FRESULT update_file(char *buffer, char *filename, char *data, FIL *fil, UINT *bw
 
 	f_close (fil);
 
-	bufclear(buffer);
+	//bufclear(buffer);
 
 	return fresult;
 }
