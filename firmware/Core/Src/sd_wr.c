@@ -18,7 +18,7 @@ int bufsize (char *buf)
 
 void bufclear (char *buffer)  // clear buffer
 {
-	for (int i=0; i<1024; i++)
+	for (int i=0; i<512; i++)
 	{
 		buffer[i] = '\0';
 	}

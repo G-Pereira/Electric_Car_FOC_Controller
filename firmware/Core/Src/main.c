@@ -80,7 +80,7 @@ static void MX_I2C1_Init(void);
 	FATFS fs;  // file system
 	FIL fil;  // file
 	FRESULT fresult;  // to store the result
-	char buffer[1024]; // to store data
+	char buffer[512]; // to store data
 
 	UINT br, bw;   // file read/write count
 
@@ -149,9 +149,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 	  HAL_Delay(500);
+    /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
