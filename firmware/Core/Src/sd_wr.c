@@ -31,6 +31,11 @@ FRESULT mount_card (FATFS *fs)
       //if fresult <>
 }
 
+FRESULT unmount_card (FATFS *fs)
+{
+      return f_mount(fs, "", 1);
+}
+
 /*************** Card capacity details ********************/
 
 void card_capacity (uint32_t *free_space, uint32_t *total_space, FATFS *fs, DWORD *fre_clust)
