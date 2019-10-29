@@ -32,6 +32,7 @@ FRESULT mount_card (FATFS *fs)
 }
 
 /*************** Card capacity details ********************/
+
 void card_capacity (char *buffer, uint32_t *free_space, uint32_t *total_space, FATFS **pfs, DWORD *fre_clust)
 {
 	/* Check free space */

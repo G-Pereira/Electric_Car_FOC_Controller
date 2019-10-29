@@ -3285,6 +3285,7 @@ FRESULT mount_card (FATFS *fs)
 080017c0 <card_capacity>:
 
 /*************** Card capacity details ********************/
+
 void card_capacity (char *buffer, uint32_t *free_space, uint32_t *total_space, FATFS **pfs, DWORD *fre_clust)
 {
  80017c0:	b590      	push	{r4, r7, lr}
