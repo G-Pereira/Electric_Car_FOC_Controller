@@ -33,33 +33,25 @@ FRESULT mount_card (FATFS *fs)
 
 /*************** Card capacity details ********************/
 
-void card_capacity (char *buffer, uint32_t *free_space, uint32_t *total_space, FATFS **pfs, DWORD *fre_clust)
+void card_capacity (uint32_t *free_space, uint32_t *total_space, FATFS *fs, DWORD *fre_clust)
 {
 	/* Check free space */
-	f_getfree("", fre_clust, &(*pfs));
+	f_getfree("", fre_clust, &fs);
 
-	*total_space = (uint32_t)(((*pfs)->n_fatent - 2) * ((*pfs)->csize) * 0.5);
-	sprintf (buffer, "SD CARD Total Size: \t%lu\n", *total_space);
-	bufclear(buffer);
-	*free_space = (uint32_t)(*fre_clust * ((*pfs)->csize) * 0.5);
-	sprintf (buffer, "SD CARD Free Space: \t%lu\n",*free_space);
-	//bufclear(buffer);
+	*total_space = (uint32_t)((fs->n_fatent - 2) * (fs->csize) * 0.5);
+	*free_space = (uint32_t)(*fre_clust * (fs->csize) * 0.5);
 }
 
 /**************** The following operation is using f_write and f_read **************************/
 
-FRESULT create_file (char *buffer, char *filename, char *data, FIL *fil, UINT *bw){
+FRESULT create_file (char *filename, char *data, FIL *fil, UINT *bw){
 
 	FRESULT fresult;
 
 	/* Create second file with read write access and open it */
 	fresult = f_open(fil, filename , FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
 
-	/* Writing text */
-	strcpy (buffer, data); //pode precisar de um "\n"
-
-	fresult = f_write(fil, buffer, bufsize(buffer), bw);
-
+	fresult = f_write(fil, data, bufsize(data), bw);
 
 	/* Close file */
 	f_close(fil);
@@ -87,7 +79,7 @@ FRESULT read_file (char *buffer, char *filename, FIL *fil, UINT *br){
 }
 
 /*********************UPDATING an existing file ***************************/
-FRESULT update_file(char *buffer, char *filename, char *data, FIL *fil, UINT *bw)
+FRESULT update_file(char *filename, char *data, FIL *fil, UINT *bw)
 {
 	FRESULT fresult;
 
@@ -101,8 +93,5 @@ FRESULT update_file(char *buffer, char *filename, char *data, FIL *fil, UINT *bw
 	fresult = f_puts(data, fil); //pode precisar de um "\n"
 
 	f_close (fil);
-
-	//bufclear(buffer);
-
 	return fresult;
 }

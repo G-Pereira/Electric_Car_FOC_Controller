@@ -85,7 +85,6 @@ static void MX_I2C1_Init(void);
 	UINT br, bw;   // file read/write count
 
 	/* capacity related variables */
-	FATFS *pfs;
 	DWORD fre_clust;
 	uint32_t total, free_space;
 
@@ -129,20 +128,10 @@ int main(void)
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
-  //f_getfree("", &fre_clust, &pfs);
-
-
-
   fresult=mount_card (&fs);
-  card_capacity (buffer, &free_space, &total, &pfs, &fre_clust);
-  bufclear(buffer);
-  fresult=create_file (buffer, "nome.txt", "BLA BLA BLA", &fil, &bw);
-  bufclear(buffer);
-  //fresult=read_file (buffer, "nome.txt", &fil, &br);
-  fresult=update_file(buffer, "nome.txt", "BLA2 BLA2 BLA2", &fil, &bw);
-  bufclear(buffer);
-
-
+  card_capacity (&free_space, &total, &fs, &fre_clust);
+  fresult=create_file ("nome.txt", "BLA BLA BLA", &fil, &bw);
+  fresult=update_file("nome.txt", "BLA2 BLA2 BLA2", &fil, &bw);
   /* USER CODE END 2 */
 
   /* Infinite loop */
