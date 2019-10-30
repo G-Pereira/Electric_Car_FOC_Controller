@@ -57,6 +57,16 @@ UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 
+//CAN
+uint8_t ubKeyNumber = 0x0;
+CAN_HandleTypeDef     CanHandle;
+CAN_TxHeaderTypeDef   TxHeader;
+CAN_RxHeaderTypeDef   RxHeader;
+uint8_t               TxData[8];
+uint8_t               RxData[8];
+uint32_t              TxMailbox;
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -129,6 +139,11 @@ int main(void)
   printf("Hello!\nFree Space: %lu", free_space);
   fresult=create_file ("nome.txt", "OLE OLE OLE", &fil, &bw);
   fresult=update_file("nome.txt", "BLA2 BLA2 BLA2", &fil, &bw);
+
+  MX_CAN_Init();
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -137,10 +152,27 @@ int main(void)
   {
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 	  HAL_Delay(500);
+
+
+
+
+	          /* Set the data to be transmitted */
+	          TxData[0] = 0x00;
+	          TxData[1] = 0xAD;
+	          /* Start the Transmission process */
+	          if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &free_space) != HAL_OK)
+	          {
+	            /* Transmission request Error */
+	            Error_Handler();
+	          }
+	          HAL_Delay(10);
+
+
+	      }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+
   /* USER CODE END 3 */
 }
 
@@ -362,6 +394,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SDCard_CS_GPIO_Port, SDCard_CS_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(CAN_Stand_by_GPIO_Port, CAN_Stand_by_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : LED_Pin */
   GPIO_InitStruct.Pin = LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -382,6 +417,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(SDCard_Detect_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : CAN_Stand_by_Pin */
+  GPIO_InitStruct.Pin = CAN_Stand_by_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(CAN_Stand_by_GPIO_Port, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
@@ -398,6 +440,7 @@ int _write(int file, char *ptr, int len){
 	}
 	return len;
 }
+
 /* USER CODE END 4 */
 
 /**

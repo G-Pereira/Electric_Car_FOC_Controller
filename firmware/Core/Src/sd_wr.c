@@ -42,10 +42,9 @@ void card_capacity (DWORD *free_space, DWORD *total_space)//, DWORD *fre_clust)
 {
 	FATFS *pfs;
 	DWORD fre_clust;
-	FRESULT res;
 
 	/* Check free space */
-	res=f_getfree("", &fre_clust, &pfs);
+	f_getfree("", &fre_clust, &pfs);
 	*total_space = ((pfs->n_fatent - 2) * (pfs->csize)); //total number of sectors
 	*free_space = (fre_clust * (pfs->csize)); //number of free sectors
 }
