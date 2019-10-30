@@ -38,13 +38,16 @@ FRESULT unmount_card (FATFS *fs)
 
 /*************** Card capacity details ********************/
 
-void card_capacity (uint32_t *free_space, uint32_t *total_space, FATFS *fs, DWORD *fre_clust)
+void card_capacity (DWORD *free_space, DWORD *total_space)//, DWORD *fre_clust)
 {
-	/* Check free space */
-	f_getfree("", fre_clust, &fs);
+	FATFS *pfs;
+	DWORD fre_clust;
+	FRESULT res;
 
-	*total_space = (uint32_t)((fs->n_fatent - 2) * (fs->csize) * 0.5);
-	*free_space = (uint32_t)(*fre_clust * (fs->csize) * 0.5);
+	/* Check free space */
+	res=f_getfree("", &fre_clust, &pfs);
+	*total_space = ((pfs->n_fatent - 2) * (pfs->csize)); //total number of sectors
+	*free_space = (fre_clust * (pfs->csize)); //number of free sectors
 }
 
 /**************** The following operation is using f_write and f_read **************************/
