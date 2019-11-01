@@ -8,8 +8,8 @@
 
 
 /* defines for the CS PIN */
-#define SD_CS_GPIO_Port GPIOA
-#define SD_CS_Pin GPIO_PIN_4
+#define SD_CS_GPIO_Port GPIOB
+#define SD_CS_Pin GPIO_PIN_10
 
 /* manage your SPI handler below */
 extern SPI_HandleTypeDef hspi1; 
