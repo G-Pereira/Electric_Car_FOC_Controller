@@ -99,13 +99,14 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_ADC_Start(&hadc1);
+  //HAL_ADC_Start(&hadc1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  HAL_ADC_Start(&hadc1);
 
 	  HAL_ADC_PollForConversion(&hadc1, 500);
 	  rawVelo = HAL_ADC_GetValue(&hadc1);
