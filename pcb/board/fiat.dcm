@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ACS773ECB-200B-PFF
+D ±200A Bidirectional Hall-Effect Current Sensor, +3.3V supply, 6.6mV/A, CB-5 PFF
+K hall effect current monitor sensor isolated
+F https://www.allegromicro.com/-/media/Files/Datasheets/ACS773-Datasheet.ashx
+$ENDCMP
+#
+#End Doc Library
