@@ -114,7 +114,7 @@ U 1 1 5DBD769F
 P 7150 1700
 F 0 "TH1" H 7247 1746 50  0000 L CNN
 F 1 "KTY81" H 7247 1655 50  0000 L CNN
-F 2 "" V 7350 1700 50  0001 C CNN
+F 2 "TerminalBlock_RND:TerminalBlock_RND_205-00012_1x02_P5.00mm_Horizontal" V 7350 1700 50  0001 C CNN
 F 3 "http://www.nxp.com/documents/data_sheet/KTY81_SER.pdf" H 7150 1650 50  0001 C CNN
 	1    7150 1700
 	1    0    0    -1  
@@ -274,7 +274,7 @@ U 1 1 5DBF7608
 P 9100 1700
 F 0 "TH2" H 9198 1746 50  0000 L CNN
 F 1 "Thermistor_NTC" H 9198 1655 50  0000 L CNN
-F 2 "" H 9100 1750 50  0001 C CNN
+F 2 "TerminalBlock_RND:TerminalBlock_RND_205-00012_1x02_P5.00mm_Horizontal" H 9100 1750 50  0001 C CNN
 F 3 "~" H 9100 1750 50  0001 C CNN
 	1    9100 1700
 	1    0    0    -1  
@@ -296,12 +296,12 @@ Inverter_temp
 $Comp
 L MCU_ST_STM32F4:STM32F405RGTx U6
 U 1 1 5DC72DB0
-P 1550 3900
-F 0 "U6" H 1850 2000 50  0000 C CNN
-F 1 "STM32F405RGTx" H 2100 2100 50  0000 C CNN
-F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 950 2200 50  0001 R CNN
-F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00037051.pdf" H 1550 3900 50  0001 C CNN
-	1    1550 3900
+P 1800 4100
+F 0 "U6" H 2100 2200 50  0000 C CNN
+F 1 "STM32F405RGTx" H 2350 2300 50  0000 C CNN
+F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 1200 2400 50  0001 R CNN
+F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00037051.pdf" H 1800 4100 50  0001 C CNN
+	1    1800 4100
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -327,48 +327,48 @@ F 3 "http://www.ti.com/lit/ds/symlink/opa356.pdf" H 10050 2200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1550 2000 1450 2000
+	1800 2200 1700 2200
 Wire Wire Line
-	1550 2000 1550 2100
-Connection ~ 1550 2000
+	1800 2200 1800 2300
+Connection ~ 1800 2200
 Wire Wire Line
-	1450 2000 1450 2100
+	1700 2200 1700 2300
 Wire Wire Line
-	1650 2100 1650 2000
+	1900 2300 1900 2200
 Wire Wire Line
-	1650 2000 1550 2000
+	1900 2200 1800 2200
 Wire Wire Line
-	1750 2100 1750 2000
+	2000 2300 2000 2200
 Wire Wire Line
-	1750 2000 1650 2000
-Connection ~ 1650 2000
+	2000 2200 1900 2200
+Connection ~ 1900 2200
 Wire Wire Line
-	1850 2100 1850 2000
+	2100 2300 2100 2200
 Wire Wire Line
-	1850 2000 1750 2000
-Connection ~ 1750 2000
+	2100 2200 2000 2200
+Connection ~ 2000 2200
 $Comp
 L power:GND #PWR027
 U 1 1 5DC7D7B5
-P 1550 5800
-F 0 "#PWR027" H 1550 5550 50  0001 C CNN
-F 1 "GND" H 1555 5627 50  0000 C CNN
-F 2 "" H 1550 5800 50  0001 C CNN
-F 3 "" H 1550 5800 50  0001 C CNN
-	1    1550 5800
+P 1800 6000
+F 0 "#PWR027" H 1800 5750 50  0001 C CNN
+F 1 "GND" H 1805 5827 50  0000 C CNN
+F 2 "" H 1800 6000 50  0001 C CNN
+F 3 "" H 1800 6000 50  0001 C CNN
+	1    1800 6000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1550 5800 1450 5800
+	1800 6000 1700 6000
 Wire Wire Line
-	1450 5800 1450 5700
+	1700 6000 1700 5900
 Wire Wire Line
-	1550 5700 1550 5800
-Connection ~ 1550 5800
+	1800 5900 1800 6000
+Connection ~ 1800 6000
 Wire Wire Line
-	1650 5700 1650 5800
+	1900 5900 1900 6000
 Wire Wire Line
-	1650 5800 1550 5800
+	1900 6000 1800 6000
 $Comp
 L Device:C C12
 U 1 1 5DC86F64
@@ -391,9 +391,9 @@ F 3 "~" H 850 1250 50  0001 C CNN
 	1    850  1250
 	1    0    0    -1  
 $EndComp
-Text Label 850  2700 2    50   ~ 0
+Text Label 1100 2900 2    50   ~ 0
 VCAP_1
-Text Label 850  2800 2    50   ~ 0
+Text Label 1100 3000 2    50   ~ 0
 VCAP_2
 Text Label 850  1100 2    50   ~ 0
 VCAP_1
@@ -455,7 +455,7 @@ Wire Wire Line
 	2150 1050 2150 1100
 Text Notes 1700 1000 0    50   ~ 0
 ADC
-NoConn ~ 1350 2100
+NoConn ~ 1600 2300
 $Comp
 L Device:C C15
 U 1 1 5DC9A5FB
@@ -713,12 +713,12 @@ $EndComp
 $Comp
 L power:+3V3 #PWR034
 U 1 1 5DCEBEA8
-P 1650 2000
-F 0 "#PWR034" H 1650 1850 50  0001 C CNN
-F 1 "+3V3" H 1665 2173 50  0000 C CNN
-F 2 "" H 1650 2000 50  0001 C CNN
-F 3 "" H 1650 2000 50  0001 C CNN
-	1    1650 2000
+P 1900 2200
+F 0 "#PWR034" H 1900 2050 50  0001 C CNN
+F 1 "+3V3" H 1915 2373 50  0000 C CNN
+F 2 "" H 1900 2200 50  0001 C CNN
+F 3 "" H 1900 2200 50  0001 C CNN
+	1    1900 2200
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -777,7 +777,7 @@ U 1 1 5DD2DFA2
 P 6000 7000
 F 0 "J1" H 6028 6976 50  0000 L CNN
 F 1 "Conn_01x10_Female" H 6028 6885 50  0000 L CNN
-F 2 "" H 6000 7000 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x10_P2.54mm_Vertical" H 6000 7000 50  0001 C CNN
 F 3 "~" H 6000 7000 50  0001 C CNN
 	1    6000 7000
 	1    0    0    -1  
@@ -836,4 +836,50 @@ Wire Wire Line
 Wire Wire Line
 	5100 6700 5800 6700
 Connection ~ 5100 7000
+$Comp
+L power:GND #PWR041
+U 1 1 5DD53313
+P 700 2700
+F 0 "#PWR041" H 700 2450 50  0001 C CNN
+F 1 "GND" H 705 2527 50  0000 C CNN
+F 2 "" H 700 2700 50  0001 C CNN
+F 3 "" H 700 2700 50  0001 C CNN
+	1    700  2700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	700  2700 1100 2700
+Text Label 950  2500 2    50   ~ 0
+reset
+$Comp
+L power:+3V3 #PWR040
+U 1 1 5DD5B29D
+P 1000 2050
+F 0 "#PWR040" H 1000 1900 50  0001 C CNN
+F 1 "+3V3" H 1015 2223 50  0000 C CNN
+F 2 "" H 1000 2050 50  0001 C CNN
+F 3 "" H 1000 2050 50  0001 C CNN
+	1    1000 2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R7
+U 1 1 5DD5BE82
+P 1000 2250
+F 0 "R7" H 1070 2296 50  0000 L CNN
+F 1 "10k" H 1070 2205 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 930 2250 50  0001 C CNN
+F 3 "~" H 1000 2250 50  0001 C CNN
+	1    1000 2250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1000 2050 1000 2100
+Wire Wire Line
+	950  2500 1000 2500
+Wire Wire Line
+	1000 2400 1000 2500
+Connection ~ 1000 2500
+Wire Wire Line
+	1000 2500 1100 2500
 $EndSCHEMATC
