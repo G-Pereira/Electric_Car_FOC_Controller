@@ -749,10 +749,10 @@ F 3 "" H 3400 1050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C C?
+L Device:C C19
 U 1 1 5DD27FA0
 P 4200 1250
-F 0 "C?" H 4315 1296 50  0000 L CNN
+F 0 "C19" H 4315 1296 50  0000 L CNN
 F 1 "4.7u" H 4315 1205 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0805_2012Metric" H 4238 1100 50  0001 C CNN
 F 3 "~" H 4200 1250 50  0001 C CNN
@@ -771,4 +771,69 @@ Wire Wire Line
 Connection ~ 3800 1500
 Wire Wire Line
 	3000 1050 3400 1050
+$Comp
+L Connector:Conn_01x10_Female J1
+U 1 1 5DD2DFA2
+P 6000 7000
+F 0 "J1" H 6028 6976 50  0000 L CNN
+F 1 "Conn_01x10_Female" H 6028 6885 50  0000 L CNN
+F 2 "" H 6000 7000 50  0001 C CNN
+F 3 "~" H 6000 7000 50  0001 C CNN
+	1    6000 7000
+	1    0    0    -1  
+$EndComp
+Text Notes 5650 6250 0    100  ~ 20
+IMU
+$Comp
+L power:+3V3 #PWR038
+U 1 1 5DD331B4
+P 5700 6550
+F 0 "#PWR038" H 5700 6400 50  0001 C CNN
+F 1 "+3V3" H 5715 6723 50  0000 C CNN
+F 2 "" H 5700 6550 50  0001 C CNN
+F 3 "" H 5700 6550 50  0001 C CNN
+	1    5700 6550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5700 6550 5700 6600
+Wire Wire Line
+	5700 6600 5800 6600
+$Comp
+L power:GND #PWR039
+U 1 1 5DD3B561
+P 5100 7000
+F 0 "#PWR039" H 5100 6750 50  0001 C CNN
+F 1 "GND" H 5105 6827 50  0000 C CNN
+F 2 "" H 5100 7000 50  0001 C CNN
+F 3 "" H 5100 7000 50  0001 C CNN
+	1    5100 7000
+	1    0    0    -1  
+$EndComp
+Text Label 5800 6800 2    50   ~ 0
+SPI1_SCK
+Text Label 5800 6900 2    50   ~ 0
+SPI1_MOSI
+Text Label 5750 7150 2    50   ~ 0
+SPI1_MISO
+Wire Wire Line
+	5750 7150 5800 7150
+Wire Wire Line
+	5800 7150 5800 7100
+Wire Wire Line
+	5800 7200 5800 7150
+Connection ~ 5800 7150
+Text Label 5800 7300 2    50   ~ 0
+SPI1_CS_Accel
+Text Label 5800 7400 2    50   ~ 0
+SPI1_CS_Gyro
+Text Label 5800 7500 2    50   ~ 0
+SPI1_CS_Magnet
+Wire Wire Line
+	5100 7000 5800 7000
+Wire Wire Line
+	5100 7000 5100 6700
+Wire Wire Line
+	5100 6700 5800 6700
+Connection ~ 5100 7000
 $EndSCHEMATC
