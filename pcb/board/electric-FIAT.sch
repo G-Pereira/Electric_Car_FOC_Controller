@@ -5,9 +5,9 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 4
-Title ""
-Date ""
-Rev ""
+Title "Motor Controller"
+Date "2019-11-10"
+Rev "0.2"
 Comp ""
 Comment1 ""
 Comment2 ""
@@ -774,68 +774,68 @@ Wire Wire Line
 $Comp
 L Connector:Conn_01x10_Female J1
 U 1 1 5DD2DFA2
-P 6000 7000
-F 0 "J1" H 6028 6976 50  0000 L CNN
-F 1 "Conn_01x10_Female" H 6028 6885 50  0000 L CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x10_P2.54mm_Vertical" H 6000 7000 50  0001 C CNN
-F 3 "~" H 6000 7000 50  0001 C CNN
-	1    6000 7000
+P 8600 7150
+F 0 "J1" H 8628 7126 50  0000 L CNN
+F 1 "Conn_01x10_Female" H 8628 7035 50  0000 L CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x10_P2.54mm_Vertical" H 8600 7150 50  0001 C CNN
+F 3 "~" H 8600 7150 50  0001 C CNN
+	1    8600 7150
 	1    0    0    -1  
 $EndComp
-Text Notes 5650 6250 0    100  ~ 20
+Text Notes 8250 6400 0    100  ~ 20
 IMU
 $Comp
 L power:+3V3 #PWR038
 U 1 1 5DD331B4
-P 5700 6550
-F 0 "#PWR038" H 5700 6400 50  0001 C CNN
-F 1 "+3V3" H 5715 6723 50  0000 C CNN
-F 2 "" H 5700 6550 50  0001 C CNN
-F 3 "" H 5700 6550 50  0001 C CNN
-	1    5700 6550
+P 8300 6700
+F 0 "#PWR038" H 8300 6550 50  0001 C CNN
+F 1 "+3V3" H 8315 6873 50  0000 C CNN
+F 2 "" H 8300 6700 50  0001 C CNN
+F 3 "" H 8300 6700 50  0001 C CNN
+	1    8300 6700
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5700 6550 5700 6600
+	8300 6700 8300 6750
 Wire Wire Line
-	5700 6600 5800 6600
+	8300 6750 8400 6750
 $Comp
 L power:GND #PWR039
 U 1 1 5DD3B561
-P 5100 7000
-F 0 "#PWR039" H 5100 6750 50  0001 C CNN
-F 1 "GND" H 5105 6827 50  0000 C CNN
-F 2 "" H 5100 7000 50  0001 C CNN
-F 3 "" H 5100 7000 50  0001 C CNN
-	1    5100 7000
+P 7700 7150
+F 0 "#PWR039" H 7700 6900 50  0001 C CNN
+F 1 "GND" H 7705 6977 50  0000 C CNN
+F 2 "" H 7700 7150 50  0001 C CNN
+F 3 "" H 7700 7150 50  0001 C CNN
+	1    7700 7150
 	1    0    0    -1  
 $EndComp
-Text Label 5800 6800 2    50   ~ 0
+Text Label 8400 6950 2    50   ~ 0
 SPI1_SCK
-Text Label 5800 6900 2    50   ~ 0
+Text Label 8400 7050 2    50   ~ 0
 SPI1_MOSI
-Text Label 5750 7150 2    50   ~ 0
+Text Label 8350 7300 2    50   ~ 0
 SPI1_MISO
 Wire Wire Line
-	5750 7150 5800 7150
+	8350 7300 8400 7300
 Wire Wire Line
-	5800 7150 5800 7100
+	8400 7300 8400 7250
 Wire Wire Line
-	5800 7200 5800 7150
-Connection ~ 5800 7150
-Text Label 5800 7300 2    50   ~ 0
+	8400 7350 8400 7300
+Connection ~ 8400 7300
+Text Label 8400 7450 2    50   ~ 0
 SPI1_CS_Accel
-Text Label 5800 7400 2    50   ~ 0
+Text Label 8400 7550 2    50   ~ 0
 SPI1_CS_Gyro
-Text Label 5800 7500 2    50   ~ 0
+Text Label 8400 7650 2    50   ~ 0
 SPI1_CS_Magnet
 Wire Wire Line
-	5100 7000 5800 7000
+	7700 7150 8400 7150
 Wire Wire Line
-	5100 7000 5100 6700
+	7700 7150 7700 6850
 Wire Wire Line
-	5100 6700 5800 6700
-Connection ~ 5100 7000
+	7700 6850 8400 6850
+Connection ~ 7700 7150
 $Comp
 L power:GND #PWR041
 U 1 1 5DD53313
