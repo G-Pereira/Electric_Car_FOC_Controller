@@ -29,6 +29,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -58,6 +59,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Accel_CS_Pin GPIO_PIN_4
+#define Accel_CS_GPIO_Port GPIOA
+#define Gyro_CS_Pin GPIO_PIN_4
+#define Gyro_CS_GPIO_Port GPIOC
+#define Magnet_CS_Pin GPIO_PIN_5
+#define Magnet_CS_GPIO_Port GPIOC
+#define Card_Detect_Pin GPIO_PIN_7
+#define Card_Detect_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
