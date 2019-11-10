@@ -1,9 +1,10 @@
 EESchema Schematic File Version 4
+LIBS:electric-FIAT-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 4
+Sheet 4 4
 Title ""
 Date ""
 Rev ""
@@ -28,23 +29,6 @@ F 1 "ACS773ECB-200B-PFF" H 5750 4250 50  0000 L CNN
 F 2 "Sensor_Current:Allegro_CB_PFF" H 5600 3950 50  0001 C CNN
 F 3 "https://www.allegromicro.com/-/media/Files/Datasheets/ACS773-Datasheet.ashx" H 5600 3950 50  0001 C CNN
 	1    5600 3950
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR?
-U 1 1 5DC6FAA0
-P 5600 3600
-AR Path="/5DC7202D/5DC6FAA0" Ref="#PWR?"  Part="1" 
-AR Path="/5DC75544/5DC6FAA0" Ref="#PWR?"  Part="1" 
-AR Path="/5DC755EE/5DC6FAA0" Ref="#PWR?"  Part="1" 
-AR Path="/5DC773B5/5DC6FAA0" Ref="#PWR01"  Part="1" 
-AR Path="/5DC77C5E/5DC6FAA0" Ref="#PWR06"  Part="1" 
-AR Path="/5DC77D5C/5DC6FAA0" Ref="#PWR011"  Part="1" 
-F 0 "#PWR011" H 5600 3450 50  0001 C CNN
-F 1 "+3.3V" H 5615 3773 50  0000 C CNN
-F 2 "" H 5600 3600 50  0001 C CNN
-F 3 "" H 5600 3600 50  0001 C CNN
-	1    5600 3600
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -171,4 +155,18 @@ Wire Wire Line
 	6100 3950 6000 3950
 Text HLabel 6100 3950 2    50   Output ~ 0
 out
+$Comp
+L power:+3V3 #PWR035
+U 1 1 5DCEB1D3
+P 5600 3600
+AR Path="/5DC773B5/5DCEB1D3" Ref="#PWR035"  Part="1" 
+AR Path="/5DC77C5E/5DCEB1D3" Ref="#PWR036"  Part="1" 
+AR Path="/5DC77D5C/5DCEB1D3" Ref="#PWR037"  Part="1" 
+F 0 "#PWR037" H 5600 3450 50  0001 C CNN
+F 1 "+3V3" H 5615 3773 50  0000 C CNN
+F 2 "" H 5600 3600 50  0001 C CNN
+F 3 "" H 5600 3600 50  0001 C CNN
+	1    5600 3600
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
