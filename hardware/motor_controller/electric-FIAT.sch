@@ -1061,4 +1061,24 @@ Text Label 2500 2600 0    50   ~ 0
 Current_PH2
 Text Label 2500 2700 0    50   ~ 0
 Current_PH3
+$Comp
+L fiat:TMC4671-ES U?
+U 1 1 5DC9033A
+P 5350 4700
+F 0 "U?" H 5350 2419 40  0000 C CNN
+F 1 "TMC4671-ES" H 5350 2343 40  0000 C CNN
+F 2 "trinamic-footprints:QFN76P" H 6400 4900 60  0001 L CNN
+F 3 "https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC4671_datasheet_v1.03.pdf" H 6400 5000 60  0001 L CNN
+F 4 "1460-1302-ND" H 6400 5100 60  0001 L CNN "Digi-Key_PN"
+F 5 "TMC4671-ES" H 6400 5200 60  0001 L CNN "MPN"
+F 6 "Integrated Circuits (ICs)" H 6400 5300 60  0001 L CNN "Category"
+F 7 "PMIC - Motor Drivers, Controllers" H 6400 5400 60  0001 L CNN "Family"
+F 8 "https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC4671_datasheet_v1.03.pdf" H 6400 5500 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/trinamic-motion-control-gmbh/TMC4671-ES/1460-1302-ND/9450492" H 6400 5600 60  0001 L CNN "DK_Detail_Page"
+F 10 "IC MOTOR DRIVER MULTIPHASE 76QFN" H 6400 5700 60  0001 L CNN "Description"
+F 11 "Trinamic Motion Control GmbH" H 6400 5800 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 6400 5900 60  0001 L CNN "Status"
+	1    5350 4700
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
