@@ -1049,4 +1049,16 @@ F 3 "~" H 6050 1050 50  0001 C CNN
 	1    6050 1050
 	1    0    0    -1  
 $EndComp
+Text Label 10450 3950 0    50   ~ 0
+Current_PH1
+Text Label 10450 4550 0    50   ~ 0
+Current_PH2
+Text Label 10450 5150 0    50   ~ 0
+Current_PH3
+Text Label 2500 2500 0    50   ~ 0
+Current_PH1
+Text Label 2500 2600 0    50   ~ 0
+Current_PH2
+Text Label 2500 2700 0    50   ~ 0
+Current_PH3
 $EndSCHEMATC

@@ -65,6 +65,10 @@ void Error_Handler(void);
 #define Gyro_CS_GPIO_Port GPIOC
 #define Magnet_CS_Pin GPIO_PIN_5
 #define Magnet_CS_GPIO_Port GPIOC
+#define Motor_temp_Pin GPIO_PIN_0
+#define Motor_temp_GPIO_Port GPIOB
+#define Inverter_temp_Pin GPIO_PIN_1
+#define Inverter_temp_GPIO_Port GPIOB
 #define Card_Detect_Pin GPIO_PIN_7
 #define Card_Detect_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
