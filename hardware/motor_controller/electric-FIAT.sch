@@ -1010,21 +1010,6 @@ F 3 "" H 6050 1250 50  0001 C CNN
 	1    6050 1250
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:GND #PWR044
-U 1 1 5DCCC2B5
-P 6200 600
-F 0 "#PWR044" H 6200 350 50  0001 C CNN
-F 1 "GND" H 6205 427 50  0000 C CNN
-F 2 "" H 6200 600 50  0001 C CNN
-F 3 "" H 6200 600 50  0001 C CNN
-	1    6200 600 
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6050 850  6050 600 
-Wire Wire Line
-	6050 600  6200 600 
 Text Label 2500 3100 0    50   ~ 0
 SPI1_MISO
 Text Label 2500 2900 0    50   ~ 0
@@ -1038,17 +1023,6 @@ Motor_temp
 Text Label 2500 4300 0    50   ~ 0
 Inverter_temp
 NoConn ~ 10400 -1700
-$Comp
-L Device:Crystal_GND24 Y2
-U 1 1 5DCB2832
-P 6050 1050
-F 0 "Y2" H 6250 1200 50  0000 L CNN
-F 1 "25MHz" H 6250 1100 50  0000 L CNN
-F 2 "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm" H 6050 1050 50  0001 C CNN
-F 3 "~" H 6050 1050 50  0001 C CNN
-	1    6050 1050
-	1    0    0    -1  
-$EndComp
 Text Label 10450 3950 0    50   ~ 0
 Current_PH1
 Text Label 10450 4550 0    50   ~ 0
@@ -1061,11 +1035,49 @@ Text Label 2500 2600 0    50   ~ 0
 Current_PH2
 Text Label 2500 2700 0    50   ~ 0
 Current_PH3
+Text Label 5200 1050 0    50   ~ 0
+LSE_OUT
+Text Label 4800 1050 2    50   ~ 0
+LSE_IN
+Text Label 5850 1050 2    50   ~ 0
+HSE_IN
+Wire Wire Line
+	6050 850  6050 800 
+Wire Wire Line
+	6050 800  6300 800 
 $Comp
-L fiat:TMC4671-ES U?
+L power:GND #PWR044
+U 1 1 5DCCC2B5
+P 6300 800
+F 0 "#PWR044" H 6300 550 50  0001 C CNN
+F 1 "GND" H 6305 627 50  0000 C CNN
+F 2 "" H 6300 800 50  0001 C CNN
+F 3 "" H 6300 800 50  0001 C CNN
+	1    6300 800 
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Crystal_GND24 Y2
+U 1 1 5DCB2832
+P 6050 1050
+F 0 "Y2" H 5650 1300 50  0000 L CNN
+F 1 "25MHz" H 5650 1200 50  0000 L CNN
+F 2 "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm" H 6050 1050 50  0001 C CNN
+F 3 "~" H 6050 1050 50  0001 C CNN
+	1    6050 1050
+	1    0    0    -1  
+$EndComp
+Text Label 6400 1050 0    50   ~ 0
+HSE_OUT
+Text Label 1100 5700 2    50   ~ 0
+LSE_OUT
+Text Label 1100 5600 2    50   ~ 0
+LSE_IN
+$Comp
+L fiat:TMC4671-ES U7
 U 1 1 5DC9033A
 P 5350 4700
-F 0 "U?" H 5350 2419 40  0000 C CNN
+F 0 "U7" H 5350 2419 40  0000 C CNN
 F 1 "TMC4671-ES" H 5350 2343 40  0000 C CNN
 F 2 "trinamic-footprints:QFN76P" H 6400 4900 60  0001 L CNN
 F 3 "https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC4671_datasheet_v1.03.pdf" H 6400 5000 60  0001 L CNN
@@ -1081,4 +1093,8 @@ F 12 "Active" H 6400 5900 60  0001 L CNN "Status"
 	1    5350 4700
 	1    0    0    -1  
 $EndComp
+Text Label 1100 3700 2    50   ~ 0
+HSE_IN
+Text Label 1150 3800 2    50   ~ 0
+HSE_OUT
 $EndSCHEMATC
