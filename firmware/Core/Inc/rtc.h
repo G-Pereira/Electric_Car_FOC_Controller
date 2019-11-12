@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : SPI.h
+  * File Name          : RTC.h
   * Description        : This file provides code for the configuration
-  *                      of the SPI instances.
+  *                      of the RTC instances.
   ******************************************************************************
   * @attention
   *
@@ -17,8 +17,8 @@
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __spi_H
-#define __spi_H
+#ifndef __rtc_H
+#define __rtc_H
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -30,15 +30,13 @@
 
 /* USER CODE END Includes */
 
-extern SPI_HandleTypeDef hspi1;
-extern SPI_HandleTypeDef hspi2;
+extern RTC_HandleTypeDef hrtc;
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
-void MX_SPI1_Init(void);
-void MX_SPI2_Init(void);
+void MX_RTC_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
@@ -47,7 +45,7 @@ void MX_SPI2_Init(void);
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ spi_H */
+#endif /*__ rtc_H */
 
 /**
   * @}

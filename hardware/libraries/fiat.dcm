@@ -1,0 +1,15 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ACS773ECB-200B-PFF
+D ±200A Bidirectional Hall-Effect Current Sensor, +3.3V supply, 6.6mV/A, CB-5 PFF
+K hall effect current monitor sensor isolated
+F https://www.allegromicro.com/-/media/Files/Datasheets/ACS773-Datasheet.ashx
+$ENDCMP
+#
+$CMP TMC4671-ES
+D IC MOTOR DRIVER MULTIPHASE 76QFN
+K 1460-1302-ND
+F https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC4671_datasheet_v1.06.pdf
+$ENDCMP
+#
+#End Doc Library

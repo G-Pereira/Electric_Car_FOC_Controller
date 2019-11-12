@@ -74,6 +74,10 @@ void Error_Handler(void);
 #define Motor_temp_GPIO_Port GPIOB
 #define Inverter_temp_Pin GPIO_PIN_1
 #define Inverter_temp_GPIO_Port GPIOB
+#define FOC_Status_Pin GPIO_PIN_6
+#define FOC_Status_GPIO_Port GPIOC
+#define CAN_STBY_Pin GPIO_PIN_10
+#define CAN_STBY_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
