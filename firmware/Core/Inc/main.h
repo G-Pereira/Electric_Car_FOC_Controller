@@ -64,6 +64,12 @@ void Error_Handler(void);
 #define SDCard_CS_GPIO_Port GPIOB
 #define SDCard_Detect_Pin GPIO_PIN_11
 #define SDCard_Detect_GPIO_Port GPIOB
+#define CS_magnet_Pin GPIO_PIN_12
+#define CS_magnet_GPIO_Port GPIOB
+#define CS_gyro_Pin GPIO_PIN_13
+#define CS_gyro_GPIO_Port GPIOB
+#define CS_accel_Pin GPIO_PIN_14
+#define CS_accel_GPIO_Port GPIOB
 #define CAN_Stand_by_Pin GPIO_PIN_8
 #define CAN_Stand_by_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */

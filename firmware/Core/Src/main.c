@@ -28,6 +28,9 @@
 #include "stdio.h"
 #include "fatfs_sd.h"
 #include "sd_wr.h"
+//#include "stm32f1xx_it.h" //enable printfs
+#include "print.h"
+#include "IMU_read.h"
 
 /* USER CODE END Includes */
 
@@ -38,6 +41,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 
 /* USER CODE END PD */
 
@@ -56,6 +60,14 @@ SPI_HandleTypeDef hspi1;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
+
+uint32_t adc1 = 0;
+uint32_t adc2 = 0;
+
+
+//IMU
+	int accel_data[3], gyro_data[3], mag_data[3];
+	float acx, acy, acz, gyx, gyy, gyz;
 
 //CAN
 uint8_t ubKeyNumber = 0x0;
@@ -133,15 +145,26 @@ int main(void)
   MX_USART1_UART_Init();
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
-
+  myprintf("Hello!\n", 1);
   fresult=mount_card (&fs);
   card_capacity(&free_space, &total);
-  printf("Hello!\nFree Space: %lu", free_space);
-  fresult=create_file ("nome.txt", "OLE OLE OLE", &fil, &bw);
-  fresult=update_file("nome.txt", "BLA2 BLA2 BLA2", &fil, &bw);
+  myprintf("Hello!\nFree Space: %lu", 1);
+  fresult=create_file ("teste.txt", "OLE OLE OLE", &fil, &bw);
+  fresult=update_file("teste.txt", "BLA2 BLA2 BLA2", &fil, &bw);
 
   MX_CAN_Init();
 
+
+  //buf_data[1]=0x3E;
+  //buf_data[2]=0x80;
+  // HAL_SPI_Transmit(&hspi1, buf_data, 2, 2000); //activate STREAM MODE accelerometer
+
+  IMU_config(&hspi1);
+
+  //store_data[1]=0xBF;
+  //buf_data[2]=0x80;
+  //write_data=0xBF;
+  //store_data=0;
 
 
   /* USER CODE END 2 */
@@ -151,21 +174,69 @@ int main(void)
   while (1)
   {
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	  HAL_Delay(500);
+
+	  IMU_acc_read(&hspi1, accel_data);
+
+	  //printf("\raccel data x: %d accel data y: %d accel data z: %d ", accel_data[0], accel_data[1], accel_data[2]);
+
+	  acx = accel_data[0]*0.00098;
+	  acy = accel_data[1]*0.00098;
+	  acz = accel_data[2]*0.00098;
+
+	  printf("\rreal value x: %f G real value y: %f G real value z: %f G ", acx, acy, acz);
+
+	  IMU_gyro_read(&hspi1, gyro_data);
+
+	  //printf("\rgyro data x: %d gyro data y: %d gyro data z: %d ", gyro_data[0], gyro_data[1], gyro_data[2]);
+
+	  gyx = (262.4/32767)*gyro_data[0];
+	  gyy = (262.4/32767)*gyro_data[1];
+	  gyz = (262.4/32767)*gyro_data[2];
+
+	  printf("\rgyro real value x: %f gyro real value y: %f gyro real value z: %f  ", gyx, gyy, gyz);
+
+	  IMU_mag_read(&hspi1, mag_data);
+
+	  printf("\rmag data x: %d mag data y: %d mag data z: %d ", mag_data[0], mag_data[1], mag_data[2]);
+	  printf("\n");
 
 
 
+	  //HAL_Delay(500);
+	 /* write_data=0x82;
+	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, RESET);
+	  HAL_SPI_TransmitReceive(&hspi1, &write_data, &pre_Store, 2, 2000);
+	  if(HAL_SPI_Receive(&hspi1, store_data, 5, 2000) !=HAL_OK) Error_Handler();
+	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
+	  accel_data[0]=(uint16_t)((store_data[0]<<4) + (pre_Store & 0xF0)); //isto está mal
+	  accel_data[1]=(uint16_t)((store_data[2]<<4) + (store_data[1] & 0xF0));
+	  accel_data[2]=(uint16_t)((store_data[4]<<4) + (store_data[3] & 0xF0));
+	  HAL_Delay(2000);*/
+	  //printf("Read acc: %i\n", store_data[2]);
 
-	          /* Set the data to be transmitted */
-	          TxData[0] = 0x00;
-	          TxData[1] = 0xAD;
-	          /* Start the Transmission process */
-	          if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &free_space) != HAL_OK)
-	          {
-	            /* Transmission request Error */
-	            Error_Handler();
-	          }
-	          HAL_Delay(10);
+	  /*HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+	  adc1 = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+	  adc2 = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
+	  HAL_Delay(100);
+
+
+	  if (adc1>3000 && adc2<3000) HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, SET);
+	  else HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, RESET);*/
+
+
+	  /* Set the data to be transmitted */
+	  // TxData[0] = 0x00;
+	  //TxData[1] = 0xAD;
+	  /* Start the Transmission process */
+	  // if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &free_space) != HAL_OK)
+	  // {
+	  /* Transmission request Error */
+	  // Error_Handler();
+	  // }
+	  // HAL_Delay(10);
 
 
 	      }
@@ -240,12 +311,12 @@ static void MX_ADC1_Init(void)
   /** Common config 
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.NbrOfConversion = 2;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
@@ -255,6 +326,14 @@ static void MX_ADC1_Init(void)
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel 
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -392,7 +471,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SDCard_CS_GPIO_Port, SDCard_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, SDCard_CS_Pin|CS_magnet_Pin|CS_gyro_Pin|CS_accel_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(CAN_Stand_by_GPIO_Port, CAN_Stand_by_Pin, GPIO_PIN_RESET);
@@ -404,12 +483,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SDCard_CS_Pin */
-  GPIO_InitStruct.Pin = SDCard_CS_Pin;
+  /*Configure GPIO pins : SDCard_CS_Pin CS_magnet_Pin CS_gyro_Pin CS_accel_Pin */
+  GPIO_InitStruct.Pin = SDCard_CS_Pin|CS_magnet_Pin|CS_gyro_Pin|CS_accel_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SDCard_CS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SDCard_Detect_Pin */
   GPIO_InitStruct.Pin = SDCard_Detect_Pin;
