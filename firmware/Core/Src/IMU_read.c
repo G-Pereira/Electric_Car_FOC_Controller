@@ -92,11 +92,17 @@ void IMU_acc_read(SPI_HandleTypeDef *hspi, int *accel_data){
 		accel_data[2] -= 4096;
 		//accel_data[2] = accel_data[2]*0.00098;
 	}
+
+	//os parametros da conversão podem mudar consoante a configuração dos registos
+	accel_data[0] = accel_data[0]*0.00098;
+	accel_data[1] = accel_data[1]*0.00098;
+	accel_data[2] = accel_data[2]*0.00098;
 }
 
 void IMU_gyro_read(SPI_HandleTypeDef *hspi, int *gyro_data){
 	uint8_t write_data=BMX055_GYRO_DATA_START_REG;
 	uint8_t store_data[6];
+
 
 	HAL_GPIO_WritePin(CS_gyro_GPIO_Port, CS_gyro_Pin, RESET); //read acceloremeter data
 	HAL_SPI_Transmit(hspi, &write_data, 1, 2000);
@@ -126,6 +132,12 @@ void IMU_gyro_read(SPI_HandleTypeDef *hspi, int *gyro_data){
 		gyro_data[2] -= 65536;
 		//accel_data[2] = accel_data[2]*0.00098;
 	}
+
+	//os parametros da conversão podem mudar consoante a configuração dos registos
+	gyro_data[0] = (262.4/32767)*gyro_data[0];
+	gyro_data[1] = (262.4/32767)*gyro_data[1];
+	gyro_data[2] = (262.4/32767)*gyro_data[2];
+
 }
 
 void IMU_mag_read(SPI_HandleTypeDef *hspi, int *mag_data){
@@ -142,7 +154,7 @@ void IMU_mag_read(SPI_HandleTypeDef *hspi, int *mag_data){
 	HAL_GPIO_WritePin(CS_magnet_GPIO_Port, CS_magnet_Pin, SET);
 	mag_data[0]=((store_data[1]<<5)+(store_data[0]>>3));
 	mag_data[1]=((store_data[3]<<5)+(store_data[2]>>3));
-	mag_data[2]=((store_data[5]<<5)+(store_data[4]>>4));
+	mag_data[2]=((store_data[5]<<5)+(store_data[4]>>3));
 
 	if (mag_data[0] > 4095)
 	{

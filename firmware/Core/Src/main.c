@@ -28,7 +28,6 @@
 #include "stdio.h"
 #include "fatfs_sd.h"
 #include "sd_wr.h"
-//#include "stm32f1xx_it.h" //enable printfs
 #include "print.h"
 #include "IMU_read.h"
 
@@ -66,8 +65,7 @@ uint32_t adc2 = 0;
 
 
 //IMU
-	int accel_data[3], gyro_data[3], mag_data[3];
-	float acx, acy, acz, gyx, gyy, gyz;
+int accel_data[3], gyro_data[3], mag_data[3];
 
 //CAN
 uint8_t ubKeyNumber = 0x0;
@@ -145,26 +143,17 @@ int main(void)
   MX_USART1_UART_Init();
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
-  myprintf("Hello!\n", 1);
+  printf("Hello!\n");
   fresult=mount_card (&fs);
   card_capacity(&free_space, &total);
-  myprintf("Hello!\nFree Space: %lu", 1);
+  printf("Hello!\nFree Space: %lu");
   fresult=create_file ("teste.txt", "OLE OLE OLE", &fil, &bw);
   fresult=update_file("teste.txt", "BLA2 BLA2 BLA2", &fil, &bw);
 
   MX_CAN_Init();
 
 
-  //buf_data[1]=0x3E;
-  //buf_data[2]=0x80;
-  // HAL_SPI_Transmit(&hspi1, buf_data, 2, 2000); //activate STREAM MODE accelerometer
-
   IMU_config(&hspi1);
-
-  //store_data[1]=0xBF;
-  //buf_data[2]=0x80;
-  //write_data=0xBF;
-  //store_data=0;
 
 
   /* USER CODE END 2 */
@@ -177,23 +166,11 @@ int main(void)
 
 	  IMU_acc_read(&hspi1, accel_data);
 
-	  //printf("\raccel data x: %d accel data y: %d accel data z: %d ", accel_data[0], accel_data[1], accel_data[2]);
-
-	  acx = accel_data[0]*0.00098;
-	  acy = accel_data[1]*0.00098;
-	  acz = accel_data[2]*0.00098;
-
-	  printf("\rreal value x: %f G real value y: %f G real value z: %f G ", acx, acy, acz);
+	  printf("\raccel data x: %d accel data y: %d accel data z: %d ", accel_data[0], accel_data[1], accel_data[2]);
 
 	  IMU_gyro_read(&hspi1, gyro_data);
 
-	  //printf("\rgyro data x: %d gyro data y: %d gyro data z: %d ", gyro_data[0], gyro_data[1], gyro_data[2]);
-
-	  gyx = (262.4/32767)*gyro_data[0];
-	  gyy = (262.4/32767)*gyro_data[1];
-	  gyz = (262.4/32767)*gyro_data[2];
-
-	  printf("\rgyro real value x: %f gyro real value y: %f gyro real value z: %f  ", gyx, gyy, gyz);
+	  printf("\rgyro data x: %d gyro data y: %d gyro data z: %d ", gyro_data[0], gyro_data[1], gyro_data[2]);
 
 	  IMU_mag_read(&hspi1, mag_data);
 
@@ -201,35 +178,9 @@ int main(void)
 	  printf("\n");
 
 
-
-	  //HAL_Delay(500);
-	 /* write_data=0x82;
-	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, RESET);
-	  HAL_SPI_TransmitReceive(&hspi1, &write_data, &pre_Store, 2, 2000);
-	  if(HAL_SPI_Receive(&hspi1, store_data, 5, 2000) !=HAL_OK) Error_Handler();
-	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
-	  accel_data[0]=(uint16_t)((store_data[0]<<4) + (pre_Store & 0xF0)); //isto está mal
-	  accel_data[1]=(uint16_t)((store_data[2]<<4) + (store_data[1] & 0xF0));
-	  accel_data[2]=(uint16_t)((store_data[4]<<4) + (store_data[3] & 0xF0));
-	  HAL_Delay(2000);*/
-	  //printf("Read acc: %i\n", store_data[2]);
-
-	  /*HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-	  adc1 = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-	  adc2 = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_Stop(&hadc1);
-	  HAL_Delay(100);
-
-
-	  if (adc1>3000 && adc2<3000) HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, SET);
-	  else HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, RESET);*/
-
-
 	  /* Set the data to be transmitted */
 	  // TxData[0] = 0x00;
-	  //TxData[1] = 0xAD;
+	  // TxData[1] = 0xAD;
 	  /* Start the Transmission process */
 	  // if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &free_space) != HAL_OK)
 	  // {
@@ -239,10 +190,10 @@ int main(void)
 	  // HAL_Delay(10);
 
 
-	      }
-    /* USER CODE END WHILE */
+  }
+  /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+  /* USER CODE BEGIN 3 */
 
   /* USER CODE END 3 */
 }
