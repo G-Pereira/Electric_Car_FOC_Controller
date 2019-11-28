@@ -22,6 +22,7 @@
 #include "main.h"
 #include "adc.h"
 #include "can.h"
+#include "fatfs.h"
 #include "rtc.h"
 #include "spi.h"
 #include "usart.h"
@@ -29,6 +30,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "string.h"
+#include "stdio.h"
+#include "sd_wr.h"
+#include "IMU_read.h"
+
 
 /* USER CODE END Includes */
 
@@ -49,6 +55,29 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+
+	//SD file variables
+	FATFS fs;  // file system
+	FIL fil;  // file
+	FRESULT fresult;  // to store the result
+	char buffer[512]; // to store data
+
+	UINT br, bw;   // file read/write count
+
+	/* capacity related variables */
+	//DWORD fre_clust;
+	DWORD total, free_space;
+
+	//IMU accelerometer data
+	int accel_data[3];
+	//IMU accelerometer data
+	int gyro_data[3];
+
+	//ADCs converted values variables
+	int dc_current, current_ph1, current_ph2, current_ph3,  motor_temp, conv_temp, enc_data, acc_pedal , brk_pedal;
+
+
 
 /* USER CODE END PV */
 
@@ -94,11 +123,23 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_CAN1_Init();
-  MX_SPI1_Init();
   MX_RTC_Init();
   MX_SPI2_Init();
   MX_USART1_UART_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
+
+  //Initialize FOC-IC registers
+
+  //Initialize IMU
+
+  IMU_config(&hspi2);
+
+  //Initialize data logger
+  if(mount_card (&fs) != FR_OK){
+	  printf("ERROR mounting SD Card");
+  }
+
 
   /* USER CODE END 2 */
 
@@ -109,6 +150,62 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  //read and convert adc value for current on DC bus
+
+		  //read and convert adc value for voltage on DC bus
+
+		  //read and convert the 3 adc current values from the motor
+
+		  //read and convert adc value for temperature on converter
+
+		  //read and convert adc value for temperature on motor
+
+		  //read and convert adc values for encoder
+
+	  	  //read and convert adc value for braking pedal
+
+		  //read and convert accelerometer data
+		  IMU_acc_read(&hspi2, accel_data);
+		  //Send read data to SD card
+		  update_file("accelerometer_data_x.txt", accel_data[0], &fil, &bw);
+		  update_file("accelerometer_data_y.txt", accel_data[1], &fil, &bw);
+		  update_file("accelerometer_data_z.txt", accel_data[2], &fil, &bw);
+
+		  //read and convert gyroscope data
+		  IMU_gyro_read(&hspi2, gyro_data);
+		  //Send read data to SD card
+		  update_file("gyroscope_data_x.txt", gyro_data[0], &fil, &bw);
+		  update_file("gyroscope_data_y.txt", gyro_data[1], &fil, &bw);
+		  update_file("gyroscope_data_z.txt", gyro_data[2], &fil, &bw);
+
+		  //DEFINIR O QUE FAZER COM VALORES LIDOS
+
+		  //read and convert adc value for accelerator potenciometer
+
+		  //after reading pedal value send ref to FOC-IC
+
+		  //save read values on SD card separate files
+
+		  update_file("DC_current.txt", dc_current, &fil, &bw);
+		  update_file("phase1_current.txt", current_ph1, &fil, &bw);
+		  update_file("phase2_current.txt", current_ph2, &fil, &bw);
+		  update_file("phase3_current.txt", current_ph3, &fil, &bw);
+		  update_file("Motor_temperature.txt", motor_temp, &fil, &bw);
+		  update_file("Converter_temperature.txt", conv_temp, &fil, &bw);
+		  update_file("encoder_data.txt", enc_data, &fil, &bw);
+		  update_file("Accelerator_pedal.txt", acc_pedal, &fil, &bw);
+		  update_file("Braking_Pedal.txt", brk_pedal, &fil, &bw);
+
+
+
+
+
+
+
+
+
+
+
   }
   /* USER CODE END 3 */
 }
