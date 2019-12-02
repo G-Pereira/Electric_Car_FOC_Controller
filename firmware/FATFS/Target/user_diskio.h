@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * File Name          : CAN.h
-  * Description        : This file provides code for the configuration
-  *                      of the CAN instances.
+ ******************************************************************************
+  * @file    user_diskio.h
+  * @brief   This file contains the common defines and functions prototypes for  
+  *          the user_diskio driver.
   ******************************************************************************
   * @attention
   *
@@ -16,43 +17,30 @@
   *
   ******************************************************************************
   */
+ /* USER CODE END Header */
+  
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __can_H
-#define __can_H
+#ifndef __USER_DISKIO_H
+#define __USER_DISKIO_H
+
 #ifdef __cplusplus
  extern "C" {
-#endif
+#endif 
+
+/* USER CODE BEGIN 0 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
+extern Diskio_drvTypeDef  USER_Driver;
 
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-extern CAN_HandleTypeDef hcan1;
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
-
-void MX_CAN1_Init(void);
-
-/* USER CODE BEGIN Prototypes */
-
-/* USER CODE END Prototypes */
-
+/* USER CODE END 0 */
+   
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ can_H */
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
+#endif /* __USER_DISKIO_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -22,6 +22,8 @@
 #include "main.h"
 #include "adc.h"
 #include "can.h"
+#include "dma.h"
+#include "fatfs.h"
 #include "rtc.h"
 #include "spi.h"
 #include "usart.h"
@@ -29,6 +31,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "string.h"
+#include "stdio.h"
+#include "sd_wr.h"
+#include "IMU_read.h"
+
 
 /* USER CODE END Includes */
 
@@ -39,6 +46,18 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+	#define	NR_ADC_CHANNELS 5 //Nº de channels adc
+
+	//#define FOC_IC_BBM_TIMES ??? //TEMPO M�?XIMO COMUTAÇÃO DOS IGBTS
+	//#define FOC_IC_PWM_POLARITIES_1 0x //0 NOS DOIS REGISTOS
+	//#define FOC_IC_PWM_POLARITIES_2
+	#define FOC_IC_PWM_MAX_COUNT  //(100MHz/FREQ_COMU)-1
+	#define FOC_IC_PWM_CHOP  // COLOCAR A 7
+	//#define FOC_IC_PWM_SV ???
+
+	//
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -49,6 +68,32 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+
+	//SD file variables
+	FATFS fs;  // file system
+	FIL fil;  // file
+	FRESULT fresult;  // to store the result
+	char buffer[512]; // to store data
+
+	UINT br, bw;   // file read/write count
+
+	/* capacity related variables */
+	//DWORD fre_clust;
+	DWORD total, free_space;
+
+	//IMU accelerometer data
+	int accel_data[3];
+	//IMU accelerometer data
+	int gyro_data[3];
+
+	//ADCs converted values variables
+	int dc_current, current_ph1, current_ph2, current_ph3,  motor_temp, conv_temp, enc_data, acc_pedal , brk_pedal;
+
+	//String aux
+	char *str;
+
+
 
 /* USER CODE END PV */
 
@@ -61,6 +106,15 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+
+uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+	for(int i=0; i < NR_ADC_CHANNELS; i++)
+	{
+		adc_dma[i]=buffer_dma[i];
+	}
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -70,7 +124,11 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	float curr_ph1 = 0;
+	float curr_ph2 = 0;
+	float curr_ph3 = 0;
+	float temp_motor = 0;
+	float temp_inv = 0;
   /* USER CODE END 1 */
   
 
@@ -94,11 +152,32 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_CAN1_Init();
-  MX_SPI1_Init();
   MX_RTC_Init();
   MX_SPI2_Init();
   MX_USART1_UART_Init();
+  MX_FATFS_Init();
+  MX_DMA_Init();
   /* USER CODE BEGIN 2 */
+
+  //Initialize FOC-IC registers
+
+  HAL_GPIO_WritePin(FOC_IC_CSS_GPIO_Port, FOC_IC_CSS_Pin, RESET);
+  //HAL_SPI_Transmit(&hspi2, /*reg*/ , /*size*/ , 2000);
+  HAL_GPIO_WritePin(FOC_IC_CSS_GPIO_Port, FOC_IC_CSS_Pin, SET);
+  //Initialize IMU
+
+  //FP=0,707
+
+
+  IMU_config(&hspi2);
+
+  //Initialize data logger
+  if(mount_card (&fs) != FR_OK){
+	  printf("ERROR mounting SD Card");
+  }
+
+
+  HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
 
   /* USER CODE END 2 */
 
@@ -109,6 +188,77 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  //read and convert adc value for current on DC bus
+
+		  //read and convert adc value for voltage on DC bus
+
+		  //read and convert the 3 adc current values from the motor
+
+	  	  curr_ph1 = motorCurrent(adc_dma[0]);
+	  	  curr_ph2 = motorCurrent(adc_dma[1]);
+	  	  curr_ph3 = motorCurrent(adc_dma[2]);
+	  	  temp_motor = motorCurrent(adc_dma[3]);
+	  	  temp_inv = motorCurrent(adc_dma[4]);
+
+		  //read and convert adc value for temperature on converter
+
+		  //read and convert adc value for temperature on motor
+
+		  //read and convert adc values for encoder
+
+	  	  //read and convert adc value for braking pedal
+
+		  //read and convert accelerometer data
+		  IMU_acc_read(&hspi2, accel_data);
+		  sprintf(str, "%d", accel_data[0]);
+
+		  //Send read data to SD card
+		  update_file("accelerometer_data_x.txt", str, &fil, &bw);
+		  sprintf(str, "%d", accel_data[1]);
+		  update_file("accelerometer_data_y.txt", str, &fil, &bw);
+		  sprintf(str, "%d", accel_data[2]);
+		  update_file("accelerometer_data_z.txt", str, &fil, &bw);
+
+		  //read and convert gyroscope data
+		  IMU_gyro_read(&hspi2, gyro_data);
+		  sprintf(str, "%d", gyro_data[0]);
+		  //Send read data to SD card
+		  update_file("gyroscope_data_x.txt", str, &fil, &bw);
+		  sprintf(str, "%d", gyro_data[1]);
+		  update_file("gyroscope_data_y.txt", str, &fil, &bw);
+		  sprintf(str, "%d", gyro_data[2]);
+		  update_file("gyroscope_data_z.txt", str, &fil, &bw);
+
+		  //DEFINIR O QUE FAZER COM VALORES LIDOS
+
+		  //read and convert adc value for accelerator potenciometer
+
+		  //after reading pedal value send ref to FOC-IC
+
+		  //save read values on SD card separate files
+
+		  sprintf(str, "%d", dc_current);
+		  update_file("DC_current.txt", str, &fil, &bw);
+		  sprintf(str, "%d", current_ph1);
+		  update_file("phase1_current.txt", str, &fil, &bw);
+		  sprintf(str, "%d", current_ph2);
+		  update_file("phase2_current.txt", str, &fil, &bw);
+		  sprintf(str, "%d", current_ph3);
+		  update_file("phase3_current.txt", str, &fil, &bw);
+		  sprintf(str, "%d", motor_temp);
+		  update_file("Motor_temperature.txt", str, &fil, &bw);
+		  sprintf(str, "%d", conv_temp);
+		  update_file("Converter_temperature.txt", str, &fil, &bw);
+		  sprintf(str, "%d", enc_data);
+		  update_file("encoder_data.txt", str, &fil, &bw);
+		  sprintf(str, "%d", acc_pedal);
+		  update_file("Accelerator_pedal.txt", str, &fil, &bw);
+		  sprintf(str, "%d", brk_pedal);
+		  update_file("Braking_Pedal.txt", str, &fil, &bw);
+
+
+
+
   }
   /* USER CODE END 3 */
 }

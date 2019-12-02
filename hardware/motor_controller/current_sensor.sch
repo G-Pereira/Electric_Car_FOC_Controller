@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:electric-FIAT-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -98,44 +99,44 @@ Wire Wire Line
 $Comp
 L Device:C C?
 U 1 1 5DC730E7
-P 6750 4200
+P 7100 4200
 AR Path="/5DC7202D/5DC730E7" Ref="C?"  Part="1" 
 AR Path="/5DC75544/5DC730E7" Ref="C?"  Part="1" 
 AR Path="/5DC755EE/5DC730E7" Ref="C?"  Part="1" 
 AR Path="/5DC773B5/5DC730E7" Ref="C2"  Part="1" 
 AR Path="/5DC77C5E/5DC730E7" Ref="C4"  Part="1" 
 AR Path="/5DC77D5C/5DC730E7" Ref="C6"  Part="1" 
-F 0 "C6" H 6865 4246 50  0000 L CNN
-F 1 "1n" H 6865 4155 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric" H 6788 4050 50  0001 C CNN
-F 3 "~" H 6750 4200 50  0001 C CNN
-	1    6750 4200
+F 0 "C6" H 7215 4246 50  0000 L CNN
+F 1 "1n" H 7215 4155 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 7138 4050 50  0001 C CNN
+F 3 "~" H 7100 4200 50  0001 C CNN
+	1    7100 4200
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR?
 U 1 1 5DC7443D
-P 6750 4400
+P 7100 4400
 AR Path="/5DC7202D/5DC7443D" Ref="#PWR?"  Part="1" 
 AR Path="/5DC75544/5DC7443D" Ref="#PWR?"  Part="1" 
 AR Path="/5DC755EE/5DC7443D" Ref="#PWR?"  Part="1" 
 AR Path="/5DC773B5/5DC7443D" Ref="#PWR05"  Part="1" 
 AR Path="/5DC77C5E/5DC7443D" Ref="#PWR010"  Part="1" 
 AR Path="/5DC77D5C/5DC7443D" Ref="#PWR015"  Part="1" 
-F 0 "#PWR015" H 6750 4150 50  0001 C CNN
-F 1 "GND" H 6755 4227 50  0000 C CNN
-F 2 "" H 6750 4400 50  0001 C CNN
-F 3 "" H 6750 4400 50  0001 C CNN
-	1    6750 4400
+F 0 "#PWR015" H 7100 4150 50  0001 C CNN
+F 1 "GND" H 7105 4227 50  0000 C CNN
+F 2 "" H 7100 4400 50  0001 C CNN
+F 3 "" H 7100 4400 50  0001 C CNN
+	1    7100 4400
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6750 4400 6750 4350
+	7100 4400 7100 4350
 Wire Wire Line
-	6750 4050 6750 4000
+	7100 4050 7100 4000
 Wire Wire Line
-	6750 4000 6650 4000
-Text HLabel 6750 4000 2    50   Output ~ 0
+	7100 4000 7000 4000
+Text HLabel 7100 4000 2    50   Output ~ 0
 out
 $Comp
 L power:+3V3 #PWR035
@@ -165,4 +166,20 @@ F 3 "http://www.allegromicro.com/~/media/Files/Datasheets/ACS759-Datasheet.ashx?
 	1    6250 4000
 	1    0    0    -1  
 $EndComp
+$Comp
+L Device:R R33
+U 1 1 5DE77132
+P 6850 4000
+AR Path="/5DC773B5/5DE77132" Ref="R33"  Part="1" 
+AR Path="/5DC77C5E/5DE77132" Ref="R34"  Part="1" 
+AR Path="/5DC77D5C/5DE77132" Ref="R35"  Part="1" 
+F 0 "R35" V 6643 4000 50  0000 C CNN
+F 1 "4.7k" V 6734 4000 50  0000 C CNN
+F 2 "" V 6780 4000 50  0001 C CNN
+F 3 "~" H 6850 4000 50  0001 C CNN
+	1    6850 4000
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6650 4000 6700 4000
 $EndSCHEMATC

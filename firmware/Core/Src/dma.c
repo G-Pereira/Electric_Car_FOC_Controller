@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : CAN.h
+  * File Name          : dma.c
   * Description        : This file provides code for the configuration
-  *                      of the CAN instances.
+  *                      of all the requested memory to memory DMA transfers.
   ******************************************************************************
   * @attention
   *
@@ -16,36 +16,41 @@
   *
   ******************************************************************************
   */
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __can_H
-#define __can_H
-#ifdef __cplusplus
- extern "C" {
-#endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+#include "dma.h"
 
-/* USER CODE BEGIN Includes */
+/* USER CODE BEGIN 0 */
 
-/* USER CODE END Includes */
+/* USER CODE END 0 */
 
-extern CAN_HandleTypeDef hcan1;
+/*----------------------------------------------------------------------------*/
+/* Configure DMA                                                              */
+/*----------------------------------------------------------------------------*/
 
-/* USER CODE BEGIN Private defines */
+/* USER CODE BEGIN 1 */
 
-/* USER CODE END Private defines */
+/* USER CODE END 1 */
 
-void MX_CAN1_Init(void);
+/** 
+  * Enable DMA controller clock
+  */
+void MX_DMA_Init(void) 
+{
 
-/* USER CODE BEGIN Prototypes */
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
 
-/* USER CODE END Prototypes */
+  /* DMA interrupt init */
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
-#ifdef __cplusplus
 }
-#endif
-#endif /*__ can_H */
+
+/* USER CODE BEGIN 2 */
+
+/* USER CODE END 2 */
 
 /**
   * @}
