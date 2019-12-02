@@ -47,7 +47,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-	#define	NR_ADC_CHANNELS 3 //Nº de channels adc
+	#define	NR_ADC_CHANNELS 5 //Nº de channels adc
 
 	//#define FOC_IC_BBM_TIMES ??? //TEMPO M�?XIMO COMUTAÇÃO DOS IGBTS
 	//#define FOC_IC_PWM_POLARITIES_1 0x //0 NOS DOIS REGISTOS
@@ -124,7 +124,11 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];void HAL_ADC_Conv
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	float curr_ph1 = 0;
+	float curr_ph2 = 0;
+	float curr_ph3 = 0;
+	float temp_motor = 0;
+	float temp_inv = 0;
   /* USER CODE END 1 */
   
 
@@ -189,6 +193,12 @@ int main(void)
 		  //read and convert adc value for voltage on DC bus
 
 		  //read and convert the 3 adc current values from the motor
+
+	  	  curr_ph1 = motorCurrent(adc_dma[0]);
+	  	  curr_ph2 = motorCurrent(adc_dma[1]);
+	  	  curr_ph3 = motorCurrent(adc_dma[2]);
+	  	  temp_motor = motorCurrent(adc_dma[3]);
+	  	  temp_inv = motorCurrent(adc_dma[4]);
 
 		  //read and convert adc value for temperature on converter
 
