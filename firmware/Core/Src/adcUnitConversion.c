@@ -54,3 +54,20 @@ float motorTemp (int adcReading){
 
 }
 
+float voltageAC (int adcReading){
+
+	/*
+	 * R1 = R28 = 75k
+	 * R2 = R30 = 10k
+	 */
+	int R1 = 75000;
+	int R2 = 10000;
+
+	float Vout = adcInt2Volt(adcReading);
+
+	float Vin = ((R1*R2)/R2)*Vout;
+
+	return Vin;
+
+}
+

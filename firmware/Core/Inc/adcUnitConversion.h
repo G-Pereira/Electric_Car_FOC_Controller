@@ -17,4 +17,6 @@ float motorCurrent (int adcReading);
 float igbtTemp (int adcReading);
 float motorTemp (int adcReading);
 
+float voltageAC (int adcReading);
+
 #endif /* INC_ADCUNITCONVERSION_H_ */
