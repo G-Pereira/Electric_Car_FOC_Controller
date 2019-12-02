@@ -35,6 +35,7 @@
 #include "stdio.h"
 #include "sd_wr.h"
 #include "IMU_read.h"
+#include "adcUnitConversion.h"
 
 
 /* USER CODE END Includes */
@@ -49,12 +50,7 @@
 
 	#define	NR_ADC_CHANNELS 5 //Nº de channels adc
 
-	//#define FOC_IC_BBM_TIMES ??? //TEMPO M�?XIMO COMUTAÇÃO DOS IGBTS
-	//#define FOC_IC_PWM_POLARITIES_1 0x //0 NOS DOIS REGISTOS
-	//#define FOC_IC_PWM_POLARITIES_2
-	#define FOC_IC_PWM_MAX_COUNT  //(100MHz/FREQ_COMU)-1
-	#define FOC_IC_PWM_CHOP  // COLOCAR A 7
-	//#define FOC_IC_PWM_SV ???
+
 
 	//
 
@@ -107,7 +103,9 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 
-uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
 	for(int i=0; i < NR_ADC_CHANNELS; i++)
 	{
@@ -160,13 +158,16 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   //Initialize FOC-IC registers
+  //FP=0,707
+  foc_ic_config();
+
+
 
   HAL_GPIO_WritePin(FOC_IC_CSS_GPIO_Port, FOC_IC_CSS_Pin, RESET);
   //HAL_SPI_Transmit(&hspi2, /*reg*/ , /*size*/ , 2000);
   HAL_GPIO_WritePin(FOC_IC_CSS_GPIO_Port, FOC_IC_CSS_Pin, SET);
   //Initialize IMU
 
-  //FP=0,707
 
 
   IMU_config(&hspi2);

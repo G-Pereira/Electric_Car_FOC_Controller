@@ -66,8 +66,8 @@ void Error_Handler(void);
 #define Current_PH3_GPIO_Port GPIOA
 #define Accel_CS_Pin GPIO_PIN_4
 #define Accel_CS_GPIO_Port GPIOA
-#define FOC_IC_CSS_Pin GPIO_PIN_5
-#define FOC_IC_CSS_GPIO_Port GPIOA
+#define FOC_IC_CS_Pin GPIO_PIN_5
+#define FOC_IC_CS_GPIO_Port GPIOA
 #define Gyro_CS_Pin GPIO_PIN_4
 #define Gyro_CS_GPIO_Port GPIOC
 #define Magnet_CS_Pin GPIO_PIN_5
