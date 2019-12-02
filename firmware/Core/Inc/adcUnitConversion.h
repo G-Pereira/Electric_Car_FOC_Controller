@@ -9,7 +9,7 @@
 #define INC_ADCUNITCONVERSION_H_
 
 #define BIASSENSOR 1.65
-#define ADCVREF 1.224
+#define ADCVREF 3.3
 
 float adcInt2Volt (int ADCReading);
 

@@ -18,8 +18,8 @@ float adcInt2Volt (int ADCReading){
 
 
 float motorCurrent (int adcReading){
-	//0.066 sensor's scale factor
-	return (adcInt2Volt(adcReading) - BIASSENSOR)/0.066;
+	//0.0066 sensor's scale factor
+	return (adcInt2Volt(adcReading) - BIASSENSOR)/0.0066;
 }
 
 float igbtTemp (int adcReading){
@@ -34,9 +34,15 @@ float igbtTemp (int adcReading){
 
 float motorTemp (int adcReading){
 
-	float a = 0.0233781;
-	float b = -0.0032369;
-	float c = 0.0000104;
+	/*
+	 * R1 = 1495 @ -10°C
+	 * R2 = 2245 @  40°C
+	 * R3 = 3817 @ 120°C
+	 */
+
+	float a = 0.0251239;
+	float b = -0.0035737;
+	float c = 0.0000123;
 
 	int Rk = 2700;
 
@@ -44,7 +50,7 @@ float motorTemp (int adcReading){
 
 	float T = 1/(a+b*log(Rt)+c*pow(log(Rt),3));
 
-	return (T - 273.15);
+	return T;
 
 }
 
