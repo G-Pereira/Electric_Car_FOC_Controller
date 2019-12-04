@@ -159,7 +159,7 @@ int main(void)
 
   //Initialize FOC-IC registers
   //FP=0,707
-  foc_ic_config();
+  foc_ic_config(&hspi2);
 
 
 
@@ -191,74 +191,73 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  //read and convert adc value for current on DC bus
 
-		  //read and convert adc value for voltage on DC bus
+	  //convert adc value for voltage on DC bus
 
-		  //read and convert the 3 adc current values from the motor
+	  //rconvert the 3 adc current values from the motor
 
-	  	  curr_ph1 = motorCurrent(adc_dma[0]);
-	  	  curr_ph2 = motorCurrent(adc_dma[1]);
-	  	  curr_ph3 = motorCurrent(adc_dma[2]);
-	  	  temp_motor = motorCurrent(adc_dma[3]);
-	  	  temp_inv = motorCurrent(adc_dma[4]);
-
-		  //read and convert adc value for temperature on converter
-
-		  //read and convert adc value for temperature on motor
-
-		  //read and convert adc values for encoder
-
-	  	  //read and convert adc value for braking pedal
-
-		  //read and convert accelerometer data
-		  IMU_acc_read(&hspi2, accel_data);
-		  sprintf(str, "%d", accel_data[0]);
-
-		  //Send read data to SD card
-		  update_file("accelerometer_data_x.txt", str, &fil, &bw);
-		  sprintf(str, "%d", accel_data[1]);
-		  update_file("accelerometer_data_y.txt", str, &fil, &bw);
-		  sprintf(str, "%d", accel_data[2]);
-		  update_file("accelerometer_data_z.txt", str, &fil, &bw);
-
-		  //read and convert gyroscope data
-		  IMU_gyro_read(&hspi2, gyro_data);
-		  sprintf(str, "%d", gyro_data[0]);
-		  //Send read data to SD card
-		  update_file("gyroscope_data_x.txt", str, &fil, &bw);
-		  sprintf(str, "%d", gyro_data[1]);
-		  update_file("gyroscope_data_y.txt", str, &fil, &bw);
-		  sprintf(str, "%d", gyro_data[2]);
-		  update_file("gyroscope_data_z.txt", str, &fil, &bw);
-
-		  //DEFINIR O QUE FAZER COM VALORES LIDOS
-
-		  //read and convert adc value for accelerator potenciometer
-
-		  //after reading pedal value send ref to FOC-IC
-
-		  //save read values on SD card separate files
-
-		  sprintf(str, "%d", dc_current);
-		  update_file("DC_current.txt", str, &fil, &bw);
-		  sprintf(str, "%d", current_ph1);
-		  update_file("phase1_current.txt", str, &fil, &bw);
-		  sprintf(str, "%d", current_ph2);
-		  update_file("phase2_current.txt", str, &fil, &bw);
-		  sprintf(str, "%d", current_ph3);
-		  update_file("phase3_current.txt", str, &fil, &bw);
-		  sprintf(str, "%d", motor_temp);
-		  update_file("Motor_temperature.txt", str, &fil, &bw);
-		  sprintf(str, "%d", conv_temp);
-		  update_file("Converter_temperature.txt", str, &fil, &bw);
-		  sprintf(str, "%d", enc_data);
-		  update_file("encoder_data.txt", str, &fil, &bw);
-		  sprintf(str, "%d", acc_pedal);
-		  update_file("Accelerator_pedal.txt", str, &fil, &bw);
-		  sprintf(str, "%d", brk_pedal);
-		  update_file("Braking_Pedal.txt", str, &fil, &bw);
+	  //convert the 3 adc current values from the motor
+	  curr_ph1 = motorCurrent(adc_dma[0]);
+	  curr_ph2 = motorCurrent(adc_dma[1]);
+	  curr_ph3 = motorCurrent(adc_dma[2]);
 
 
+	  temp_motor = motorCurrent(adc_dma[3]); //convert adc value for temperature on motor
+	  temp_inv = motorCurrent(adc_dma[4]); //convert adc value for temperature on converter
 
+	  //read and convert adc values for encoder
+
+	  //read and convert adc value for braking pedal
+
+
+	  IMU_acc_read(&hspi2, accel_data); //read and convert accelerometer data
+	  sprintf(str, "%d", accel_data[0]);
+
+	  //Send read data to SD card
+	  update_file("accelerometer_data_x.txt", str, &fil, &bw);
+	  sprintf(str, "%d", accel_data[1]);
+	  update_file("accelerometer_data_y.txt", str, &fil, &bw);
+	  sprintf(str, "%d", accel_data[2]);
+	  update_file("accelerometer_data_z.txt", str, &fil, &bw);
+
+	  //read and convert gyroscope data
+	  IMU_gyro_read(&hspi2, gyro_data);
+	  sprintf(str, "%d", gyro_data[0]);
+
+	  //Send read data to SD card
+	  update_file("gyroscope_data_x.txt", str, &fil, &bw);
+	  sprintf(str, "%d", gyro_data[1]);
+	  update_file("gyroscope_data_y.txt", str, &fil, &bw);
+	  sprintf(str, "%d", gyro_data[2]);
+	  update_file("gyroscope_data_z.txt", str, &fil, &bw);
+
+	  //DEFINIR O QUE FAZER COM VALORES LIDOS
+
+	  //send torque reference to foc ic
+
+	  //read and convert adc value for accelerator potenciometer
+
+	  //after reading pedal value send ref to FOC-IC
+
+	  //save read values on SD card separate files
+
+	  sprintf(str, "%d", dc_current);
+	  update_file("DC_current.txt", str, &fil, &bw);
+	  sprintf(str, "%d", current_ph1);
+	  update_file("phase1_current.txt", str, &fil, &bw);
+	  sprintf(str, "%d", current_ph2);
+	  update_file("phase2_current.txt", str, &fil, &bw);
+	  sprintf(str, "%d", current_ph3);
+	  update_file("phase3_current.txt", str, &fil, &bw);
+	  sprintf(str, "%d", motor_temp);
+	  update_file("Motor_temperature.txt", str, &fil, &bw);
+	  sprintf(str, "%d", conv_temp);
+	  update_file("Converter_temperature.txt", str, &fil, &bw);
+	  sprintf(str, "%d", enc_data);
+	  update_file("encoder_data.txt", str, &fil, &bw);
+	  sprintf(str, "%d", acc_pedal);
+	  update_file("Accelerator_pedal.txt", str, &fil, &bw);
+	  sprintf(str, "%d", brk_pedal);
+	  update_file("Braking_Pedal.txt", str, &fil, &bw);
 
   }
   /* USER CODE END 3 */

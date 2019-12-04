@@ -14,7 +14,14 @@
 	#define FOC_IC_MODE_MOTION
 
 
-void foc_ic_config();
+	#define FOC_IC_TORQUE_REF  //endereço para enviar referência de binário
+
+
+void foc_ic_config(SPI_HandleTypeDef *hspi);
+
+void foc_ic_send_torque(SPI_HandleTypeDef *hspi, int torque);
+
+uint8_t * torque_convertion(int torque);
 
 
 #endif
