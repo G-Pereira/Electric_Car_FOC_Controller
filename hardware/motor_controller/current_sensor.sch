@@ -1,10 +1,9 @@
 EESchema Schematic File Version 4
-LIBS:electric-FIAT-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 7
+Sheet 2 13
 Title ""
 Date ""
 Rev ""
