@@ -1146,91 +1146,91 @@ CAN_STBY
 $Comp
 L fiat:TMC4671-ES U1
 U 1 1 5DCA1D60
-P 5650 4650
-F 0 "U1" H 6400 2650 40  0000 C CNN
-F 1 "TMC4671-ES" H 6550 2550 40  0000 C CNN
-F 2 "trinamic:TMC4671-ES" H 6700 4850 60  0001 L CNN
-F 3 "https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC4671_datasheet_v1.03.pdf" H 6700 4950 60  0001 L CNN
-F 4 "1460-1302-ND" H 6700 5050 60  0001 L CNN "Digi-Key_PN"
-F 5 "TMC4671-ES" H 6700 5150 60  0001 L CNN "MPN"
-F 6 "Integrated Circuits (ICs)" H 6700 5250 60  0001 L CNN "Category"
-F 7 "PMIC - Motor Drivers, Controllers" H 6700 5350 60  0001 L CNN "Family"
-F 8 "https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC4671_datasheet_v1.03.pdf" H 6700 5450 60  0001 L CNN "DK_Datasheet_Link"
-F 9 "/product-detail/en/trinamic-motion-control-gmbh/TMC4671-ES/1460-1302-ND/9450492" H 6700 5550 60  0001 L CNN "DK_Detail_Page"
-F 10 "IC MOTOR DRIVER MULTIPHASE 76QFN" H 6700 5650 60  0001 L CNN "Description"
-F 11 "Trinamic Motion Control GmbH" H 6700 5750 60  0001 L CNN "Manufacturer"
-F 12 "Active" H 6700 5850 60  0001 L CNN "Status"
-	1    5650 4650
+P 5500 5000
+F 0 "U1" H 6250 3000 40  0000 C CNN
+F 1 "TMC4671-ES" H 6400 2900 40  0000 C CNN
+F 2 "trinamic:TMC4671-ES" H 6550 5200 60  0001 L CNN
+F 3 "https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC4671_datasheet_v1.03.pdf" H 6550 5300 60  0001 L CNN
+F 4 "1460-1302-ND" H 6550 5400 60  0001 L CNN "Digi-Key_PN"
+F 5 "TMC4671-ES" H 6550 5500 60  0001 L CNN "MPN"
+F 6 "Integrated Circuits (ICs)" H 6550 5600 60  0001 L CNN "Category"
+F 7 "PMIC - Motor Drivers, Controllers" H 6550 5700 60  0001 L CNN "Family"
+F 8 "https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC4671_datasheet_v1.03.pdf" H 6550 5800 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/trinamic-motion-control-gmbh/TMC4671-ES/1460-1302-ND/9450492" H 6550 5900 60  0001 L CNN "DK_Detail_Page"
+F 10 "IC MOTOR DRIVER MULTIPHASE 76QFN" H 6550 6000 60  0001 L CNN "Description"
+F 11 "Trinamic Motion Control GmbH" H 6550 6100 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 6550 6200 60  0001 L CNN "Status"
+	1    5500 5000
 	1    0    0    -1  
 $EndComp
-NoConn ~ 6850 4750
-NoConn ~ 6850 4850
-NoConn ~ 6850 4950
-NoConn ~ 6850 5050
-NoConn ~ 6850 5150
-NoConn ~ 6850 5250
-NoConn ~ 6850 5550
+NoConn ~ 6700 5100
+NoConn ~ 6700 5200
+NoConn ~ 6700 5300
+NoConn ~ 6700 5400
+NoConn ~ 6700 5500
+NoConn ~ 6700 5600
+NoConn ~ 6700 5900
 $Comp
 L power:GND #PWR052
 U 1 1 5DCE5884
-P 5700 6750
-F 0 "#PWR052" H 5700 6500 50  0001 C CNN
-F 1 "GND" H 5705 6577 50  0000 C CNN
-F 2 "" H 5700 6750 50  0001 C CNN
-F 3 "" H 5700 6750 50  0001 C CNN
-	1    5700 6750
+P 5550 7100
+F 0 "#PWR052" H 5550 6850 50  0001 C CNN
+F 1 "GND" H 5555 6927 50  0000 C CNN
+F 2 "" H 5550 7100 50  0001 C CNN
+F 3 "" H 5550 7100 50  0001 C CNN
+	1    5550 7100
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5700 6750 5650 6750
+	5550 7100 5500 7100
 Wire Wire Line
-	5350 6750 5350 6650
+	5200 7100 5200 7000
 Wire Wire Line
-	5450 6650 5450 6750
-Connection ~ 5450 6750
+	5300 7000 5300 7100
+Connection ~ 5300 7100
 Wire Wire Line
-	5450 6750 5350 6750
+	5300 7100 5200 7100
 Wire Wire Line
-	5550 6650 5550 6750
-Connection ~ 5550 6750
+	5400 7000 5400 7100
+Connection ~ 5400 7100
 Wire Wire Line
-	5550 6750 5450 6750
+	5400 7100 5300 7100
 Wire Wire Line
-	5650 6650 5650 6750
-Connection ~ 5650 6750
+	5500 7000 5500 7100
+Connection ~ 5500 7100
 Wire Wire Line
-	5650 6750 5550 6750
+	5500 7100 5400 7100
 Wire Wire Line
-	6050 6650 6050 6750
+	5900 7000 5900 7100
 Wire Wire Line
-	6050 6750 5950 6750
-Connection ~ 5700 6750
+	5900 7100 5800 7100
+Connection ~ 5550 7100
 Wire Wire Line
-	5750 6650 5750 6750
-Connection ~ 5750 6750
+	5600 7000 5600 7100
+Connection ~ 5600 7100
 Wire Wire Line
-	5750 6750 5700 6750
+	5600 7100 5550 7100
 Wire Wire Line
-	5850 6650 5850 6750
-Connection ~ 5850 6750
+	5700 7000 5700 7100
+Connection ~ 5700 7100
 Wire Wire Line
-	5850 6750 5750 6750
+	5700 7100 5600 7100
 Wire Wire Line
-	5950 6650 5950 6750
-Connection ~ 5950 6750
+	5800 7000 5800 7100
+Connection ~ 5800 7100
 Wire Wire Line
-	5950 6750 5850 6750
-Text Label 4550 6150 2    50   ~ 0
+	5800 7100 5700 7100
+Text Label 4400 6500 2    50   ~ 0
 SPI2_SCK
-Text Label 4550 6350 2    50   ~ 0
+Text Label 4400 6700 2    50   ~ 0
 SPI2_MOSI
-Text Label 4550 6450 2    50   ~ 0
+Text Label 4400 6800 2    50   ~ 0
 SPI2_MISO
-Text Label 4550 6250 2    50   ~ 0
+Text Label 4400 6600 2    50   ~ 0
 SPI2_NSS
-NoConn ~ 6850 4350
-NoConn ~ 6850 4450
-NoConn ~ 6850 4550
+NoConn ~ 6700 4700
+NoConn ~ 6700 4800
+NoConn ~ 6700 4900
 $Comp
 L Connector_Generic:Conn_02x13_Odd_Even J2
 U 1 1 5DD38A7B
@@ -1242,9 +1242,9 @@ F 3 "~" H 9300 4900 50  0001 C CNN
 	1    9300 4900
 	1    0    0    -1  
 $EndComp
-Text Notes 8150 3600 0    100  ~ 20
+Text Notes 8750 3850 0    100  ~ 20
 IGBT Connector
-Text Notes 5150 2400 0    100  ~ 20
+Text Notes 4950 2200 0    100  ~ 20
 FOC Controller
 $Comp
 L power:GND #PWR049
@@ -1277,21 +1277,6 @@ Connection ~ 9050 5500
 Wire Wire Line
 	9050 5500 9050 5400
 $Comp
-L power:+24V #PWR046
-U 1 1 5DD6A898
-P 9900 4850
-F 0 "#PWR046" H 9900 4700 50  0001 C CNN
-F 1 "+24V" H 9915 5023 50  0000 C CNN
-F 2 "" H 9900 4850 50  0001 C CNN
-F 3 "" H 9900 4850 50  0001 C CNN
-	1    9900 4850
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	9900 4850 9900 4900
-Wire Wire Line
-	9900 4900 9600 4900
-$Comp
 L power:+24V #PWR047
 U 1 1 5DD7161B
 P 8750 4950
@@ -1307,17 +1292,15 @@ Wire Wire Line
 $Comp
 L power:GND #PWR048
 U 1 1 5DD8F9C1
-P 10000 5100
-F 0 "#PWR048" H 10000 4850 50  0001 C CNN
-F 1 "GND" H 10005 4927 50  0000 C CNN
-F 2 "" H 10000 5100 50  0001 C CNN
-F 3 "" H 10000 5100 50  0001 C CNN
-	1    10000 5100
+P 10100 5100
+F 0 "#PWR048" H 10100 4850 50  0001 C CNN
+F 1 "GND" H 10105 4927 50  0000 C CNN
+F 2 "" H 10100 5100 50  0001 C CNN
+F 3 "" H 10100 5100 50  0001 C CNN
+	1    10100 5100
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	10000 5100 9600 5100
-Text Label 4550 4250 2    50   ~ 0
+Text Label 4400 4600 2    50   ~ 0
 FOC_Status
 $Comp
 L MCU_ST_STM32F4:STM32F405RGTx U6
@@ -2065,53 +2048,410 @@ Wire Wire Line
 Wire Wire Line
 	8200 2900 8600 2900
 $Sheet
-S 7500 5800 550  200 
+S 9150 8150 550  200 
 U 5DEDB0CD
 F0 "Sheet5DEDB0CC" 50
 F1 "logic_converter.sch" 50
-F2 "in" I L 7500 5900 50 
-F3 "out" O R 8050 5900 50 
+F2 "in" I L 9150 8250 50 
+F3 "out" O R 9700 8250 50 
 $EndSheet
 $Sheet
-S 7500 5400 550  200 
+S 9150 7750 550  200 
 U 5DEE527A
 F0 "sheet5DEE5276" 50
 F1 "logic_converter.sch" 50
-F2 "in" I L 7500 5500 50 
-F3 "out" O R 8050 5500 50 
+F2 "in" I L 9150 7850 50 
+F3 "out" O R 9700 7850 50 
 $EndSheet
 $Sheet
-S 7500 5000 550  200 
+S 9150 7350 550  200 
 U 5DEF4ACC
 F0 "sheet5DEF4AC8" 50
 F1 "logic_converter.sch" 50
-F2 "in" I L 7500 5100 50 
-F3 "out" O R 8050 5100 50 
+F2 "in" I L 9150 7450 50 
+F3 "out" O R 9700 7450 50 
 $EndSheet
 $Sheet
-S 7500 4600 550  200 
+S 9150 6950 550  200 
 U 5DF13C30
 F0 "sheet5DF13C2A" 50
 F1 "logic_converter.sch" 50
-F2 "in" I L 7500 4700 50 
-F3 "out" O R 8050 4700 50 
+F2 "in" I L 9150 7050 50 
+F3 "out" O R 9700 7050 50 
 $EndSheet
 $Sheet
-S 7500 4200 550  200 
+S 9150 6550 550  200 
 U 5DF13C34
 F0 "sheet5DF13C2B" 50
 F1 "logic_converter.sch" 50
-F2 "in" I L 7500 4300 50 
-F3 "out" O R 8050 4300 50 
+F2 "in" I L 9150 6650 50 
+F3 "out" O R 9700 6650 50 
 $EndSheet
 $Sheet
-S 7500 3800 550  200 
+S 9150 6150 550  200 
 U 5DF13C38
 F0 "sheet5DF13C2C" 50
 F1 "logic_converter.sch" 50
-F2 "in" I L 7500 3900 50 
-F3 "out" O R 8050 3900 50 
+F2 "in" I L 9150 6250 50 
+F3 "out" O R 9700 6250 50 
 $EndSheet
 Wire Wire Line
 	8750 5000 8750 4950
+Text Label 6700 6200 0    50   ~ 0
+PWM_UX1_H_3V3
+$Comp
+L power:+15V #PWR0107
+U 1 1 5DEBC2EC
+P 8550 5000
+F 0 "#PWR0107" H 8550 4850 50  0001 C CNN
+F 1 "+15V" H 8565 5173 50  0000 C CNN
+F 2 "" H 8550 5000 50  0001 C CNN
+F 3 "" H 8550 5000 50  0001 C CNN
+	1    8550 5000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9100 5100 8550 5100
+Wire Wire Line
+	8550 5100 8550 5000
+Text Label 6700 6300 0    50   ~ 0
+PWM_UX1_L_3V3
+Text Label 6700 6400 0    50   ~ 0
+PWM_VX2_H_3V3
+Text Label 6700 6500 0    50   ~ 0
+PWM_VX2_L_3V3
+Text Label 6700 6600 0    50   ~ 0
+PWM_WY1_H_3V3
+Text Label 6700 6700 0    50   ~ 0
+PWM_WY1_L_3V3
+Text Label 9150 6250 2    50   ~ 0
+PWM_UX1_H_3V3
+Text Label 9150 6650 2    50   ~ 0
+PWM_UX1_L_3V3
+Text Label 9150 7050 2    50   ~ 0
+PWM_VX2_H_3V3
+Text Label 9150 7450 2    50   ~ 0
+PWM_VX2_L_3V3
+Text Label 9150 7850 2    50   ~ 0
+PWM_WY1_H_3V3
+Text Label 9150 8250 2    50   ~ 0
+PWM_WY1_L_3V3
+Text Label 6700 4200 0    50   ~ 0
+Current_PH2
+Text Label 6700 4400 0    50   ~ 0
+Current_PH1
+Text Label 6700 5800 0    50   ~ 0
+ENCODER_VA
+Text Label 6700 6000 0    50   ~ 0
+ENCODER_VB
+Wire Wire Line
+	5100 3000 5100 2500
+Wire Wire Line
+	5100 2500 5200 2500
+Wire Wire Line
+	6000 2500 6000 3000
+Wire Wire Line
+	5200 3000 5200 2500
+Connection ~ 5200 2500
+Wire Wire Line
+	5200 2500 5500 2500
+Wire Wire Line
+	5500 3000 5500 2500
+Connection ~ 5500 2500
+Wire Wire Line
+	5500 2500 5700 2500
+Wire Wire Line
+	5700 3000 5700 2500
+Connection ~ 5700 2500
+Wire Wire Line
+	5700 2500 5800 2500
+Wire Wire Line
+	5800 3000 5800 2500
+Connection ~ 5800 2500
+Wire Wire Line
+	5800 2500 6000 2500
+Wire Wire Line
+	5300 3000 5300 2750
+Wire Wire Line
+	5300 2750 5600 2750
+Wire Wire Line
+	5900 2750 5900 3000
+Wire Wire Line
+	5600 3000 5600 2750
+Connection ~ 5600 2750
+Wire Wire Line
+	5600 2750 5900 2750
+$Comp
+L power:+3V3 #PWR0102
+U 1 1 5DFE46CA
+P 5500 2500
+F 0 "#PWR0102" H 5500 2350 50  0001 C CNN
+F 1 "+3V3" H 5515 2673 50  0000 C CNN
+F 2 "" H 5500 2500 50  0001 C CNN
+F 3 "" H 5500 2500 50  0001 C CNN
+	1    5500 2500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+1V8 #PWR0103
+U 1 1 5DFE55CB
+P 5600 2750
+F 0 "#PWR0103" H 5600 2600 50  0001 C CNN
+F 1 "+1V8" H 5615 2923 50  0000 C CNN
+F 2 "" H 5600 2750 50  0001 C CNN
+F 3 "" H 5600 2750 50  0001 C CNN
+	1    5600 2750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR097
+U 1 1 5DFE6250
+P 5400 3000
+F 0 "#PWR097" H 5400 2850 50  0001 C CNN
+F 1 "+5V" H 5415 3173 50  0000 C CNN
+F 2 "" H 5400 3000 50  0001 C CNN
+F 3 "" H 5400 3000 50  0001 C CNN
+	1    5400 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR091
+U 1 1 5DFE6F2E
+P 3900 3300
+F 0 "#PWR091" H 3900 3050 50  0001 C CNN
+F 1 "GND" H 3905 3127 50  0000 C CNN
+F 2 "" H 3900 3300 50  0001 C CNN
+F 3 "" H 3900 3300 50  0001 C CNN
+	1    3900 3300
+	1    0    0    -1  
+$EndComp
+Text Label 4400 3900 2    50   ~ 0
+DBGSPI_TRG
+Text Label 4400 4000 2    50   ~ 0
+DBGSPI_MISO
+Text Label 4400 4100 2    50   ~ 0
+DBGSPI_MOSI
+Text Label 4400 4200 2    50   ~ 0
+DBGSPI_SCK
+Text Label 4400 4300 2    50   ~ 0
+DBGSPI_nSCS
+NoConn ~ 4400 4500
+NoConn ~ 4400 6200
+NoConn ~ 4400 6300
+NoConn ~ 4400 5100
+NoConn ~ 4400 5200
+NoConn ~ 4400 5300
+NoConn ~ 4400 5400
+NoConn ~ 4400 5500
+NoConn ~ 4400 5600
+NoConn ~ 6700 4300
+NoConn ~ 6700 4500
+Text Label 9700 6250 0    50   ~ 0
+PWM_UX1_H_15V
+Text Label 9700 6650 0    50   ~ 0
+PWM_UX1_L_15V
+Text Label 9700 7050 0    50   ~ 0
+PWM_VX2_H_15V
+Text Label 9700 7450 0    50   ~ 0
+PWM_VX2_L_15V
+Text Label 9700 7850 0    50   ~ 0
+PWM_WY1_H_15V
+Text Label 9700 8250 0    50   ~ 0
+PWM_WY1_L_15V
+Text Label 9600 4400 0    50   ~ 0
+PWM_UX1_H_15V
+Text Label 9600 4300 0    50   ~ 0
+PWM_UX1_L_15V
+Text Label 9100 4600 2    50   ~ 0
+PWM_VX2_H_15V
+Text Label 9100 4500 2    50   ~ 0
+PWM_VX2_L_15V
+Text Label 9600 4700 0    50   ~ 0
+PWM_WY1_H_15V
+$Comp
+L power:+24V #PWR046
+U 1 1 5DD6A898
+P 10300 4950
+F 0 "#PWR046" H 10300 4800 50  0001 C CNN
+F 1 "+24V" H 10315 5123 50  0000 C CNN
+F 2 "" H 10300 4950 50  0001 C CNN
+F 3 "" H 10300 4950 50  0001 C CNN
+	1    10300 4950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10150 4900 10150 4950
+Wire Wire Line
+	10150 4950 10300 4950
+Wire Wire Line
+	9600 4900 10150 4900
+Text Label 9600 4600 0    50   ~ 0
+PWM_WY1_L_15V
+NoConn ~ 4400 3200
+Text Label 4400 6000 2    50   ~ 0
+ENABLE_INPUTS
+Text Label 9100 4400 2    50   ~ 0
+ERROR_HB1
+Text Label 9600 4500 0    50   ~ 0
+ERROR_HB2
+Text Label 9100 4700 2    50   ~ 0
+ERROR_HB3
+Text Label 9600 5200 0    50   ~ 0
+TEMP_OUT
+Wire Wire Line
+	9600 5100 10100 5100
+Text Label 4400 3700 2    50   ~ 0
+CLK_25MHZ
+NoConn ~ 4400 3500
+$Comp
+L Device:R R48
+U 1 1 5DEE358A
+P 4250 3400
+F 0 "R48" V 4043 3400 50  0000 C CNN
+F 1 "10k" V 4134 3400 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 4180 3400 50  0001 C CNN
+F 3 "~" H 4250 3400 50  0001 C CNN
+	1    4250 3400
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3900 3300 4050 3300
+Wire Wire Line
+	4100 3400 4050 3400
+Wire Wire Line
+	4050 3400 4050 3300
+Connection ~ 4050 3300
+Wire Wire Line
+	4050 3300 4400 3300
+NoConn ~ 4400 4800
+NoConn ~ 4400 4900
+NoConn ~ 4400 5800
+NoConn ~ 4400 5900
+$Comp
+L Device:C C54
+U 1 1 5DFECA07
+P 4950 1300
+F 0 "C54" H 5065 1346 50  0000 L CNN
+F 1 "100n" H 5065 1255 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 4988 1150 50  0001 C CNN
+F 3 "~" H 4950 1300 50  0001 C CNN
+	1    4950 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR095
+U 1 1 5DFECA16
+P 4950 1450
+F 0 "#PWR095" H 4950 1200 50  0001 C CNN
+F 1 "GND" H 4955 1277 50  0000 C CNN
+F 2 "" H 4950 1450 50  0001 C CNN
+F 3 "" H 4950 1450 50  0001 C CNN
+	1    4950 1450
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR093
+U 1 1 5DFECA22
+P 4950 1150
+F 0 "#PWR093" H 4950 1000 50  0001 C CNN
+F 1 "+3V3" H 4965 1323 50  0000 C CNN
+F 2 "" H 4950 1150 50  0001 C CNN
+F 3 "" H 4950 1150 50  0001 C CNN
+	1    4950 1150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C55
+U 1 1 5E0F153B
+P 5450 1300
+F 0 "C55" H 5565 1346 50  0000 L CNN
+F 1 "100n" H 5565 1255 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 5488 1150 50  0001 C CNN
+F 3 "~" H 5450 1300 50  0001 C CNN
+	1    5450 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0101
+U 1 1 5E0F1541
+P 5450 1450
+F 0 "#PWR0101" H 5450 1200 50  0001 C CNN
+F 1 "GND" H 5455 1277 50  0000 C CNN
+F 2 "" H 5450 1450 50  0001 C CNN
+F 3 "" H 5450 1450 50  0001 C CNN
+	1    5450 1450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C56
+U 1 1 5E10498E
+P 5900 1300
+F 0 "C56" H 6015 1346 50  0000 L CNN
+F 1 "100n" H 6015 1255 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 5938 1150 50  0001 C CNN
+F 3 "~" H 5900 1300 50  0001 C CNN
+	1    5900 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0105
+U 1 1 5E104994
+P 5900 1450
+F 0 "#PWR0105" H 5900 1200 50  0001 C CNN
+F 1 "GND" H 5905 1277 50  0000 C CNN
+F 2 "" H 5900 1450 50  0001 C CNN
+F 3 "" H 5900 1450 50  0001 C CNN
+	1    5900 1450
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR099
+U 1 1 5E12BA47
+P 5450 1150
+F 0 "#PWR099" H 5450 1000 50  0001 C CNN
+F 1 "+5V" H 5465 1323 50  0000 C CNN
+F 2 "" H 5450 1150 50  0001 C CNN
+F 3 "" H 5450 1150 50  0001 C CNN
+	1    5450 1150
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+1V8 #PWR0104
+U 1 1 5E12C06D
+P 5900 1150
+F 0 "#PWR0104" H 5900 1000 50  0001 C CNN
+F 1 "+1V8" H 5915 1323 50  0000 C CNN
+F 2 "" H 5900 1150 50  0001 C CNN
+F 3 "" H 5900 1150 50  0001 C CNN
+	1    5900 1150
+	1    0    0    -1  
+$EndComp
+NoConn ~ 6700 3200
+NoConn ~ 6700 3300
+NoConn ~ 6700 3400
+NoConn ~ 6700 3800
+NoConn ~ 6700 3900
+NoConn ~ 6700 4100
+$Comp
+L power:GND #PWR0106
+U 1 1 5E1E273E
+P 7000 3700
+F 0 "#PWR0106" H 7000 3450 50  0001 C CNN
+F 1 "GND" H 7005 3527 50  0000 C CNN
+F 2 "" H 7000 3700 50  0001 C CNN
+F 3 "" H 7000 3700 50  0001 C CNN
+	1    7000 3700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6700 3600 6850 3600
+Wire Wire Line
+	7000 3600 7000 3700
+Wire Wire Line
+	6700 3700 6850 3700
+Wire Wire Line
+	6850 3700 6850 3600
+Connection ~ 6850 3600
+Wire Wire Line
+	6850 3600 7000 3600
 $EndSCHEMATC

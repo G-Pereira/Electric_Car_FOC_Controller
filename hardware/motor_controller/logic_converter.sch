@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 8 13
+Sheet 12 13
 Title ""
 Date ""
 Rev ""
@@ -81,23 +81,6 @@ F 3 "" H 5400 3900 50  0001 C CNN
 	1    5400 3900
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:+24V #PWR091
-U 1 1 5DE58E01
-P 6100 3900
-AR Path="/5DEDB0CD/5DE58E01" Ref="#PWR091"  Part="1" 
-AR Path="/5DEE527A/5DE58E01" Ref="#PWR093"  Part="1" 
-AR Path="/5DEF4ACC/5DE58E01" Ref="#PWR095"  Part="1" 
-AR Path="/5DF13C30/5DE58E01" Ref="#PWR097"  Part="1" 
-AR Path="/5DF13C34/5DE58E01" Ref="#PWR099"  Part="1" 
-AR Path="/5DF13C38/5DE58E01" Ref="#PWR0101"  Part="1" 
-F 0 "#PWR0101" H 6100 3750 50  0001 C CNN
-F 1 "+24V" H 6115 4073 50  0000 C CNN
-F 2 "" H 6100 3900 50  0001 C CNN
-F 3 "" H 6100 3900 50  0001 C CNN
-	1    6100 3900
-	1    0    0    -1  
-$EndComp
 Text HLabel 5250 4350 0    50   Input ~ 0
 in
 Text HLabel 6250 4350 2    50   Output ~ 0
@@ -127,4 +110,21 @@ Wire Wire Line
 	6100 4350 6250 4350
 Wire Wire Line
 	6100 3900 6100 4000
+$Comp
+L power:+15V #PWR0113
+U 1 1 5DEB8F65
+P 6100 3900
+AR Path="/5DF13C38/5DEB8F65" Ref="#PWR0113"  Part="1" 
+AR Path="/5DF13C34/5DEB8F65" Ref="#PWR0112"  Part="1" 
+AR Path="/5DEDB0CD/5DEB8F65" Ref="#PWR0108"  Part="1" 
+AR Path="/5DEE527A/5DEB8F65" Ref="#PWR0109"  Part="1" 
+AR Path="/5DEF4ACC/5DEB8F65" Ref="#PWR0110"  Part="1" 
+AR Path="/5DF13C30/5DEB8F65" Ref="#PWR0111"  Part="1" 
+F 0 "#PWR0113" H 6100 3750 50  0001 C CNN
+F 1 "+15V" H 6115 4073 50  0000 C CNN
+F 2 "" H 6100 3900 50  0001 C CNN
+F 3 "" H 6100 3900 50  0001 C CNN
+	1    6100 3900
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
