@@ -29,6 +29,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -94,12 +95,12 @@ void Error_Handler(void);
 #define Gyro_CS_GPIO_Port GPIOB
 #define Magnet_CS_Pin GPIO_PIN_10
 #define Magnet_CS_GPIO_Port GPIOB
-#define FOC_Status_Pin GPIO_PIN_6
-#define FOC_Status_GPIO_Port GPIOC
 #define SW_25MHz_output_Pin GPIO_PIN_8
 #define SW_25MHz_output_GPIO_Port GPIOA
-#define CAN_STBY_Pin GPIO_PIN_10
-#define CAN_STBY_GPIO_Port GPIOC
+#define CAN_STBY_Pin GPIO_PIN_5
+#define CAN_STBY_GPIO_Port GPIOB
+#define FOC_Status_Pin GPIO_PIN_6
+#define FOC_Status_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

@@ -699,7 +699,7 @@ Text Label 2600 6800 0    50   ~ 0
 SPI2_MISO
 Text Label 2600 6600 0    50   ~ 0
 SPI2_NSS
-Text Label 1200 6000 2    50   ~ 0
+Text Label 2600 5900 0    50   ~ 0
 FOC_Status
 $Comp
 L Interface_CAN_LIN:MCP2562-E-SN U8
@@ -2668,6 +2668,32 @@ Text Label 1200 5800 2    50   ~ 0
 voltage_ph2
 Text Label 1200 5900 2    50   ~ 0
 voltage_ph3
-Text Label 1200 6400 2    50   ~ 0
+Text Label 2600 6000 0    50   ~ 0
 CAN_STBY
+Text Label 15500 4700 0    50   ~ 0
+voltage_dc_bus
+Text Label 4900 9200 2    50   ~ 0
+SD_DAT3
+Text Label 4900 9100 2    50   ~ 0
+SD_DAT2
+Text Label 4900 9300 2    50   ~ 0
+SD_CMD
+Text Label 4900 9500 2    50   ~ 0
+SD_CLK
+Text Label 4900 9700 2    50   ~ 0
+SD_DAT0
+Text Label 4900 9800 2    50   ~ 0
+SD_DAT1
+Text Label 1200 6400 2    50   ~ 0
+SD_DAT2
+Text Label 1200 6500 2    50   ~ 0
+SD_DAT3
+Text Label 1200 5200 2    50   ~ 0
+SD_CMD
+Text Label 1200 6600 2    50   ~ 0
+SD_CLK
+Text Label 1200 6200 2    50   ~ 0
+SD_DAT0
+Text Label 1200 6300 2    50   ~ 0
+SD_DAT1
 $EndSCHEMATC
