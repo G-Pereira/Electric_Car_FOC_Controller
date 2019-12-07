@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:electric-FIAT-cache
 EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
@@ -464,11 +463,11 @@ F 3 "" H 12500 10550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Label 13200 10350 2    50   ~ 0
-SPI1_SCK
+SPI2_SCK
 Text Label 13200 10450 2    50   ~ 0
-SPI1_MOSI
+SPI2_MOSI
 Text Label 13150 10700 2    50   ~ 0
-SPI1_MISO
+SPI2_MISO
 Wire Wire Line
 	13150 10700 13200 10700
 Wire Wire Line
@@ -535,10 +534,6 @@ Wire Wire Line
 Connection ~ 1100 3700
 Wire Wire Line
 	1100 3700 1200 3700
-Text Label 2600 4200 0    50   ~ 0
-SPI1_SCK
-Text Label 2600 4400 0    50   ~ 0
-SPI1_MOSI
 $Comp
 L Device:C C20
 U 1 1 5DC95CFF
@@ -650,13 +645,7 @@ Wire Wire Line
 Wire Wire Line
 	2850 3200 2500 3200
 Connection ~ 2500 3200
-Text Label 2600 4300 0    50   ~ 0
-SPI1_MISO
-Text Label 2600 4100 0    50   ~ 0
-SPI1_CS_Accel
-Text Label 1200 5800 2    50   ~ 0
-SPI1_CS_Gyro
-Text Label 1200 5900 2    50   ~ 0
+Text Label 2600 6400 0    50   ~ 0
 SPI1_CS_Magnet
 Text Label 2600 5400 0    50   ~ 0
 Motor_temp
@@ -792,7 +781,7 @@ CAN_TX
 Text Label 1500 9200 2    50   ~ 0
 CAN_STBY
 Text Label 2600 4700 0    50   ~ 0
-CAN_STBY
+USART_RX
 $Comp
 L fiat:TMC4671-ES U1
 U 1 1 5DCA1D60
@@ -933,17 +922,6 @@ F 3 "" H 10100 5100 50  0001 C CNN
 $EndComp
 Text Label 4400 4600 2    50   ~ 0
 FOC_Status
-$Comp
-L MCU_ST_STM32F4:STM32F405RGTx U6
-U 1 1 5DC72DB0
-P 1900 5300
-F 0 "U6" H 2200 3400 50  0000 C CNN
-F 1 "STM32F405RGTx" H 2450 3500 50  0000 C CNN
-F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 1300 3600 50  0001 R CNN
-F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00037051.pdf" H 1900 5300 50  0001 C CNN
-	1    1900 5300
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	1350 2350 1350 2250
 Wire Wire Line
@@ -2645,4 +2623,51 @@ Wire Wire Line
 	2500 2450 2700 2450
 Wire Wire Line
 	2500 2450 2500 2550
+Text Label 2600 4500 0    50   ~ 0
+Square_Wave_25MHz
+Text Label 2600 4600 0    50   ~ 0
+USART_TX
+Text Label 1200 5400 2    50   ~ 0
+ENCODER_VA
+Text Label 1200 5500 2    50   ~ 0
+ENCODER_VB
+Text Label 1200 5600 2    50   ~ 0
+braking_pedal
+Text Label 1200 5700 2    50   ~ 0
+accelerator_pedal
+Text Label 2600 5600 0    50   ~ 0
+SPI1_CS_Gyro
+Text Label 2600 4000 0    50   ~ 0
+voltage_dc_bus
+$Comp
+L MCU_ST_STM32F4:STM32F405RGTx U6
+U 1 1 5DC72DB0
+P 1900 5300
+F 0 "U6" H 2200 3400 50  0000 C CNN
+F 1 "STM32F405RGTx" H 2450 3500 50  0000 C CNN
+F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 1300 3600 50  0001 R CNN
+F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00037051.pdf" H 1900 5300 50  0001 C CNN
+	1    1900 5300
+	1    0    0    -1  
+$EndComp
+Text Label 2600 4100 0    50   ~ 0
+SPI1_CS_Accel
+Text Label 2600 4200 0    50   ~ 0
+SPI2_NSS
+Text Label 2600 4300 0    50   ~ 0
+current_dc_bus
+Text Label 15050 6400 0    50   ~ 0
+voltage_ph1
+Text Label 15050 6800 0    50   ~ 0
+voltage_ph2
+Text Label 15050 7200 0    50   ~ 0
+voltage_ph3
+Text Label 2600 4400 0    50   ~ 0
+voltage_ph1
+Text Label 1200 5800 2    50   ~ 0
+voltage_ph2
+Text Label 1200 5900 2    50   ~ 0
+voltage_ph3
+Text Label 1200 6400 2    50   ~ 0
+CAN_STBY
 $EndSCHEMATC
