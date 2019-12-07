@@ -193,7 +193,7 @@ int main(void)
 
 	  //convert adc value for voltage on DC bus
 
-	  //rconvert the 3 adc current values from the motor
+	  //convert the 3 adc current values from the motor
 
 	  //convert the 3 adc current values from the motor
 	  curr_ph1 = motorCurrent(adc_dma[0]);

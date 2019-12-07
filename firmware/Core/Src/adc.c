@@ -90,16 +90,30 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     /* ADC1 clock enable */
     __HAL_RCC_ADC1_CLK_ENABLE();
   
+    __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     /**ADC1 GPIO Configuration    
+    PC0     ------> ADC1_IN10
+    PC1     ------> ADC1_IN11
+    PC2     ------> ADC1_IN12
+    PC3     ------> ADC1_IN13
     PA0-WKUP     ------> ADC1_IN0
     PA1     ------> ADC1_IN1
     PA2     ------> ADC1_IN2
+    PA3     ------> ADC1_IN3
+    PA6     ------> ADC1_IN6
+    PA7     ------> ADC1_IN7
     PB0     ------> ADC1_IN8
     PB1     ------> ADC1_IN9 
     */
-    GPIO_InitStruct.Pin = Current_PH1_Pin|Current_PH2_Pin|Current_PH3_Pin;
+    GPIO_InitStruct.Pin = encoder_w1_Pin|encoder_w2_Pin|braking_pedal_Pin|accelerator_pedal_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = Current_PH1_Pin|Current_PH2_Pin|Current_PH3_Pin|DC_bus_voltage_Pin 
+                          |DC_bus_current_Pin|Motor_Voltage_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -146,13 +160,23 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     __HAL_RCC_ADC1_CLK_DISABLE();
   
     /**ADC1 GPIO Configuration    
+    PC0     ------> ADC1_IN10
+    PC1     ------> ADC1_IN11
+    PC2     ------> ADC1_IN12
+    PC3     ------> ADC1_IN13
     PA0-WKUP     ------> ADC1_IN0
     PA1     ------> ADC1_IN1
     PA2     ------> ADC1_IN2
+    PA3     ------> ADC1_IN3
+    PA6     ------> ADC1_IN6
+    PA7     ------> ADC1_IN7
     PB0     ------> ADC1_IN8
     PB1     ------> ADC1_IN9 
     */
-    HAL_GPIO_DeInit(GPIOA, Current_PH1_Pin|Current_PH2_Pin|Current_PH3_Pin);
+    HAL_GPIO_DeInit(GPIOC, encoder_w1_Pin|encoder_w2_Pin|braking_pedal_Pin|accelerator_pedal_Pin);
+
+    HAL_GPIO_DeInit(GPIOA, Current_PH1_Pin|Current_PH2_Pin|Current_PH3_Pin|DC_bus_voltage_Pin 
+                          |DC_bus_current_Pin|Motor_Voltage_Pin);
 
     HAL_GPIO_DeInit(GPIOB, Motor_temp_Pin|Inverter_temp_Pin);
 

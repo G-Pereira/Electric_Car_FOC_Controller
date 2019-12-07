@@ -58,16 +58,30 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define encoder_w1_Pin GPIO_PIN_0
+#define encoder_w1_GPIO_Port GPIOC
+#define encoder_w2_Pin GPIO_PIN_1
+#define encoder_w2_GPIO_Port GPIOC
+#define braking_pedal_Pin GPIO_PIN_2
+#define braking_pedal_GPIO_Port GPIOC
+#define accelerator_pedal_Pin GPIO_PIN_3
+#define accelerator_pedal_GPIO_Port GPIOC
 #define Current_PH1_Pin GPIO_PIN_0
 #define Current_PH1_GPIO_Port GPIOA
 #define Current_PH2_Pin GPIO_PIN_1
 #define Current_PH2_GPIO_Port GPIOA
 #define Current_PH3_Pin GPIO_PIN_2
 #define Current_PH3_GPIO_Port GPIOA
+#define DC_bus_voltage_Pin GPIO_PIN_3
+#define DC_bus_voltage_GPIO_Port GPIOA
 #define Accel_CS_Pin GPIO_PIN_4
 #define Accel_CS_GPIO_Port GPIOA
 #define FOC_IC_CS_Pin GPIO_PIN_5
 #define FOC_IC_CS_GPIO_Port GPIOA
+#define DC_bus_current_Pin GPIO_PIN_6
+#define DC_bus_current_GPIO_Port GPIOA
+#define Motor_Voltage_Pin GPIO_PIN_7
+#define Motor_Voltage_GPIO_Port GPIOA
 #define Gyro_CS_Pin GPIO_PIN_4
 #define Gyro_CS_GPIO_Port GPIOC
 #define Magnet_CS_Pin GPIO_PIN_5
