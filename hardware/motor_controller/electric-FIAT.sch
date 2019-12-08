@@ -1,9 +1,10 @@
 EESchema Schematic File Version 4
+LIBS:electric-FIAT-cache
 EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 1 13
+Sheet 1 14
 Title "Motor Controller"
 Date "2019-11-18"
 Rev "0.3"
@@ -2543,12 +2544,12 @@ $EndComp
 $Comp
 L Connector_Generic:Conn_02x05_Odd_Even J?
 U 1 1 5E3A6BB6
-P 8500 9600
-F 0 "J?" H 8550 10017 50  0000 C CNN
-F 1 "RTMI" H 8550 9926 50  0000 C CNN
-F 2 "" H 8500 9600 50  0001 C CNN
-F 3 "~" H 8500 9600 50  0001 C CNN
-	1    8500 9600
+P 3100 10400
+F 0 "J?" H 3150 10817 50  0000 C CNN
+F 1 "RTMI" H 3150 10726 50  0000 C CNN
+F 2 "" H 3100 10400 50  0001 C CNN
+F 3 "~" H 3100 10400 50  0001 C CNN
+	1    3100 10400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -2696,4 +2697,96 @@ Text Label 1200 6200 2    50   ~ 0
 SD_DAT0
 Text Label 1200 6300 2    50   ~ 0
 SD_DAT1
+$Comp
+L Device:R_POT RV?
+U 1 1 5DF3A930
+P 1150 10400
+F 0 "RV?" H 1080 10446 50  0000 R CNN
+F 1 "Pedal Sensor" H 1080 10355 50  0000 R CNN
+F 2 "" H 1150 10400 50  0001 C CNN
+F 3 "~" H 1150 10400 50  0001 C CNN
+	1    1150 10400
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5DF407CE
+P 1150 10550
+F 0 "#PWR?" H 1150 10300 50  0001 C CNN
+F 1 "GND" H 1155 10377 50  0000 C CNN
+F 2 "" H 1150 10550 50  0001 C CNN
+F 3 "" H 1150 10550 50  0001 C CNN
+	1    1150 10550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5DF5758D
+P 1150 10250
+F 0 "#PWR?" H 1150 10100 50  0001 C CNN
+F 1 "+3V3" H 1165 10423 50  0000 C CNN
+F 2 "" H 1150 10250 50  0001 C CNN
+F 3 "" H 1150 10250 50  0001 C CNN
+	1    1150 10250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5E015BAF
+P 2900 10200
+F 0 "#PWR?" H 2900 10050 50  0001 C CNN
+F 1 "+3V3" H 2915 10373 50  0000 C CNN
+F 2 "" H 2900 10200 50  0001 C CNN
+F 3 "" H 2900 10200 50  0001 C CNN
+	1    2900 10200
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E042A59
+P 3400 10600
+F 0 "#PWR?" H 3400 10350 50  0001 C CNN
+F 1 "GND" H 3405 10427 50  0000 C CNN
+F 2 "" H 3400 10600 50  0001 C CNN
+F 3 "" H 3400 10600 50  0001 C CNN
+	1    3400 10600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3400 10400 3400 10500
+Connection ~ 3400 10600
+Connection ~ 3400 10500
+Wire Wire Line
+	3400 10500 3400 10600
+Text Notes 11050 5950 0    100  ~ 20
+DC-Link Current Sensor
+$Sheet
+S 11500 6200 800  300 
+U 5E0A8F27
+F0 "sheet5E0A8F22" 50
+F1 "current_sensor.sch" 50
+F2 "IGBT_PH1" I L 11500 6300 50 
+F3 "Motor_PH1" O L 11500 6400 50 
+F4 "out" O R 12300 6300 50 
+$EndSheet
+Text Label 12300 6300 0    50   ~ 0
+current_dc_bus
+Text Label 2900 10600 2    50   ~ 0
+DBGSPI_MISO
+Text Label 2900 10500 2    50   ~ 0
+DBGSPI_MOSI
+Text Label 2900 10400 2    50   ~ 0
+DBGSPI_SCK
+Text Label 2900 10300 2    50   ~ 0
+DBGSPI_nSCS
+Text Label 6800 4800 0    50   ~ 0
+GPIO0
+Text Label 6800 4900 0    50   ~ 0
+GPIO1
+Text Label 3500 10200 0    50   ~ 0
+GPIO0
+Text Label 3500 10300 0    50   ~ 0
+GPIO1
+Text Label 1300 10400 0    50   ~ 0
+braking_pedal
 $EndSCHEMATC
