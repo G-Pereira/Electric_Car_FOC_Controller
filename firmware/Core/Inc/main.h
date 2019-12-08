@@ -59,6 +59,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Conv_temp_error_Pin GPIO_PIN_13
+#define Conv_temp_error_GPIO_Port GPIOC
 #define encoder_va_Pin GPIO_PIN_0
 #define encoder_va_GPIO_Port GPIOC
 #define encoder_vb_Pin GPIO_PIN_1
@@ -95,12 +97,20 @@ void Error_Handler(void);
 #define Gyro_CS_GPIO_Port GPIOB
 #define Magnet_CS_Pin GPIO_PIN_10
 #define Magnet_CS_GPIO_Port GPIOB
+#define SDIO_DET_Pin GPIO_PIN_7
+#define SDIO_DET_GPIO_Port GPIOC
 #define SW_25MHz_output_Pin GPIO_PIN_8
 #define SW_25MHz_output_GPIO_Port GPIOA
 #define CAN_STBY_Pin GPIO_PIN_5
 #define CAN_STBY_GPIO_Port GPIOB
 #define FOC_Status_Pin GPIO_PIN_6
 #define FOC_Status_GPIO_Port GPIOB
+#define Conv_error_1_Pin GPIO_PIN_7
+#define Conv_error_1_GPIO_Port GPIOB
+#define Conv_error_2_Pin GPIO_PIN_8
+#define Conv_error_2_GPIO_Port GPIOB
+#define Conv_error_3_Pin GPIO_PIN_9
+#define Conv_error_3_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

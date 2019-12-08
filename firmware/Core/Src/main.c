@@ -27,7 +27,6 @@
 #include "rtc.h"
 #include "sdio.h"
 #include "spi.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -153,7 +152,6 @@ int main(void)
   MX_CAN1_Init();
   MX_RTC_Init();
   MX_SPI2_Init();
-  MX_USART1_UART_Init();
   MX_FATFS_Init();
   MX_DMA_Init();
   MX_SDIO_SD_Init();
