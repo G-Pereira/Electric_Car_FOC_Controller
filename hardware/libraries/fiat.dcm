@@ -6,6 +6,12 @@ K hall effect current monitor sensor isolated
 F https://www.allegromicro.com/-/media/Files/Datasheets/ACS773-Datasheet.ashx
 $ENDCMP
 #
+$CMP AO3400
+D 30V Vds, 5.8A Id, N-Channel MOSFET, SOT-23
+K N-Channel MOSFET
+F http://www.aosmd.com/pdfs/datasheet/ao3400.pdf
+$ENDCMP
+#
 $CMP TMC4671-ES
 D IC MOTOR DRIVER MULTIPHASE 76QFN
 K 1460-1302-ND
