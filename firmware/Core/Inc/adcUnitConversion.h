@@ -2,7 +2,6 @@
  * adcUnitConversion.h
  *
  *  Created on: 27/11/2019
- *      Author: Catarina
  */
 
 #ifndef INC_ADCUNITCONVERSION_H_
@@ -18,5 +17,8 @@ float igbtTemp (int adcReading);
 float motorTemp (int adcReading);
 
 float voltageAC (int adcReading);
+float voltageDC (int adcReading);
+
+float pedalPos (int adcReading);
 
 #endif /* INC_ADCUNITCONVERSION_H_ */
