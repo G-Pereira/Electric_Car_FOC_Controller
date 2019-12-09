@@ -12,6 +12,12 @@ K N-Channel MOSFET
 F http://www.aosmd.com/pdfs/datasheet/ao3400.pdf
 $ENDCMP
 #
+$CMP TEN40-1215E
+D 1.666A Isolated DC/DC Converter Module, fixed 24V Output Voltage, 9-18V Input Voltage
+K Traco isolated DC/DC Converter module
+F https://assets.tracopower.com/20191205133257/TEN40E/documents/ten40e-datasheet.pdf
+$ENDCMP
+#
 $CMP TMC4671-ES
 D IC MOTOR DRIVER MULTIPHASE 76QFN
 K 1460-1302-ND

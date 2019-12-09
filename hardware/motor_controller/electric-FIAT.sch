@@ -1056,17 +1056,6 @@ Wire Wire Line
 Connection ~ 1200 9900
 Wire Wire Line
 	1200 9900 1250 9900
-$Comp
-L Converter_DCDC:TEN20-2412WIN U19
-U 1 1 5DE48FF4
-P 2450 10400
-F 0 "U19" H 2450 10867 50  0000 C CNN
-F 1 "TEN40-1215" H 2450 10776 50  0000 C CNN
-F 2 "Converter_DCDC:Converter_DCDC_TRACO_TEN20-xxxx_THT" H 3050 10000 50  0001 C CIN
-F 3 "http://www.tracopower.com/products/ten20win.pdf" H 2450 10400 50  0001 C CNN
-	1    2450 10400
-	1    0    0    -1  
-$EndComp
 Connection ~ 1200 10200
 Wire Wire Line
 	1950 10600 1200 10600
@@ -2090,7 +2079,7 @@ U 1 1 5E673507
 P 7250 5200
 F 0 "J5" H 7358 5481 50  0000 C CNN
 F 1 "Batt_conn" H 7358 5390 50  0000 C CNN
-F 2 "" H 7250 5200 50  0001 C CNN
+F 2 "fiat:Battery" H 7250 5200 50  0001 C CNN
 F 3 "~" H 7250 5200 50  0001 C CNN
 	1    7250 5200
 	1    0    0    -1  
@@ -2106,8 +2095,6 @@ F 3 "~" H 7200 8700 50  0001 C CNN
 	1    7200 8700
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7450 5100 7550 5100
 Connection ~ 7650 5100
 Wire Wire Line
 	7650 5100 7750 5100
@@ -3589,23 +3576,17 @@ F 3 "~" H 8750 5200 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	8550 5200 8600 5200
-Wire Wire Line
-	7450 5300 7750 5300
 $Comp
 L power:GND #PWR056
 U 1 1 618B49E6
-P 7700 5500
-F 0 "#PWR056" H 7700 5250 50  0001 C CNN
-F 1 "GND" H 7705 5327 50  0000 C CNN
-F 2 "" H 7700 5500 50  0001 C CNN
-F 3 "" H 7700 5500 50  0001 C CNN
-	1    7700 5500
+P 7500 5350
+F 0 "#PWR056" H 7500 5100 50  0001 C CNN
+F 1 "GND" H 7505 5177 50  0000 C CNN
+F 2 "" H 7500 5350 50  0001 C CNN
+F 3 "" H 7500 5350 50  0001 C CNN
+	1    7500 5350
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7700 5200 7700 5500
-Wire Wire Line
-	7450 5200 7700 5200
 Wire Notes Line width 20
 	10400 4100 7050 4100
 Text Notes 10300 4650 2    100  ~ 20
@@ -5444,7 +5425,6 @@ F 3 "" H 3850 10800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 NoConn ~ 2950 10400
-NoConn ~ 1950 10400
 Wire Notes Line width 20
 	7800 9550 7800 11200
 Wire Notes Line width 20
@@ -5573,24 +5553,6 @@ $EndComp
 Connection ~ 1200 8300
 Wire Wire Line
 	1200 8300 1550 8300
-$Comp
-L power:PWR_FLAG #FLG01
-U 1 1 667A36D6
-P 7500 4800
-F 0 "#FLG01" H 7500 4875 50  0001 C CNN
-F 1 "PWR_FLAG" H 7500 4973 50  0000 C CNN
-F 2 "" H 7500 4800 50  0001 C CNN
-F 3 "~" H 7500 4800 50  0001 C CNN
-	1    7500 4800
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7500 4800 7550 4800
-Wire Wire Line
-	7550 4800 7550 5100
-Connection ~ 7550 5100
-Wire Wire Line
-	7550 5100 7650 5100
 Wire Wire Line
 	4500 10750 4250 10750
 Wire Wire Line
@@ -5643,4 +5605,26 @@ Wire Wire Line
 	12800 3300 13100 3300
 Wire Wire Line
 	13100 3600 13400 3600
+$Comp
+L fiat:TEN40-1215E U19
+U 1 1 5DF985CB
+P 2450 10400
+F 0 "U19" H 2450 10867 50  0000 C CNN
+F 1 "TEN40-1215E" H 2450 10776 50  0000 C CNN
+F 2 "fiat:Converter_DCDC_TRACO_TEN40-xxxxE" H 3050 10000 50  0001 C CIN
+F 3 "https://assets.tracopower.com/20191205133257/TEN40E/documents/ten40e-datasheet.pdf" H 2450 10400 50  0001 C CNN
+	1    2450 10400
+	1    0    0    -1  
+$EndComp
+NoConn ~ 1950 10400
+Wire Wire Line
+	7450 5100 7650 5100
+Wire Wire Line
+	7450 5200 7750 5200
+Wire Wire Line
+	7750 5200 7750 5300
+Wire Wire Line
+	7500 5350 7500 5300
+Wire Wire Line
+	7500 5300 7450 5300
 $EndSCHEMATC
