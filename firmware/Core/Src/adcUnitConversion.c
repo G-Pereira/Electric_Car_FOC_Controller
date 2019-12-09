@@ -2,7 +2,6 @@
  * adcUnitConversion.c
  *
  *  Created on: 27/11/2019
- *      Author: Catarina
  */
 
 
@@ -68,6 +67,35 @@ float voltageAC (int adcReading){
 	float Vin = ((R1*R2)/R2)*Vout;
 
 	return Vin;
+
+}
+
+float voltageDC (int adcReading){
+
+	/*
+	 * R1 = R9 = 300k
+	 * R2 = R12 = 2k
+	 * R3 = R10 = 39  <- negligenciar?
+	 */
+
+	int R1 = 300000;
+	int R2 = 2000;
+	int R3 = 39;
+
+	float Vout = adcInt2Volt(adcReading);
+
+	float Vin = ((R1*R2)/R2)*Vout;
+
+	return Vin;
+
+}
+
+
+float pedalPos (int adcReading){
+
+	float pos = (adcInt2Volt(adcReading)/ADCVREF)*100;
+
+	return pos;
 
 }
 
