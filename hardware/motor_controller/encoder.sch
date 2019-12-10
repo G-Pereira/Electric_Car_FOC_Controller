@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:encoder-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -13,136 +14,41 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L Amplifier_Operational:OPA356xxD U1
-U 1 1 5DEE3782
-P 4950 2900
-F 0 "U1" H 5294 2946 50  0000 L CNN
-F 1 "OPA356xxD" H 5294 2855 50  0000 L CNN
-F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 4850 2700 50  0001 L CNN
-F 3 "http://www.ti.com/lit/ds/symlink/opa356.pdf" H 5100 3050 50  0001 C CNN
-	1    4950 2900
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR03
-U 1 1 5DEE4155
-P 4850 2600
-F 0 "#PWR03" H 4850 2450 50  0001 C CNN
-F 1 "+3.3V" H 4865 2773 50  0000 C CNN
-F 2 "" H 4850 2600 50  0001 C CNN
-F 3 "" H 4850 2600 50  0001 C CNN
-	1    4850 2600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR04
-U 1 1 5DEE4797
-P 4850 3200
-F 0 "#PWR04" H 4850 2950 50  0001 C CNN
-F 1 "GND" H 4855 3027 50  0000 C CNN
-F 2 "" H 4850 3200 50  0001 C CNN
-F 3 "" H 4850 3200 50  0001 C CNN
-	1    4850 3200
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R2
-U 1 1 5DEE4D3C
-P 4150 3050
-F 0 "R2" V 3943 3050 50  0000 C CNN
-F 1 "1k2" V 4034 3050 50  0000 C CNN
-F 2 "" V 4080 3050 50  0001 C CNN
-F 3 "~" H 4150 3050 50  0001 C CNN
-	1    4150 3050
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R R3
-U 1 1 5DEE544B
-P 4400 3200
-F 0 "R3" H 4470 3246 50  0000 L CNN
-F 1 "910" H 4470 3155 50  0000 L CNN
-F 2 "" V 4330 3200 50  0001 C CNN
-F 3 "~" H 4400 3200 50  0001 C CNN
-	1    4400 3200
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+5V #PWR01
-U 1 1 5DEE5BA3
-P 3850 3050
-F 0 "#PWR01" H 3850 2900 50  0001 C CNN
-F 1 "+5V" H 3865 3223 50  0000 C CNN
-F 2 "" H 3850 3050 50  0001 C CNN
-F 3 "" H 3850 3050 50  0001 C CNN
-	1    3850 3050
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R1
-U 1 1 5DEE62D4
-P 4150 2750
-F 0 "R1" V 3943 2750 50  0000 C CNN
-F 1 "1k2" V 4034 2750 50  0000 C CNN
-F 2 "" V 4080 2750 50  0001 C CNN
-F 3 "~" H 4150 2750 50  0001 C CNN
-	1    4150 2750
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R R4
-U 1 1 5DEE82C2
-P 4850 2200
-F 0 "R4" V 4643 2200 50  0000 C CNN
-F 1 "1k2" V 4734 2200 50  0000 C CNN
-F 2 "" V 4780 2200 50  0001 C CNN
-F 3 "~" H 4850 2200 50  0001 C CNN
-	1    4850 2200
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	3850 3050 4000 3050
-Wire Wire Line
-	4300 3050 4400 3050
-$Comp
-L power:GND #PWR02
-U 1 1 5DEE9686
-P 4400 3350
-F 0 "#PWR02" H 4400 3100 50  0001 C CNN
-F 1 "GND" H 4405 3177 50  0000 C CNN
-F 2 "" H 4400 3350 50  0001 C CNN
-F 3 "" H 4400 3350 50  0001 C CNN
-	1    4400 3350
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4650 3000 4400 3000
-Wire Wire Line
-	4400 3000 4400 3050
-Connection ~ 4400 3050
-Wire Wire Line
-	4650 2800 4650 2750
-Wire Wire Line
-	4650 2750 4550 2750
-Wire Wire Line
-	4700 2200 4550 2200
-Wire Wire Line
-	4550 2200 4550 2750
-Connection ~ 4550 2750
-Wire Wire Line
-	4550 2750 4300 2750
-Wire Wire Line
-	5000 2200 5250 2200
-Wire Wire Line
-	5250 2200 5250 2500
-Text HLabel 4000 2750 0    50   Input ~ 0
+Text HLabel 3150 2000 0    50   Input ~ 0
 encoder
-Text HLabel 5400 2500 2    50   Output ~ 0
+Text HLabel 3450 2000 2    50   Output ~ 0
 out
-Wire Wire Line
-	5400 2500 5250 2500
-Connection ~ 5250 2500
-Wire Wire Line
-	5250 2500 5250 2900
+$Comp
+L power:+1V8 #PWR?
+U 1 1 5DEFA6C6
+P 3450 1700
+F 0 "#PWR?" H 3450 1550 50  0001 C CNN
+F 1 "+1V8" H 3465 1873 50  0000 C CNN
+F 2 "" H 3450 1700 50  0001 C CNN
+F 3 "" H 3450 1700 50  0001 C CNN
+	1    3450 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 5DEFAB95
+P 3300 2000
+F 0 "C?" V 3048 2000 50  0000 C CNN
+F 1 "330n" V 3139 2000 50  0000 C CNN
+F 2 "" H 3338 1850 50  0001 C CNN
+F 3 "~" H 3300 2000 50  0001 C CNN
+	1    3300 2000
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DEFB698
+P 3450 1850
+F 0 "R?" H 3380 1804 50  0000 R CNN
+F 1 "22k" H 3380 1895 50  0000 R CNN
+F 2 "" V 3380 1850 50  0001 C CNN
+F 3 "~" H 3450 1850 50  0001 C CNN
+	1    3450 1850
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC
