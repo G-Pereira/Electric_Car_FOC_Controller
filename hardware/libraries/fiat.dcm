@@ -12,6 +12,18 @@ K N-Channel MOSFET
 F http://www.aosmd.com/pdfs/datasheet/ao3400.pdf
 $ENDCMP
 #
+$CMP ITW1205SA
+D XP Power 1W, 1.5k VDC Isolated DC/DC Converter Module, Fully Regulated Single Output Voltage 5V, ±200mA, 9-18V Input
+K XP_POWER DC/DC isolated Converter module
+F https://www.xppower.com/Portals/0/pdfs/SF_ITW.pdf
+$ENDCMP
+#
+$CMP IU1203SA
+D XP Power 2W, 1000 VDC Isolated DC/DC Converter Module, Fully Regulated Single Output Voltage 3.3V, ±500mA, 9-18V Input Voltage, SIP
+K XP_POWER DC/DC isolated Converter module
+F https://www.xppower.com/Portals/0/pdfs/SF_IU.pdf
+$ENDCMP
+#
 $CMP TEN40-1215E
 D 1.666A Isolated DC/DC Converter Module, fixed 24V Output Voltage, 9-18V Input Voltage
 K Traco isolated DC/DC Converter module
