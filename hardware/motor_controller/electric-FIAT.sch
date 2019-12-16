@@ -378,9 +378,9 @@ Text Label 6350 4600 0    50   ~ 0
 Inverter_temp
 Text Label 9000 8750 0    50   ~ 0
 Motor_Current_W
-Text Label 6350 2800 0    50   ~ 0
+Text Label 4950 4500 2    50   ~ 0
 Motor_Current_U
-Text Label 6350 2900 0    50   ~ 0
+Text Label 4950 4600 2    50   ~ 0
 Motor_Current_V
 Text Label 6350 3000 0    50   ~ 0
 Motor_Current_W
@@ -1540,9 +1540,9 @@ Wire Wire Line
 Wire Wire Line
 	3250 1600 3250 1700
 Connection ~ 3250 1700
-Text Label 4950 4500 2    50   ~ 0
+Text Label 6350 2800 0    50   ~ 0
 ENCODER_VA
-Text Label 4950 4600 2    50   ~ 0
+Text Label 6350 2900 0    50   ~ 0
 ENCODER_VB
 Text Label 4950 4700 2    50   ~ 0
 braking_pedal
