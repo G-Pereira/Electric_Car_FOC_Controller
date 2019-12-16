@@ -1,4 +1,3 @@
 (sym_lib_table
   (lib (name fiat)(type Legacy)(uri ${KIPRJMOD}/../libraries/fiat.lib)(options "")(descr ""))
-  (lib (name encoder-rescue)(type Legacy)(uri ${KIPRJMOD}/encoder-rescue.lib)(options "")(descr ""))
 )
