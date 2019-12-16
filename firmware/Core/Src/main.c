@@ -27,6 +27,7 @@
 #include "rtc.h"
 #include "sdio.h"
 #include "spi.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -155,6 +156,7 @@ int main(void)
   MX_FATFS_Init();
   MX_DMA_Init();
   MX_SDIO_SD_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   //Initialize FOC-IC registers
@@ -179,6 +181,9 @@ int main(void)
 
 
   HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
+
+  //Initialize encoder mode
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
 
   /* USER CODE END 2 */
 
@@ -205,7 +210,8 @@ int main(void)
 	  temp_inv = motorCurrent(adc_dma[4]); //convert adc value for temperature on converter
 
 	  //read and convert adc values for encoder
-
+	  int counter = __HAL_TIM_GET_COUNTER(&htim2); //read counter register
+	  sprintf(str, "%d", counter); //arranjar encoder e testar
 	  //read and convert adc value for braking pedal
 
 
@@ -315,6 +321,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 
 /* USER CODE END 4 */
 

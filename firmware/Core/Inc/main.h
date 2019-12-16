@@ -61,18 +61,14 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define Conv_temp_error_Pin GPIO_PIN_13
 #define Conv_temp_error_GPIO_Port GPIOC
-#define encoder_va_Pin GPIO_PIN_0
-#define encoder_va_GPIO_Port GPIOC
-#define encoder_vb_Pin GPIO_PIN_1
-#define encoder_vb_GPIO_Port GPIOC
+#define current_ph1_Pin GPIO_PIN_0
+#define current_ph1_GPIO_Port GPIOC
+#define current_ph2_Pin GPIO_PIN_1
+#define current_ph2_GPIO_Port GPIOC
 #define braking_pedal_Pin GPIO_PIN_2
 #define braking_pedal_GPIO_Port GPIOC
 #define accelerator_pedal_Pin GPIO_PIN_3
 #define accelerator_pedal_GPIO_Port GPIOC
-#define current_ph1_Pin GPIO_PIN_0
-#define current_ph1_GPIO_Port GPIOA
-#define current_ph2_Pin GPIO_PIN_1
-#define current_ph2_GPIO_Port GPIOA
 #define current_ph3_Pin GPIO_PIN_2
 #define current_ph3_GPIO_Port GPIOA
 #define DC_bus_voltage_Pin GPIO_PIN_3
