@@ -1,4 +1,3 @@
 (fp_lib_table
-  (lib (name trinamic)(type KiCad)(uri ${KIPRJMOD}/../libraries/footprints.pretty)(options "")(descr ""))
   (lib (name fiat)(type KiCad)(uri /home/gpereira/Documents/Electric-FIAT/hardware/libraries/fiat.pretty)(options "")(descr ""))
 )

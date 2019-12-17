@@ -24,6 +24,12 @@ K XP_POWER DC/DC isolated Converter module
 F https://www.xppower.com/Portals/0/pdfs/SF_IU.pdf
 $ENDCMP
 #
+$CMP SN74LVC1GU04
+D Hex Inverter
+K TTL not inv
+F http://www.ti.com/lit/gpn/sn74LS04
+$ENDCMP
+#
 $CMP TEN40-1215E
 D 1.666A Isolated DC/DC Converter Module, fixed 24V Output Voltage, 9-18V Input Voltage
 K Traco isolated DC/DC Converter module
