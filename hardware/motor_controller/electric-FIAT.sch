@@ -6,7 +6,7 @@ encoding utf-8
 Sheet 1 1
 Title "Motor Controller"
 Date "2019-12-17"
-Rev "0.12.0"
+Rev "0.12.1"
 Comp ""
 Comment1 ""
 Comment2 ""
@@ -928,8 +928,8 @@ NoConn ~ 1200 5450
 NoConn ~ 1200 5550
 NoConn ~ 3500 6150
 NoConn ~ 1200 5750
-NoConn ~ 3500 4450
-NoConn ~ 3500 4650
+NoConn ~ 3500 4350
+NoConn ~ 3500 4550
 Text Label 1500 8550 0    50   ~ 0
 HB_VT
 Text Label 2750 9200 0    50   ~ 0
@@ -5180,9 +5180,9 @@ NoConn ~ 3500 5050
 Text Label 1600 2350 0    50   ~ 0
 DBGSPI_TRG
 NoConn ~ 1600 2250
-Text Label 3500 4550 0    50   ~ 0
+Text Label 3500 4650 0    50   ~ 0
 Motor_Current_U
-Text Label 3500 4350 0    50   ~ 0
+Text Label 3500 4450 0    50   ~ 0
 Motor_Current_V
 Wire Wire Line
 	650  10300 650  10000
