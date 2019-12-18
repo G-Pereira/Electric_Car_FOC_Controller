@@ -37,7 +37,7 @@
 #include "sd_wr.h"
 #include "IMU_read.h"
 #include "adcUnitConversion.h"
-#include "encoderConversion.h"
+#include "encoderMode.h"
 
 
 /* USER CODE END Includes */
