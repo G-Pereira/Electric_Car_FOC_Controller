@@ -37,6 +37,7 @@
 #include "sd_wr.h"
 #include "IMU_read.h"
 #include "adcUnitConversion.h"
+#include "encoderMode.h"
 
 
 /* USER CODE END Includes */
@@ -184,6 +185,7 @@ int main(void)
 
   //Initialize encoder mode
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  uint32_t counter = __HAL_TIM_GET_COUNTER(&htim2);
 
   /* USER CODE END 2 */
 
@@ -210,10 +212,10 @@ int main(void)
 	  temp_inv = motorCurrent(adc_dma[4]); //convert adc value for temperature on converter
 
 	  //read and convert adc values for encoder
-	  int counter = __HAL_TIM_GET_COUNTER(&htim2); //read counter register
+	  counter = __HAL_TIM_GET_COUNTER(&htim2); //read counter register
 	  sprintf(str, "%d", counter); //arranjar encoder e testar
-	  //read and convert adc value for braking pedal
 
+	  //read and convert adc value for braking pedal
 
 	  IMU_acc_read(&hspi2, accel_data); //read and convert accelerometer data
 	  sprintf(str, "%d", accel_data[0]);
