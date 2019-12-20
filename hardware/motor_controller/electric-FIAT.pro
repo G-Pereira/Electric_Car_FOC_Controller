@@ -1,4 +1,4 @@
-update=Wed 18 Dec 2019 03:12:34 AM WET
+update=Fri 20 Dec 2019 01:32:55 AM WET
 version=1
 last_client=kicad
 [general]
@@ -24,7 +24,7 @@ LabSize=50
 ERC_TestSimilarLabels=1
 [pcbnew]
 version=1
-PageLayoutDescrFile=
+PageLayoutDescrFile=sheet.kicad_wks
 LastNetListRead=
 CopperLayerCount=2
 BoardThickness=1.6
@@ -250,6 +250,17 @@ dPairViaGap=0.25
 Name=PWR
 Clearance=1
 TrackWidth=20
+ViaDiameter=0.8
+ViaDrill=0.4
+uViaDiameter=0.3
+uViaDrill=0.1
+dPairWidth=0.2
+dPairGap=0.25
+dPairViaGap=0.25
+[pcbnew/Netclasses/2]
+Name=supply
+Clearance=0.4
+TrackWidth=0.6
 ViaDiameter=0.8
 ViaDrill=0.4
 uViaDiameter=0.3
