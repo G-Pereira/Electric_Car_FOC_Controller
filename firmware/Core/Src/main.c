@@ -27,7 +27,6 @@
 #include "rtc.h"
 #include "sdio.h"
 #include "spi.h"
-#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -37,7 +36,8 @@
 #include "sd_wr.h"
 #include "IMU_read.h"
 #include "adcUnitConversion.h"
-#include "encoderMode.h"
+//#include "encoderMode.h"
+#include "encoderInterrupt.h"
 
 
 /* USER CODE END Includes */
@@ -90,6 +90,10 @@
 
 	//String aux
 	char *str;
+
+	//rpm counter - dir = 0 forward otherwise backwards
+	GPIO_PinState A, B;
+	volatile int state = 0, pstate = 0, dir = 0, counter = 0; //dir = 0 forwards, -1 reverse
 
 
 
@@ -157,7 +161,6 @@ int main(void)
   MX_FATFS_Init();
   MX_DMA_Init();
   MX_SDIO_SD_Init();
-  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   //Initialize FOC-IC registers
@@ -184,8 +187,11 @@ int main(void)
   HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
 
   //Initialize encoder mode
-  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
-  uint32_t counter = __HAL_TIM_GET_COUNTER(&htim2);
+  /*HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  uint32_t counter = __HAL_TIM_GET_COUNTER(&htim2);*/
+  //Initialize encoder - interrupts
+  stateSetup(&pstate,&tick);   // determine initial state and time
+
 
   /* USER CODE END 2 */
 
@@ -212,8 +218,19 @@ int main(void)
 	  temp_inv = motorCurrent(adc_dma[4]); //convert adc value for temperature on converter
 
 	  //read and convert adc values for encoder
-	  counter = __HAL_TIM_GET_COUNTER(&htim2); //read counter register
-	  sprintf(str, "%d", counter); //arranjar encoder e testar
+	 /* counter = __HAL_TIM_GET_COUNTER(&htim2); //read counter register
+	  sprintf(str, "%d", counter); //arranjar encoder e testar*/
+
+	  //read encoder - interrupt mode
+	  /*
+	   * if(tick - HAL_GetTick() > xxx){
+	   * 	rpm = rpm(&tick);
+	   * }
+	   *   if needed direction access dir.
+	   *
+	   * */
+
+
 
 	  //read and convert adc value for braking pedal
 
@@ -338,6 +355,30 @@ void Error_Handler(void)
 
   /* USER CODE END Error_Handler_Debug */
 }
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(GPIO_Pin);
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the HAL_GPIO_EXTI_Callback could be implemented in the user file
+   */
+
+  counter++; //test
+
+ /* if(GPIO_Pin == encoder_va_Pin || GPIO_Pin == encoder_vb_Pin){
+
+	  A = HAL_GPIO_ReadPin(GPIOA, encoder_va_Pin);
+	  B = HAL_GPIO_ReadPin(GPIOA, encoder_vb_Pin);
+
+	  updateCounter(A,B,&pstate,&dir,&counter); //state 1,2,3 or 4
+
+  }*/
+
+}
+
+
+
 
 #ifdef  USE_FULL_ASSERT
 /**

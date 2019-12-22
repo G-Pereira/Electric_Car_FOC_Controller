@@ -71,8 +71,10 @@ void Error_Handler(void);
 #define accelerator_pedal_GPIO_Port GPIOC
 #define encoder_va_Pin GPIO_PIN_0
 #define encoder_va_GPIO_Port GPIOA
+#define encoder_va_EXTI_IRQn EXTI0_IRQn
 #define encoder_vb_Pin GPIO_PIN_1
 #define encoder_vb_GPIO_Port GPIOA
+#define encoder_vb_EXTI_IRQn EXTI1_IRQn
 #define current_ph3_Pin GPIO_PIN_2
 #define current_ph3_GPIO_Port GPIOA
 #define DC_bus_voltage_Pin GPIO_PIN_3

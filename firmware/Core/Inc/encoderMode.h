@@ -7,6 +7,6 @@
 #ifndef INC_ENCODERMODE_H_
 #define INC_ENCODERMODE_H_
 
-float motorSpeed (uint32_t cnt1);
+/*float motorSpeed (uint16_t cnt1);*/
 
 #endif /* INC_ENCODERMODE_H_ */
