@@ -79,6 +79,8 @@ void Error_Handler(void);
 #define DC_bus_voltage_GPIO_Port GPIOA
 #define Accel_CS_Pin GPIO_PIN_4
 #define Accel_CS_GPIO_Port GPIOA
+#define FOC_reset_Pin GPIO_PIN_5
+#define FOC_reset_GPIO_Port GPIOA
 #define DC_bus_current_Pin GPIO_PIN_6
 #define DC_bus_current_GPIO_Port GPIOA
 #define voltage_ph1_Pin GPIO_PIN_7

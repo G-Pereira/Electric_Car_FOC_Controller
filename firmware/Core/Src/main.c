@@ -38,7 +38,7 @@
 #include "IMU_read.h"
 #include "adcUnitConversion.h"
 #include "encoderMode.h"
-
+#include "FOC_lib.h"
 
 /* USER CODE END Includes */
 
@@ -166,9 +166,9 @@ int main(void)
 
 
 
-  HAL_GPIO_WritePin(FOC_IC_CSS_GPIO_Port, FOC_IC_CSS_Pin, RESET);
+  HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, RESET);
   //HAL_SPI_Transmit(&hspi2, /*reg*/ , /*size*/ , 2000);
-  HAL_GPIO_WritePin(FOC_IC_CSS_GPIO_Port, FOC_IC_CSS_Pin, SET);
+  HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, SET);
   //Initialize IMU
 
 
@@ -213,7 +213,7 @@ int main(void)
 
 	  //read and convert adc values for encoder
 	  counter = __HAL_TIM_GET_COUNTER(&htim2); //read counter register
-	  sprintf(str, "%d", counter); //arranjar encoder e testar
+	  sprintf(str, "%lu", counter); //arranjar encoder e testar
 
 	  //read and convert adc value for braking pedal
 
