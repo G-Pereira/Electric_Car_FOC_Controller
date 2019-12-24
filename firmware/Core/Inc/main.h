@@ -79,8 +79,6 @@ void Error_Handler(void);
 #define DC_bus_voltage_GPIO_Port GPIOA
 #define Accel_CS_Pin GPIO_PIN_4
 #define Accel_CS_GPIO_Port GPIOA
-#define FOC_IC_CS_Pin GPIO_PIN_5
-#define FOC_IC_CS_GPIO_Port GPIOA
 #define DC_bus_current_Pin GPIO_PIN_6
 #define DC_bus_current_GPIO_Port GPIOA
 #define voltage_ph1_Pin GPIO_PIN_7
@@ -97,6 +95,8 @@ void Error_Handler(void);
 #define Gyro_CS_GPIO_Port GPIOB
 #define Magnet_CS_Pin GPIO_PIN_10
 #define Magnet_CS_GPIO_Port GPIOB
+#define FOC_IC_CS_Pin GPIO_PIN_12
+#define FOC_IC_CS_GPIO_Port GPIOB
 #define SDIO_DET_Pin GPIO_PIN_7
 #define SDIO_DET_GPIO_Port GPIOC
 #define SW_25MHz_output_Pin GPIO_PIN_8
