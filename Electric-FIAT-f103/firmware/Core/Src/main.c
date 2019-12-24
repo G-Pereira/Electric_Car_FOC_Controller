@@ -158,6 +158,8 @@ int main(void)
   IMU_config(&hspi2);
 
 
+  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -165,7 +167,6 @@ int main(void)
   while (1)
   {
 
-	  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 	  uint32_t counter = __HAL_TIM_GET_COUNTER(&htim3);
 	  printf("counter encoder mode: %lu \n", counter);
 
