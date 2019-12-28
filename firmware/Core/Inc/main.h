@@ -79,8 +79,6 @@ void Error_Handler(void);
 #define DC_bus_voltage_GPIO_Port GPIOA
 #define Accel_CS_Pin GPIO_PIN_4
 #define Accel_CS_GPIO_Port GPIOA
-#define FOC_reset_Pin GPIO_PIN_5
-#define FOC_reset_GPIO_Port GPIOA
 #define DC_bus_current_Pin GPIO_PIN_6
 #define DC_bus_current_GPIO_Port GPIOA
 #define voltage_ph1_Pin GPIO_PIN_7
@@ -103,12 +101,8 @@ void Error_Handler(void);
 #define SDIO_DET_GPIO_Port GPIOC
 #define SW_25MHz_output_Pin GPIO_PIN_8
 #define SW_25MHz_output_GPIO_Port GPIOA
-#define FOC_enable_Pin GPIO_PIN_4
-#define FOC_enable_GPIO_Port GPIOB
 #define CAN_STBY_Pin GPIO_PIN_5
 #define CAN_STBY_GPIO_Port GPIOB
-#define FOC_Status_Pin GPIO_PIN_6
-#define FOC_Status_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
