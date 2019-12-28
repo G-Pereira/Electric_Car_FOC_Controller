@@ -109,12 +109,6 @@ void Error_Handler(void);
 #define CAN_STBY_GPIO_Port GPIOB
 #define FOC_Status_Pin GPIO_PIN_6
 #define FOC_Status_GPIO_Port GPIOB
-#define Conv_error_1_Pin GPIO_PIN_7
-#define Conv_error_1_GPIO_Port GPIOB
-#define Conv_error_2_Pin GPIO_PIN_8
-#define Conv_error_2_GPIO_Port GPIOB
-#define Conv_error_3_Pin GPIO_PIN_9
-#define Conv_error_3_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

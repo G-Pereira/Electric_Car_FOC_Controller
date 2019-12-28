@@ -87,11 +87,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(SW_25MHz_output_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = FOC_Status_Pin|Conv_error_1_Pin|Conv_error_2_Pin|Conv_error_3_Pin;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = FOC_Status_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(FOC_Status_GPIO_Port, &GPIO_InitStruct);
 
 }
 
