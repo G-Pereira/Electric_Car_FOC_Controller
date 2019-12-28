@@ -149,16 +149,19 @@ int main(void)
   fresult=mount_card (&fs);
   card_capacity(&free_space, &total);
   printf("Hello!\nFree Space: %lu", free_space);
-  fresult=create_file ("teste.txt", "OLE OLE OLE", &fil, &bw);
+//  fresult=create_file ("teste.txt", "OLE OLE OLE", &fil, &bw);
   fresult=update_file("teste.txt", "BLA2 BLA2 BLA2", &fil, &bw);
 
   MX_CAN_Init();
 
 
-  IMU_config(&hspi2);
+  //IMU_config(&hspi2);
 
-
+  uint32_t counter = 0;
+  char *str;
+  float speed = 0;
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+ // HAL_TIM_Encoder_Init(&htim3, sConfig)
 
   /* USER CODE END 2 */
 
@@ -167,13 +170,23 @@ int main(void)
   while (1)
   {
 
-	  uint32_t counter = __HAL_TIM_GET_COUNTER(&htim3);
+	  counter = __HAL_TIM_GET_COUNTER(&htim3);
 	  printf("counter encoder mode: %lu \n", counter);
+	  HAL_Delay(500);
+	  speed = motorSpeed(counter, htim3);
+	  printf("rpm = %f\n",speed);
 
+	  /*sprintf(str, "%d", (int)speed);
+	  printf("str = %s", str);
+	  fresult=update_file("teste.txt", str, &fil, &bw);*/
+
+	  fresult=update_file("teste.txt", "aquiiii", &fil, &bw);
 
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	  HAL_Delay(500);
+	  //printf("hello\n");
 
-	  IMU_acc_read(&hspi2, accel_data);
+	  /*IMU_acc_read(&hspi2, accel_data);
 
 	  //printf("\raccel data x: %d accel data y: %d accel data z: %d ", accel_data[0], accel_data[1], accel_data[2]);
 
@@ -196,7 +209,8 @@ int main(void)
 	  IMU_mag_read(&hspi2, mag_data);
 
 	  printf("\rmag data x: %d mag data y: %d mag data z: %d ", mag_data[0], mag_data[1], mag_data[2]);
-	  printf("\n");
+	  printf("\n");*/
+
 
 
 
@@ -274,7 +288,7 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
@@ -282,7 +296,7 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
@@ -429,6 +443,7 @@ static void MX_TIM3_Init(void)
   /* USER CODE BEGIN TIM3_Init 0 */
 
   /* USER CODE END TIM3_Init 0 */
+
   TIM_Encoder_InitTypeDef sConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
 
@@ -438,14 +453,14 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 0;
+  htim3.Init.Period = 65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 0;
+  sConfig.IC1Filter = 10;
   sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
