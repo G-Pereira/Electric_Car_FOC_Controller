@@ -6,7 +6,7 @@ encoding utf-8
 Sheet 1 1
 Title "Motor Controller"
 Date "2019-12-23"
-Rev "1.0.3"
+Rev "1.1.0"
 Comp ""
 Comment1 ""
 Comment2 ""
@@ -1774,8 +1774,6 @@ F 3 "~" H 4300 900 50  0001 C CNN
 	1    4300 900 
 	1    0    0    -1  
 $EndComp
-Text Notes 5200 1400 0    50   ~ 0
-ADC
 Wire Wire Line
 	5650 1450 5650 1500
 Wire Wire Line
@@ -4704,10 +4702,6 @@ NoConn ~ 3500 5050
 Text Label 1500 2450 0    50   ~ 0
 DBGSPI_TRG
 NoConn ~ 1500 2350
-Text Label 3500 4650 0    50   ~ 0
-Motor_Current_U
-Text Label 3500 4450 0    50   ~ 0
-Motor_Current_V
 Wire Wire Line
 	650  10300 650  10000
 Connection ~ 2250 10000
@@ -4915,10 +4909,6 @@ Text Label 4150 8500 0    50   ~ 0
 HB_WB
 Text Label 4150 8600 0    50   ~ 0
 HB_WT
-Text Label 3650 8700 2    50   ~ 0
-IGBT_OVER_TEMP
-Text Label 4950 5900 2    50   ~ 0
-IGBT_OVER_TEMP
 Text Label 1200 5650 2    50   ~ 0
 ENC_B
 NoConn ~ 3550 1550
@@ -6815,4 +6805,12 @@ Text Label 2700 3100 1    50   ~ 0
 1V8_1
 Text Label 2400 3100 1    50   ~ 0
 1V8_3
+Text Label 3500 4650 0    50   ~ 0
+Motor_Current_V
+NoConn ~ 3650 8700
+Text Notes 5200 1400 0    50   ~ 0
+ADC
+NoConn ~ 4950 5900
+Text Label 3500 4450 0    50   ~ 0
+Motor_Current_W
 $EndSCHEMATC
