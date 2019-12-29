@@ -9,4 +9,5 @@
 
 int motorSpeed (uint32_t cnt1, TIM_HandleTypeDef htim3);
 
+
 #endif /* INC_ENCODERMODE_H_ */

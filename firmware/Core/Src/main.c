@@ -38,7 +38,7 @@
 #include "IMU_read.h"
 #include "adcUnitConversion.h"
 #include "encoderMode.h"
-
+#include "FOC_lib.h"
 
 /* USER CODE END Includes */
 
@@ -169,9 +169,9 @@ int main(void)
 
 
 
-  HAL_GPIO_WritePin(FOC_IC_CSS_GPIO_Port, FOC_IC_CSS_Pin, RESET);
+  HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, RESET);
   //HAL_SPI_Transmit(&hspi2, /*reg*/ , /*size*/ , 2000);
-  HAL_GPIO_WritePin(FOC_IC_CSS_GPIO_Port, FOC_IC_CSS_Pin, SET);
+  HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, SET);
   //Initialize IMU
 
 
