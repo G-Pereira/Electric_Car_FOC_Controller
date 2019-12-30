@@ -50,11 +50,8 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-	#define	NR_ADC_CHANNELS 5 //Nº de channels adc
+	#define	NR_ADC_CHANNELS 12 //Nº de channels adc
 
-
-
-	//
 
 /* USER CODE END PD */
 
@@ -86,7 +83,7 @@
 	int gyro_data[3];
 
 	//ADCs converted values variables
-	int dc_current, current_ph1, current_ph2, current_ph3,  motor_temp, conv_temp, enc_data, acc_pedal , brk_pedal;
+	float dc_current, current_ph1, current_ph2, current_ph3, dc_voltage, voltage_ph1, voltage_ph2, voltage_ph3,  motor_temp, conv_temp, acc_pedal , brk_pedal;
 
 	//String aux
 	char *str;
@@ -127,11 +124,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	float curr_ph1 = 0;
-	float curr_ph2 = 0;
-	float curr_ph3 = 0;
-	float temp_motor = 0;
-	float temp_inv = 0;
+
   /* USER CODE END 1 */
   
 
@@ -164,7 +157,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   //Initialize FOC-IC registers
-  //FP=0,707
+  //FP=0,707 ??
   foc_ic_config(&hspi2);
 
 
@@ -199,20 +192,27 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  //read and convert adc value for current on DC bus
 
-	  //convert adc value for voltage on DC bus
 
 	  //convert the 3 adc current values from the motor
+	  current_ph1 = motorCurrent(adc_dma[0]);
+	  current_ph2 = motorCurrent(adc_dma[1]);
+	  current_ph3= motorCurrent(adc_dma[2]);
 
-	  //convert the 3 adc current values from the motor
-	  curr_ph1 = motorCurrent(adc_dma[0]);
-	  curr_ph2 = motorCurrent(adc_dma[1]);
-	  curr_ph3 = motorCurrent(adc_dma[2]);
+	  //convert the 3 adc voltage values from the motor
+	  voltage_ph1 = voltageAC(adc_dma[3]);
+	  voltage_ph2 = voltageAC(adc_dma[4]);
+	  voltage_ph3 = voltageAC(adc_dma[5]);
 
+	  motor_temp = motorTemp(adc_dma[6]); //convert adc value for temperature on motor
 
-	  temp_motor = motorCurrent(adc_dma[3]); //convert adc value for temperature on motor
-	  temp_inv = motorCurrent(adc_dma[4]); //convert adc value for temperature on converter
+	  conv_temp = igbtTemp(adc_dma[7]); //convert adc value for temperature on converter
+
+	  dc_current = motorCurrent(adc_dma[8]); //convert adc value for current on DC bus
+	  dc_voltage = voltageDC(adc_dma[9]); //convert adc value for voltage on DC bus
+
+	  brk_pedal = pedalPos(adc_dma[10]); //convert adc value for braking pedal
+	  acc_pedal = pedalPos(adc_dma[11]); //convert adc value for throttle
 
 	  //read and convert adc values for encoder
 	  counter = __HAL_TIM_GET_COUNTER(&htim2);
@@ -221,8 +221,6 @@ int main(void)
 
 	  /*sprintf(str, "%d", (int)counter);
 	  update_file("rpm.txt",str, &fil, &bw);*/
-
-	  //read and convert adc value for braking pedal
 
 	  IMU_acc_read(&hspi2, accel_data); //read and convert accelerometer data
 	  sprintf(str, "%d", accel_data[0]);
