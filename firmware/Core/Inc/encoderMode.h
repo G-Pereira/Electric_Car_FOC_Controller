@@ -7,8 +7,7 @@
 #ifndef INC_ENCODERMODE_H_
 #define INC_ENCODERMODE_H_
 
-#include <stdint.h>
+int motorSpeed (uint32_t cnt1, TIM_HandleTypeDef htim2);
 
-float motorSpeed (uint32_t cnt1);
 
 #endif /* INC_ENCODERMODE_H_ */
