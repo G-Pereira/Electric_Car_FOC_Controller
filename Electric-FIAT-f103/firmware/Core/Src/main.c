@@ -162,7 +162,8 @@ int main(void)
   float speed = 0;
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
  // HAL_TIM_Encoder_Init(&htim3, sConfig)
-
+  uint32_t tick = HAL_GetTick();
+  counter = __HAL_TIM_GET_COUNTER(&htim3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -170,10 +171,16 @@ int main(void)
   while (1)
   {
 
-	  counter = __HAL_TIM_GET_COUNTER(&htim3);
+
 	  printf("counter encoder mode: %lu \n", counter);
-	  HAL_Delay(500);
-	  speed = motorSpeed(counter, htim3);
+	  //HAL_Delay(500);
+	  if (HAL_GetTick() - tick > 20L ){
+		  printf("hal = %lu , tick = %lu, Aquii \n", HAL_GetTick(), tick);
+		  speed = motorSpeed(&counter, &tick, htim3);
+	  }
+
+
+	 // speed = motorSpeed(counter, htim3);
 	  printf("rpm = %f\n",speed);
 
 	  /*sprintf(str, "%d", (int)speed);
