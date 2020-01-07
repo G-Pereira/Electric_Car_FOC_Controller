@@ -97,11 +97,11 @@ static void MX_TIM3_Init(void);
 
 
 	FATFS fs;  // file system
-	FIL fil;  // file
+	FIL fil, fil2;  // file
 	FRESULT fresult;  // to store the result
 	char buffer[512]; // to store data
 
-	UINT br, bw;   // file read/write count
+	UINT br, bw, bw2;   // file read/write count
 
 	/* capacity related variables */
 	//DWORD fre_clust;
@@ -146,11 +146,14 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   printf("Hello!\n");
+  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
+  HAL_GPIO_WritePin(CS_gyro_GPIO_Port, CS_gyro_Pin, SET);
+  HAL_GPIO_WritePin(CS_magnet_GPIO_Port, CS_magnet_Pin, SET);
   fresult=mount_card (&fs);
   card_capacity(&free_space, &total);
-  printf("Hello!\nFree Space: %lu", free_space);
-//  fresult=create_file ("teste.txt", "OLE OLE OLE", &fil, &bw);
-  fresult=update_file("teste.txt", "BLA2 BLA2 BLA2", &fil, &bw);
+  printf("Hello!\nFree Space: %10lu KB", free_space/2);
+  fresult=create_file ("enc.txt", "OLE OLE OLE", &fil, &bw);
+  fresult=create_file("imu_acc.txt", "IMU IMU IMU", &fil2, &bw2);
 
   MX_CAN_Init();
 
@@ -158,7 +161,7 @@ int main(void)
   //IMU_config(&hspi2);
 
   uint32_t counter = 0;
-  char *str;
+  char str[20];
   float speed = 0;
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
  // HAL_TIM_Encoder_Init(&htim3, sConfig)
@@ -183,29 +186,41 @@ int main(void)
 	 // speed = motorSpeed(counter, htim3);
 	  printf("rpm = %f\n",speed);
 
-	  /*sprintf(str, "%d", (int)speed);
-	  printf("str = %s", str);
-	  fresult=update_file("teste.txt", str, &fil, &bw);*/
+	  sprintf(str , "%f ", speed);
 
-	  fresult=update_file("teste.txt", "aquiiii", &fil, &bw);
+	  printf("speed %s\n", str);
+	  fresult=update_file("enc.txt", str, &fil, &bw);
 
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 	  HAL_Delay(500);
 	  //printf("hello\n");
 
-	  /*IMU_acc_read(&hspi2, accel_data);
+	  IMU_acc_read(&hspi2, accel_data);
 
-	  //printf("\raccel data x: %d accel data y: %d accel data z: %d ", accel_data[0], accel_data[1], accel_data[2]);
+	  printf("\raccel data x: %d accel data y: %d accel data z: %d ", accel_data[0], accel_data[1], accel_data[2]);
+	  char acxstr[20];
+	  char acystr[20];
+	  char aczstr[20];
 
 	  acx = accel_data[0]*0.00098;
 	  acy = accel_data[1]*0.00098;
 	  acz = accel_data[2]*0.00098;
+	  sprintf(acxstr, "acx - %f ", acx);
+	  sprintf(acystr, "acy - %f ", acy);
+	  sprintf(aczstr, "acz - %f ", acz);
+	  HAL_Delay(100);
+	  update_file("imu_acc.txt", acxstr, &fil2, &bw2);
+
+	  update_file("imu_acc.txt", acystr, &fil2, &bw2);
+
+	  update_file("imu_acc.txt", aczstr, &fil2, &bw2);
+
 
 	  printf("\rreal value x: %f G real value y: %f G real value z: %f G ", acx, acy, acz);
 
 	  IMU_gyro_read(&hspi2, gyro_data);
 
-	  //printf("\rgyro data x: %d gyro data y: %d gyro data z: %d ", gyro_data[0], gyro_data[1], gyro_data[2]);
+	  printf("\rgyro data x: %d gyro data y: %d gyro data z: %d ", gyro_data[0], gyro_data[1], gyro_data[2]);
 
 	  gyx = (262.4/32767)*gyro_data[0];
 	  gyy = (262.4/32767)*gyro_data[1];
@@ -216,7 +231,8 @@ int main(void)
 	  IMU_mag_read(&hspi2, mag_data);
 
 	  printf("\rmag data x: %d mag data y: %d mag data z: %d ", mag_data[0], mag_data[1], mag_data[2]);
-	  printf("\n");*/
+	  printf("\n");
+
 
 
 
