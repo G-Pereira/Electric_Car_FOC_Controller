@@ -6,3 +6,4 @@ sd_wr.c:41:6:card_capacity	24	static
 sd_wr.c:54:9:create_file	32	static
 sd_wr.c:69:9:read_file	32	static
 sd_wr.c:89:9:update_file	32	static
+sd_wr.c:107:5:check_file	16	static

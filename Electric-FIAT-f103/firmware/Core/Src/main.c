@@ -97,7 +97,7 @@ static void MX_TIM3_Init(void);
 
 
 	FATFS fs;  // file system
-	FIL fil, fil2;  // file
+	FIL fil, fil2;  // file (uma por cada ficheiro a criar)
 	FRESULT fresult;  // to store the result
 	char buffer[512]; // to store data
 
@@ -124,7 +124,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -146,14 +146,14 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   printf("Hello!\n");
-  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
-  HAL_GPIO_WritePin(CS_gyro_GPIO_Port, CS_gyro_Pin, SET);
-  HAL_GPIO_WritePin(CS_magnet_GPIO_Port, CS_magnet_Pin, SET);
+	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
+	  HAL_GPIO_WritePin(CS_gyro_GPIO_Port, CS_gyro_Pin, SET);
+	  HAL_GPIO_WritePin(CS_magnet_GPIO_Port, CS_magnet_Pin, SET);
   fresult=mount_card (&fs);
   card_capacity(&free_space, &total);
   printf("Hello!\nFree Space: %10lu KB", free_space/2);
-  fresult=create_file ("enc.txt", "OLE OLE OLE", &fil, &bw);
-  fresult=create_file("imu_acc.txt", "IMU IMU IMU", &fil2, &bw2);
+  update_file("enc.txt", "OLE OLE OLE", &fil, &bw);
+  update_file("imu_acc.txt", "IMU IMU IMU", &fil2, &bw2);
 
   MX_CAN_Init();
 
@@ -177,7 +177,7 @@ int main(void)
 
 	  printf("counter encoder mode: %lu \n", counter);
 	  //HAL_Delay(500);
-	  if (HAL_GetTick() - tick > 20L ){
+	  if (HAL_GetTick() - tick > 1000L){
 		  printf("hal = %lu , tick = %lu, Aquii \n", HAL_GetTick(), tick);
 		  speed = motorSpeed(&counter, &tick, htim3);
 	  }
@@ -233,33 +233,6 @@ int main(void)
 	  printf("\rmag data x: %d mag data y: %d mag data z: %d ", mag_data[0], mag_data[1], mag_data[2]);
 	  printf("\n");
 
-
-
-
-
-	  //HAL_Delay(500);
-	 /* write_data=0x82;
-	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, RESET);
-	  HAL_SPI_TransmitReceive(&hspi2, &write_data, &pre_Store, 2, 2000);
-	  if(HAL_SPI_Receive(&hspi2, store_data, 5, 2000) !=HAL_OK) Error_Handler();
-	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
-	  accel_data[0]=(uint16_t)((store_data[0]<<4) + (pre_Store & 0xF0)); //isto está mal
-	  accel_data[1]=(uint16_t)((store_data[2]<<4) + (store_data[1] & 0xF0));
-	  accel_data[2]=(uint16_t)((store_data[4]<<4) + (store_data[3] & 0xF0));
-	  HAL_Delay(2000);*/
-	  //printf("Read acc: %i\n", store_data[2]);
-
-	  /*HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-	  adc1 = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-	  adc2 = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_Stop(&hadc1);
-	  HAL_Delay(100);
-
-
-	  if (adc1>3000 && adc2<3000) HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, SET);
-	  else HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, RESET);*/
 
 
 	  /* Set the data to be transmitted */
@@ -479,7 +452,7 @@ static void MX_TIM3_Init(void)
   htim3.Init.Period = 65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;

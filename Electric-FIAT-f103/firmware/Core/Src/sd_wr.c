@@ -91,7 +91,8 @@ FRESULT update_file(char *filename, char *data, FIL *fil, UINT *bw)
 	FRESULT fresult;
 
 	/* Open the file with write access */
-	fresult = f_open(fil, filename, FA_OPEN_ALWAYS | FA_WRITE);
+	fresult = f_open(fil, filename, FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+
 
 	/* Move to offset to the end of the file */
 	fresult = f_lseek(fil, fil->fsize);
@@ -101,4 +102,13 @@ FRESULT update_file(char *filename, char *data, FIL *fil, UINT *bw)
 
 	f_close (fil);
 	return fresult;
+}
+
+int check_file(char *filename, FIL *fil)
+{
+	if(f_open(fil, filename, FA_OPEN_EXISTING)==FR_NO_FILE){
+		return 1;
+	}
+	else return 0;
+
 }

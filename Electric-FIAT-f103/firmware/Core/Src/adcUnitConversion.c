@@ -38,7 +38,7 @@ float motorTemp (int adcReading){
 	 * R2 = 2245 @  40°C
 	 * R3 = 3817 @ 120°C
 	 */
-
+	/*
 	float a = 0.0251239;
 	float b = -0.0035737;
 	float c = 0.0000123;
@@ -49,7 +49,14 @@ float motorTemp (int adcReading){
 
 	float T = 1/(a+b*log(Rt)+c*pow(log(Rt),3));
 
-	return T;
+	return T;*/
+
+	float m= (0.05-3.25)/(160-16100);
+	float b= 0.05 - 160*m;
+
+
+
+
 
 }
 

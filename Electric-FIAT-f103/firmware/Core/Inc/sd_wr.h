@@ -10,5 +10,6 @@ void card_capacity (DWORD *free_space, DWORD *total_space);
 FRESULT create_file (char *filename, char *data, FIL *fil, UINT *bw);
 FRESULT read_file (char *buffer, char *filename, FIL *fil, UINT *br);
 FRESULT update_file(char *filename, char *data, FIL *fil, UINT *bw);
+int check_file(char *filename, FIL *fil);
 
 #endif

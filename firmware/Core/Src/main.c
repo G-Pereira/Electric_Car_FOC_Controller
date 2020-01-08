@@ -67,7 +67,7 @@
 
 	//SD file variables
 	FATFS fs;  // file system
-	FIL fil;  // file
+	FIL fil[15];  // file
 	FRESULT fresult;  // to store the result
 	char buffer[512]; // to store data
 
@@ -86,7 +86,7 @@
 	float dc_current, current_ph1, current_ph2, current_ph3, dc_voltage, voltage_ph1, voltage_ph2, voltage_ph3,  motor_temp, conv_temp, acc_pedal , brk_pedal;
 
 	//String aux
-	char *str;
+	char str[30];
 
 	//Encoder mode variables
 	uint32_t counter = 0;
@@ -134,6 +134,11 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
+  HAL_GPIO_WritePin(Accel_CS_GPIO_Port, Accel_CS_Pin, SET);
+  HAL_GPIO_WritePin(Gyro_CS_GPIO_Port, Gyro_CS_Pin, SET);
+  HAL_GPIO_WritePin(Magnet_CS_GPIO_Port, Magnet_CS_Pin, SET);
+  HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, SET);
 
   /* USER CODE END Init */
 
@@ -222,26 +227,27 @@ int main(void)
 	  /*sprintf(str, "%d", (int)counter);
 	  update_file("rpm.txt",str, &fil, &bw);*/
 
+
 	  IMU_acc_read(&hspi2, accel_data); //read and convert accelerometer data
-	  sprintf(str, "%d", accel_data[0]);
+	  sprintf(str, "%d ", accel_data[0]);
 
 	  //Send read data to SD card
-	  update_file("accelerometer_data_x.txt", str, &fil, &bw);
-	  sprintf(str, "%d", accel_data[1]);
-	  update_file("accelerometer_data_y.txt", str, &fil, &bw);
-	  sprintf(str, "%d", accel_data[2]);
-	  update_file("accelerometer_data_z.txt", str, &fil, &bw);
+	  update_file("accelerometer_data_x.txt", str, &(fil[0]), &bw);
+	  sprintf(str, "%d ", accel_data[1]);
+	  update_file("accelerometer_data_y.txt", str, &(fil[1]), &bw);
+	  sprintf(str, "%d ", accel_data[2]);
+	  update_file("accelerometer_data_z.txt", str, &(fil[2]), &bw);
 
 	  //read and convert gyroscope data
 	  IMU_gyro_read(&hspi2, gyro_data);
-	  sprintf(str, "%d", gyro_data[0]);
+	  sprintf(str, "%d ", gyro_data[0]);
 
 	  //Send read data to SD card
-	  update_file("gyroscope_data_x.txt", str, &fil, &bw);
-	  sprintf(str, "%d", gyro_data[1]);
-	  update_file("gyroscope_data_y.txt", str, &fil, &bw);
-	  sprintf(str, "%d", gyro_data[2]);
-	  update_file("gyroscope_data_z.txt", str, &fil, &bw);
+	  update_file("gyroscope_data_x.txt", str, &(fil[3]), &bw);
+	  sprintf(str, "%d ", gyro_data[1]);
+	  update_file("gyroscope_data_y.txt", str, &(fil[4]), &bw);
+	  sprintf(str, "%d ", gyro_data[2]);
+	  update_file("gyroscope_data_z.txt", str, &(fil[5]), &bw);
 
 	  //DEFINIR O QUE FAZER COM VALORES LIDOS
 
@@ -253,25 +259,25 @@ int main(void)
 
 	  //save read values on SD card separate files
 
-	  sprintf(str, "%d", dc_current);
-	  update_file("DC_current.txt", str, &fil, &bw);
-	  sprintf(str, "%d", current_ph1);
-	  update_file("phase1_current.txt", str, &fil, &bw);
-	  sprintf(str, "%d", current_ph2);
-	  update_file("phase2_current.txt", str, &fil, &bw);
-	  sprintf(str, "%d", current_ph3);
-	  update_file("phase3_current.txt", str, &fil, &bw);
-	  sprintf(str, "%d", motor_temp);
-	  update_file("Motor_temperature.txt", str, &fil, &bw);
-	  sprintf(str, "%d", conv_temp);
-	  update_file("Converter_temperature.txt", str, &fil, &bw);
+	  sprintf(str, "%d ", dc_current);
+	  update_file("DC_current.txt", str, &(fil[6]), &bw);
+	  sprintf(str, "%d ", current_ph1);
+	  update_file("phase1_current.txt", str, &(fil[7]), &bw);
+	  sprintf(str, "%d ", current_ph2);
+	  update_file("phase2_current.txt", str, &(fil[8]), &bw);
+	  sprintf(str, "%d ", current_ph3);
+	  update_file("phase3_current.txt", str, &(fil[9]), &bw);
+	  sprintf(str, "%d ", motor_temp);
+	  update_file("Motor_temperature.txt", str, &(fil[10]), &bw);
+	  sprintf(str, "%d ", conv_temp);
+	  update_file("Converter_temperature.txt", str, &(fil[11]), &bw);
 	  //sprintf(str, "%d", enc_data);
-	  sprintf(str, "%d", speed);
-	  update_file("encoder_data.txt", str, &fil, &bw);
-	  sprintf(str, "%d", acc_pedal);
-	  update_file("Accelerator_pedal.txt", str, &fil, &bw);
-	  sprintf(str, "%d", brk_pedal);
-	  update_file("Braking_Pedal.txt", str, &fil, &bw);
+	  sprintf(str, "%d ", speed);
+	  update_file("encoder_data.txt", str, &(fil[12]), &bw);
+	  sprintf(str, "%d ", acc_pedal);
+	  update_file("Accelerator_pedal.txt", str, &(fil[13]), &bw);
+	  sprintf(str, "%d ", brk_pedal);
+	  update_file("Braking_Pedal.txt", str, &(fil[14]), &bw);
 
   }
   /* USER CODE END 3 */
