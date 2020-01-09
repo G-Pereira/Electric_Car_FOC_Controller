@@ -1,7 +1,7 @@
 adcUnitConversion.c:12:7:adcInt2Volt	24	static
 adcUnitConversion.c:19:7:motorCurrent	24	static
 adcUnitConversion.c:24:7:igbtTemp	32	static
-adcUnitConversion.c:34:7:motorTemp	56	static
-adcUnitConversion.c:56:7:voltageAC	32	static
-adcUnitConversion.c:73:7:voltageDC	40	static
-adcUnitConversion.c:94:7:pedalPos	32	static
+adcUnitConversion.c:34:7:motorTemp	32	static
+adcUnitConversion.c:63:7:voltageAC	32	static
+adcUnitConversion.c:80:7:voltageDC	40	static
+adcUnitConversion.c:101:7:pedalPos	32	static
