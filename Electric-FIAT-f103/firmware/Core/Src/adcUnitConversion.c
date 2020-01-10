@@ -49,12 +49,6 @@ float igbtTemp (int adcReading){
 
 float motorTemp (int adcReading){
 
-	/*
-	 * R1 = 1495 @ -10°C
-	 * R2 = 2245 @  40°C
-	 * R3 = 3817 @ 120°C
-	 */
-
 
 	int test = 0;
 
@@ -92,7 +86,7 @@ float motorTemp (int adcReading){
 
 	} else {
 
-		//considerando que a tensÃ£o corresponde linearmente a uma temperatura como no pdf da TI indicado nos desenhos
+		//considerando que a tensão corresponde linearmente a uma temperatura como no pdf da TI indicado nos desenhos
 
 		m = (Tmin-Tmax)/(Vmin-Vmax);
 		b = Tmin-Vmin*m;
@@ -100,7 +94,6 @@ float motorTemp (int adcReading){
 		T = m*(adcInt2Volt(adcReading))+b;
 
 	}
-
 
 	return T;
 
