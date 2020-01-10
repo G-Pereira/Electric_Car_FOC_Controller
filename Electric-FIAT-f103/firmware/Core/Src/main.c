@@ -171,7 +171,7 @@ int main(void)
 
   //IMU_config(&hspi2);
 
-  uint32_t counter = 0;
+  uint32_t counter = 0, counter2 = 0;
   char str[20];
   float speed = 0;
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
@@ -185,12 +185,12 @@ int main(void)
   while (1)
   {
 
-
 	  printf("counter encoder mode: %lu \n", counter);
 	  //HAL_Delay(500);
 	  if (HAL_GetTick() - tick > 1000L){
+		  counter2 = __HAL_TIM_GET_COUNTER(&htim3);
 		  printf("hal = %lu , tick = %lu, Aquii \n", HAL_GetTick(), tick);
-		  speed = motorSpeed(&counter, &tick, htim3);
+		  speed = motorSpeed(&counter, counter2, &tick, htim3);
 	  }
 
 
