@@ -31,6 +31,7 @@
 #include "IMU_read.h"
 #include "adcUnitConversion.h"
 #include "encoderMode.h"
+#include "time.h"
 
 /* USER CODE END Includes */
 
@@ -55,6 +56,8 @@ ADC_HandleTypeDef hadc1;
 
 CAN_HandleTypeDef hcan;
 
+RTC_HandleTypeDef hrtc;
+
 SPI_HandleTypeDef hspi2;
 
 TIM_HandleTypeDef htim3;
@@ -78,6 +81,12 @@ uint8_t               TxData[8];
 uint8_t               RxData[8];
 uint32_t              TxMailbox;
 
+//RTC
+RTC_TimeTypeDef currentTime;
+RTC_DateTypeDef currentDate;
+
+
+
 
 /* USER CODE END PV */
 
@@ -86,6 +95,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_CAN_Init(void);
+static void MX_RTC_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
@@ -97,11 +107,11 @@ static void MX_TIM3_Init(void);
 
 
 	FATFS fs;  // file system
-	FIL fil;  // file
+	FIL fil, fil2;  // file (uma por cada ficheiro a criar)
 	FRESULT fresult;  // to store the result
 	char buffer[512]; // to store data
 
-	UINT br, bw;   // file read/write count
+	UINT br, bw, bw2;   // file read/write count
 
 	/* capacity related variables */
 	//DWORD fre_clust;
@@ -142,27 +152,32 @@ int main(void)
   MX_ADC1_Init();
   MX_CAN_Init();
   MX_FATFS_Init();
+  MX_RTC_Init();
   MX_SPI2_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   printf("Hello!\n");
+	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
+	  HAL_GPIO_WritePin(CS_gyro_GPIO_Port, CS_gyro_Pin, SET);
+	  HAL_GPIO_WritePin(CS_magnet_GPIO_Port, CS_magnet_Pin, SET);
   fresult=mount_card (&fs);
   card_capacity(&free_space, &total);
-  printf("Hello!\nFree Space: %lu", free_space);
-//  fresult=create_file ("teste.txt", "OLE OLE OLE", &fil, &bw);
-  fresult=update_file("teste.txt", "BLA2 BLA2 BLA2", &fil, &bw);
+  printf("Hello!\nFree Space: %10lu KB", free_space/2);
+  //update_file("enc.txt", "OLE OLE OLE",  &fil, &bw);
+  //update_file("imu_acc.txt", "IMU IMU IMU", &fil2, &bw2);
 
   MX_CAN_Init();
 
 
   //IMU_config(&hspi2);
 
-  uint32_t counter = 0;
-  char *str;
+  uint32_t counter = 0, counter2 = 0;
+  char str[20];
   float speed = 0;
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
  // HAL_TIM_Encoder_Init(&htim3, sConfig)
-
+  uint32_t tick = HAL_GetTick();
+  counter = __HAL_TIM_GET_COUNTER(&htim3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -170,35 +185,53 @@ int main(void)
   while (1)
   {
 
-	  counter = __HAL_TIM_GET_COUNTER(&htim3);
 	  printf("counter encoder mode: %lu \n", counter);
-	  HAL_Delay(500);
-	  speed = motorSpeed(counter, htim3);
+	  //HAL_Delay(500);
+	  if (HAL_GetTick() - tick > 1000L){
+		  counter2 = __HAL_TIM_GET_COUNTER(&htim3);
+		  printf("hal = %lu , tick = %lu, Aquii \n", HAL_GetTick(), tick);
+		  speed = motorSpeed(&counter, counter2, &tick, htim3);
+	  }
+
+
+	 // speed = motorSpeed(counter, htim3);
 	  printf("rpm = %f\n",speed);
 
-	  /*sprintf(str, "%d", (int)speed);
-	  printf("str = %s", str);
-	  fresult=update_file("teste.txt", str, &fil, &bw);*/
+	  sprintf(str , "%f ", speed);
 
-	  fresult=update_file("teste.txt", "aquiiii", &fil, &bw);
+	  printf("speed %s\n", str);
+	  fresult=update_file("enc.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate) , &fil, &bw);
 
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 	  HAL_Delay(500);
 	  //printf("hello\n");
 
-	  /*IMU_acc_read(&hspi2, accel_data);
+	  IMU_acc_read(&hspi2, accel_data);
 
-	  //printf("\raccel data x: %d accel data y: %d accel data z: %d ", accel_data[0], accel_data[1], accel_data[2]);
+	  printf("\raccel data x: %d accel data y: %d accel data z: %d ", accel_data[0], accel_data[1], accel_data[2]);
+	  char acxstr[20];
+	  char acystr[20];
+	  char aczstr[20];
 
 	  acx = accel_data[0]*0.00098;
 	  acy = accel_data[1]*0.00098;
 	  acz = accel_data[2]*0.00098;
+	  sprintf(acxstr, "acx - %f ", acx);
+	  sprintf(acystr, "acy - %f ", acy);
+	  sprintf(aczstr, "acz - %f ", acz);
+	  HAL_Delay(100);
+	  update_file("imu_acc.txt", acxstr, get_timestamp(&hrtc, &currentTime, &currentDate), &fil2, &bw2);
+
+	  update_file("imu_acc.txt", acystr, get_timestamp(&hrtc, &currentTime, &currentDate), &fil2, &bw2);
+
+	  update_file("imu_acc.txt", aczstr, get_timestamp(&hrtc, &currentTime, &currentDate), &fil2, &bw2);
+
 
 	  printf("\rreal value x: %f G real value y: %f G real value z: %f G ", acx, acy, acz);
 
 	  IMU_gyro_read(&hspi2, gyro_data);
 
-	  //printf("\rgyro data x: %d gyro data y: %d gyro data z: %d ", gyro_data[0], gyro_data[1], gyro_data[2]);
+	  printf("\rgyro data x: %d gyro data y: %d gyro data z: %d ", gyro_data[0], gyro_data[1], gyro_data[2]);
 
 	  gyx = (262.4/32767)*gyro_data[0];
 	  gyy = (262.4/32767)*gyro_data[1];
@@ -209,35 +242,28 @@ int main(void)
 	  IMU_mag_read(&hspi2, mag_data);
 
 	  printf("\rmag data x: %d mag data y: %d mag data z: %d ", mag_data[0], mag_data[1], mag_data[2]);
-	  printf("\n");*/
+	  printf("\n");
 
+	  //testar
+	  /*
+	  HAL_RTC_GetTime(&hrtc, &currentTime, RTC_FORMAT_BIN);
+	  HAL_RTC_GetDate(&hrtc, &currentDate, RTC_FORMAT_BIN);
 
+	  currTime.tm_year = currentDate.Year-16;
+	  currTime.tm_mday = currentDate.Date-6;
+	  currTime.tm_mon  = currentDate.Month-2;
 
+	  currTime.tm_hour = currentTime.Hours+8;
+	  currTime.tm_min  = currentTime.Minutes-23;
+	  currTime.tm_sec  = currentTime.Seconds;
 
-	  //HAL_Delay(500);
-	 /* write_data=0x82;
-	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, RESET);
-	  HAL_SPI_TransmitReceive(&hspi2, &write_data, &pre_Store, 2, 2000);
-	  if(HAL_SPI_Receive(&hspi2, store_data, 5, 2000) !=HAL_OK) Error_Handler();
-	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
-	  accel_data[0]=(uint16_t)((store_data[0]<<4) + (pre_Store & 0xF0)); //isto está mal
-	  accel_data[1]=(uint16_t)((store_data[2]<<4) + (store_data[1] & 0xF0));
-	  accel_data[2]=(uint16_t)((store_data[4]<<4) + (store_data[3] & 0xF0));
-	  HAL_Delay(2000);*/
-	  //printf("Read acc: %i\n", store_data[2]);
+	  timestamp = mktime(&currTime);
+	  //asctime(gmtime
+	  char *tim;
 
-	  /*HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-	  adc1 = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-	  adc2 = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_Stop(&hadc1);
-	  HAL_Delay(100);
-
-
-	  if (adc1>3000 && adc2<3000) HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, SET);
-	  else HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, RESET);*/
-
+		tim = asctime(gmtime(&timestamp));
+		*/
+	  //printf("timestamp - %s \n" , get_timestamp(&hrtc, &currentTime, &currentDate));
 
 	  /* Set the data to be transmitted */
 	  // TxData[0] = 0x00;
@@ -271,10 +297,11 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL3;
@@ -295,7 +322,8 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_ADC;
+  PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
   PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
@@ -395,6 +423,63 @@ static void MX_CAN_Init(void)
 }
 
 /**
+  * @brief RTC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_RTC_Init(void)
+{
+
+  /* USER CODE BEGIN RTC_Init 0 */
+
+  /* USER CODE END RTC_Init 0 */
+
+  RTC_TimeTypeDef sTime = {0};
+  RTC_DateTypeDef DateToUpdate = {0};
+
+  /* USER CODE BEGIN RTC_Init 1 */
+
+  /* USER CODE END RTC_Init 1 */
+  /** Initialize RTC Only 
+  */
+  hrtc.Instance = RTC;
+  hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
+  hrtc.Init.OutPut = RTC_OUTPUTSOURCE_ALARM;
+  if (HAL_RTC_Init(&hrtc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /* USER CODE BEGIN Check_RTC_BKUP */
+    
+  /* USER CODE END Check_RTC_BKUP */
+
+  /** Initialize RTC and set the Time and Date 
+  */
+  sTime.Hours = 0x21;
+  sTime.Minutes = 0x7;
+  sTime.Seconds = 0x0;
+
+  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  DateToUpdate.WeekDay = RTC_WEEKDAY_WEDNESDAY;
+  DateToUpdate.Month = RTC_MONTH_JANUARY;
+  DateToUpdate.Date = 0x8;
+  DateToUpdate.Year = 0x0;
+
+  if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN RTC_Init 2 */
+
+  /* USER CODE END RTC_Init 2 */
+
+}
+
+/**
   * @brief SPI2 Initialization Function
   * @param None
   * @retval None
@@ -456,7 +541,7 @@ static void MX_TIM3_Init(void)
   htim3.Init.Period = 65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;

@@ -10,7 +10,7 @@ void foc_ic_config(SPI_HandleTypeDef *hspi){
 	uint8_t data[4]; //32 bit cada registo
 
 	data[0]= ((FOC_IC_MOTOR_TYPE_N_POLE_PAIRS | 0x80)<<8); // colocar 1 no MSB do byte com o endereço
-	//data[1] = //o que escrever
+	//data[1] = //o que escrever?
 
 	//colocar a zero CS do ic para iniciar comunicação por spi
 

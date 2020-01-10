@@ -1,8 +1,9 @@
-sd_wr.c:12:5:bufsize	24	static
-sd_wr.c:19:6:bufclear	24	static
-sd_wr.c:28:9:mount_card	16	static
-sd_wr.c:34:9:unmount_card	16	static
-sd_wr.c:41:6:card_capacity	24	static
-sd_wr.c:54:9:create_file	32	static
-sd_wr.c:69:9:read_file	32	static
-sd_wr.c:89:9:update_file	32	static
+sd_wr.c:13:5:bufsize	24	static
+sd_wr.c:20:6:bufclear	24	static
+sd_wr.c:29:9:mount_card	16	static
+sd_wr.c:35:9:unmount_card	16	static
+sd_wr.c:42:6:card_capacity	24	static
+sd_wr.c:55:9:create_file	32	static
+sd_wr.c:70:9:read_file	32	static
+sd_wr.c:90:9:update_file	32	static
+sd_wr.c:111:7:get_timestamp	80	static

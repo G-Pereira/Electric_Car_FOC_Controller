@@ -6,6 +6,7 @@
 #include "fatfs_sd.h"
 #include "string.h"
 #include "stdio.h"
+#include "time.h"
 
 
 /* to find the size of data in the buffer */
@@ -86,12 +87,16 @@ FRESULT read_file (char *buffer, char *filename, FIL *fil, UINT *br){
 }
 
 /*********************UPDATING an existing file ***************************/
-FRESULT update_file(char *filename, char *data, FIL *fil, UINT *bw)
+FRESULT update_file(char *filename, char *data, char *timestamp, FIL *fil, UINT *bw)
 {
 	FRESULT fresult;
 
+	strcat(data,timestamp);
+	strcat(data,"\n");
+
 	/* Open the file with write access */
-	fresult = f_open(fil, filename, FA_OPEN_ALWAYS | FA_WRITE);
+	fresult = f_open(fil, filename, FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+
 
 	/* Move to offset to the end of the file */
 	fresult = f_lseek(fil, fil->fsize);
@@ -102,3 +107,25 @@ FRESULT update_file(char *filename, char *data, FIL *fil, UINT *bw)
 	f_close (fil);
 	return fresult;
 }
+
+char *get_timestamp(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *currentTime, RTC_DateTypeDef *currentDate){
+
+	time_t timestamp;
+	struct tm currTime;
+
+	HAL_RTC_GetTime(hrtc, currentTime, RTC_FORMAT_BIN);
+	HAL_RTC_GetDate(hrtc, currentDate, RTC_FORMAT_BIN);
+
+
+	currTime.tm_year = currentDate->Year-16;
+	currTime.tm_mday = currentDate->Date-6;
+	currTime.tm_mon  = currentDate->Month-2;
+	currTime.tm_hour = currentTime->Hours+8;
+	currTime.tm_min  = currentTime->Minutes-23;
+	currTime.tm_sec  = currentTime->Seconds;
+
+	timestamp = mktime(&currTime);
+	return asctime(gmtime(&timestamp));
+
+}
+
