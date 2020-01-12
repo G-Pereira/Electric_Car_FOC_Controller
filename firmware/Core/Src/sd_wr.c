@@ -96,11 +96,11 @@ FRESULT update_file(char *filename, char *data, char *timestamp, char *msec_stam
 	strcat(data,"\n");
 
 	/* Open the file with write access */
-	fresult = f_open(fil, filename, FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+	fresult = f_open(fil, filename, FA_OPEN_APPEND | FA_WRITE);// FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
 
 
 	/* Move to offset to the end of the file */
-	fresult = f_lseek(fil, fil->fptr);
+	//fresult = f_lseek(fil, fil->fptr);
 
 	/* write the string to the file */
 	fresult = f_puts(data, fil); //pode precisar de um "\n"

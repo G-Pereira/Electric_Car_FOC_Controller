@@ -91,7 +91,7 @@
 
 	//Encoder mode variables
 	uint32_t counter = 0;
-	int speed = 0;
+	float speed = 0;
 
 	//RTC
 	RTC_TimeTypeDef currentTime;
@@ -124,7 +124,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
 {
-	timesubsec=HAL_GetTick();
+	time_subsec=HAL_GetTick();
 }
 
 /* USER CODE END 0 */
@@ -186,7 +186,7 @@ int main(void)
 
 
 
-  IMU_config(&hspi2);
+  //IMU_config(&hspi2); é para ativar dps
 
   //Initialize data logger
   if(mount_card (&fs) != FR_OK){
@@ -216,22 +216,22 @@ int main(void)
 	  current_ph1 = motorCurrent(adc_dma[0]);
 	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", current_ph1);
-	  update_file("phase1_current.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[7]), &bw);
+	  sprintf(str, "%f ", current_ph1);
+	  update_file("phase1_current.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[7]), &bw);
 
 	  //CURRENT PH2
 	  current_ph2 = motorCurrent(adc_dma[1]);
 	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", current_ph2);
-	  update_file("phase2_current.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[8]), &bw);
+	  sprintf(str, "%f ", current_ph2);
+	  update_file("phase2_current.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[8]), &bw);
 
 	  //CURRENT PH3
 	  current_ph3= motorCurrent(adc_dma[2]);
 	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", current_ph3);
-	  update_file("phase3_current.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[9]), &bw);
+	  sprintf(str, "%f ", current_ph3);
+	  update_file("phase3_current.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[9]), &bw);
 
 
 	  //convert the 3 adc voltage values from the motor
@@ -244,24 +244,24 @@ int main(void)
 	  motor_temp = motorTemp(adc_dma[6]); //convert adc value for temperature on motor
 	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", motor_temp);
-	  update_file("Motor_temperature.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[10]), &bw);
+	  sprintf(str, "%f ", motor_temp);
+	  update_file("Motor_temperature.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[10]), &bw);
 
 
 	  //CONV TEMP
 	  conv_temp = igbtTemp(adc_dma[7]); //convert adc value for temperature on converter
 	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", conv_temp);
-	  update_file("Converter_temperature.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[11]), &bw);
+	  sprintf(str, "%f ", conv_temp);
+	  update_file("Converter_temperature.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[11]), &bw);
 
 
 	  //DC CURRENT
 	  dc_current = motorCurrent(adc_dma[8]); //convert adc value for current on DC bus
 	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", dc_current);
-	  update_file("DC_current.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[6]), &bw);
+	  sprintf(str, "%f ", dc_current);
+	  update_file("DC_current.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[6]), &bw);
 
 
 	  dc_voltage = voltageDC(adc_dma[9]); //convert adc value for voltage on DC bus
@@ -271,16 +271,16 @@ int main(void)
 	  brk_pedal = pedalPos(adc_dma[10]); //convert adc value for braking pedal
 	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", brk_pedal);
-	  update_file("Braking_Pedal.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[14]), &bw);
+	  sprintf(str, "%f ", brk_pedal);
+	  update_file("Braking_Pedal.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[14]), &bw);
 
 
 	  //THROTTLE
 	  acc_pedal = pedalPos(adc_dma[11]); //convert adc value for throttle
 	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", acc_pedal);
-	  update_file("Accelerator_pedal.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[13]), &bw);
+	  sprintf(str, "%f ", acc_pedal);
+	  update_file("Accelerator_pedal.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[13]), &bw);
 
 
 	  //ENCODER
@@ -291,8 +291,8 @@ int main(void)
 
 	  msec_stamp=HAL_GetTick()-time_subsec; //aw shit
 	  sprintf(stamp, "%d", msec_stamp);
-	  sprintf(str, "%d ", speed);
-	  update_file("encoder_data.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[12]), &bw);
+	  sprintf(str, "%f ", speed);
+	  update_file("encoder_data.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[12]), &bw);
 
 
 	  //ACCELEROMETER
@@ -302,11 +302,11 @@ int main(void)
 	  sprintf(str, "%d ", accel_data[0]);
 
 	  //Send read data to SD card
-	  update_file("accelerometer_data_x.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[0]), &bw);
+	  update_file("accelerometer_data_x.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[0]), &bw);
 	  sprintf(str, "%d ", accel_data[1]);
-	  update_file("accelerometer_data_y.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[1]), &bw);
+	  update_file("accelerometer_data_y.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[1]), &bw);
 	  sprintf(str, "%d ", accel_data[2]);
-	  update_file("accelerometer_data_z.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[2]), &bw);
+	  update_file("accelerometer_data_z.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[2]), &bw);
 
 	  //GYROSCOPE
 	  IMU_gyro_read(&hspi2, gyro_data); //read and convert gyroscope data
@@ -315,11 +315,11 @@ int main(void)
 	  sprintf(str, "%d ", gyro_data[0]);
 
 	  //Send read data to SD card
-	  update_file("gyroscope_data_x.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[3]), &bw);
+	  update_file("gyroscope_data_x.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[3]), &bw);
 	  sprintf(str, "%d ", gyro_data[1]);
-	  update_file("gyroscope_data_y.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[4]), &bw);
+	  update_file("gyroscope_data_y.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[4]), &bw);
 	  sprintf(str, "%d ", gyro_data[2]);
-	  update_file("gyroscope_data_z.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), msec_stamp, &(fil[5]), &bw);
+	  update_file("gyroscope_data_z.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[5]), &bw);
 
 	  //DEFINIR O QUE FAZER COM VALORES LIDOS
 
