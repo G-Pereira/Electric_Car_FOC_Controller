@@ -90,7 +90,8 @@
 	char str[30], stamp[5];
 
 	//Encoder mode variables
-	uint32_t counter = 0;
+	uint32_t counter1 = 0, counter2 = 0;
+	uint32_t tick = 0;
 	float speed = 0;
 
 	//RTC
@@ -198,6 +199,8 @@ int main(void)
 
   //Initialize encoder mode
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  tick = HAL_GetTick();
+  counter1 = __HAL_TIM_GET_COUNTER(&htim2);
 
 
   /* USER CODE END 2 */
@@ -285,9 +288,12 @@ int main(void)
 
 	  //ENCODER
 	  //read and convert adc values for encoder
-	  counter = __HAL_TIM_GET_COUNTER(&htim2);
-	  HAL_Delay(500);
-	  speed = motorSpeed(counter, htim2);
+	  ////counter1 = __HAL_TIM_GET_COUNTER(&htim2);
+	  ///HAL_Delay(500);
+	  if(HAL_GetTick() - tick > 1000L){
+		  counter2 = __HAL_TIM_GET_COUNTER(&htim2);
+		  speed = motorSpeed(&counter1, counter2, &tick, htim2);
+	  }
 
 	  msec_stamp=HAL_GetTick()-time_subsec; //aw shit
 	  sprintf(stamp, "%d", msec_stamp);

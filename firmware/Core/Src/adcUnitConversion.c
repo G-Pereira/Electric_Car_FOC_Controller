@@ -23,31 +23,34 @@ float motorCurrent (int adcReading){
 
 float igbtTemp (int adcReading){
 
-	float m = (30-115)/(1-10);
-	float b = 30 - m;
+	int Rmin = 160, Rmax = 16100;
+	float Vmin = 0.05, Vmax = 3.25;
+	int Tmin = 0, Tmax = 150;
 
-	float T = m*(adcInt2Volt(adcReading))+b;
+	float m, b, T;
+	m = b = T = 0;
+
+	m = (Tmin-Tmax)/(Vmax-Vmin);
+	b = Tmin - m*Vmax;
+
+	T = m*(adcInt2Volt(adcReading))+b;
 
 	return T;
 }
 
 float motorTemp (int adcReading){
 
-	/*
-	 * R1 = 1495 @ -10°C
-	 * R2 = 2245 @  40°C
-	 * R3 = 3817 @ 120°C
-	 */
+	int Rmin = 1600, Rmax = 4000;   //resistance
+	float Vmin = 0.05, Vmax = 3.25; //voltage
+	int Tmin=0, Tmax=150;			//temperature
 
-	float a = 0.0251239;
-	float b = -0.0035737;
-	float c = 0.0000123;
+	float m, b, Rt, T;
+	m = b = Rt = T = 0;
 
-	int Rk = 2700;
+	m = (Tmin-Tmax)/(Vmin-Vmax);
+	b = Tmin-Vmin*m;
 
-	float Rt = Rk * ((ADCVREF/adcInt2Volt(adcReading))-1);
-
-	float T = 1/(a+b*log(Rt)+c*pow(log(Rt),3));
+	T = m*(adcInt2Volt(adcReading))+b;
 
 	return T;
 
