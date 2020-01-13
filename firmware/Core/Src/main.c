@@ -130,6 +130,20 @@ void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
 
 /* USER CODE END 0 */
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+
+	//UNUSED(htim); será preciso?
+
+	counter2 = __HAL_TIM_GET_COUNTER(&htim2);
+	speed = motorSpeed(&counter1, counter2, &tick, htim2);
+
+	/* passa a fazer-se aqui?
+	sprintf(str, "%f ", speed);
+	update_file("encoder_data.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[12]), &bw); */
+
+}
+
+
 /**
   * @brief  The application entry point.
   * @retval int
@@ -172,6 +186,7 @@ int main(void)
   MX_DMA_Init();
   MX_SDIO_SD_Init();
   MX_TIM2_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
   //Initialize FOC-IC registers
@@ -201,6 +216,10 @@ int main(void)
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   tick = HAL_GetTick();
   counter1 = __HAL_TIM_GET_COUNTER(&htim2);
+
+  //Initialize basic timer7
+  HAL_TIM_Base_Start_IT(&htim7);
+
 
 
   /* USER CODE END 2 */
@@ -290,10 +309,12 @@ int main(void)
 	  //read and convert adc values for encoder
 	  ////counter1 = __HAL_TIM_GET_COUNTER(&htim2);
 	  ///HAL_Delay(500);
+
+	  /* ---- PlanA -----
 	  if(HAL_GetTick() - tick > 1000L){
 		  counter2 = __HAL_TIM_GET_COUNTER(&htim2);
 		  speed = motorSpeed(&counter1, counter2, &tick, htim2);
-	  }
+	  }*/
 
 	  msec_stamp=HAL_GetTick()-time_subsec; //aw shit
 	  sprintf(stamp, "%d", msec_stamp);
