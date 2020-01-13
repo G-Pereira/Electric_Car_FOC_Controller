@@ -61,6 +61,7 @@ RTC_HandleTypeDef hrtc;
 SPI_HandleTypeDef hspi2;
 
 TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
 
 /* USER CODE BEGIN PV */
 
@@ -85,7 +86,10 @@ uint32_t              TxMailbox;
 RTC_TimeTypeDef currentTime;
 RTC_DateTypeDef currentDate;
 
-
+//Encoder Mode
+uint32_t tick = 0;
+uint32_t counter1 = 0, counter2 = 0;
+float speed = 0;
 
 
 /* USER CODE END PV */
@@ -98,6 +102,7 @@ static void MX_CAN_Init(void);
 static void MX_RTC_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_TIM4_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -106,17 +111,30 @@ static void MX_TIM3_Init(void);
 /* USER CODE BEGIN 0 */
 
 
-	FATFS fs;  // file system
-	FIL fil, fil2;  // file (uma por cada ficheiro a criar)
-	FRESULT fresult;  // to store the result
-	char buffer[512]; // to store data
+FATFS fs;  // file system
+FIL fil, fil2;  // file (uma por cada ficheiro a criar)
+FRESULT fresult;  // to store the result
+char buffer[512]; // to store data
 
-	UINT br, bw, bw2;   // file read/write count
+UINT br, bw, bw2;   // file read/write count
 
-	/* capacity related variables */
-	//DWORD fre_clust;
-	DWORD total, free_space;
+/* capacity related variables */
+//DWORD fre_clust;
+DWORD total, free_space;
 
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+
+	//UNUSED(htim); será preciso?
+
+	//counter2 = __HAL_TIM_GET_COUNTER(&htim2);
+	speed = motorSpeed(&counter1, &tick, htim3);
+
+	/* passa a fazer-se aqui?
+	sprintf(str, "%f ", speed);
+	update_file("encoder_data.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[12]), &bw); */
+
+}
 
 /* USER CODE END 0 */
 
@@ -155,6 +173,7 @@ int main(void)
   MX_RTC_Init();
   MX_SPI2_Init();
   MX_TIM3_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
   printf("Hello!\n");
 	  HAL_GPIO_WritePin(CS_accel_GPIO_Port, CS_accel_Pin, SET);
@@ -167,17 +186,18 @@ int main(void)
   //update_file("imu_acc.txt", "IMU IMU IMU", &fil2, &bw2);
 
   MX_CAN_Init();
+  HAL_TIM_Base_Start_IT(&htim4);
 
 
-  //IMU_config(&hspi2);
+  IMU_config(&hspi2);
 
-  uint32_t counter = 0, counter2 = 0;
   char str[20];
-  float speed = 0;
+//  float speed = 0;
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
  // HAL_TIM_Encoder_Init(&htim3, sConfig)
-  uint32_t tick = HAL_GetTick();
-  counter = __HAL_TIM_GET_COUNTER(&htim3);
+
+  counter1 = __HAL_TIM_GET_COUNTER(&htim3);
+  tick = HAL_GetTick();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -185,13 +205,12 @@ int main(void)
   while (1)
   {
 
-	  printf("counter encoder mode: %lu \n", counter);
+	  printf("counter encoder mode: %lu \n", counter1);
 	  //HAL_Delay(500);
-	  if (HAL_GetTick() - tick > 1000L){
-		  counter2 = __HAL_TIM_GET_COUNTER(&htim3);
+	 /* if (HAL_GetTick() - tick > 1000L){
 		  printf("hal = %lu , tick = %lu, Aquii \n", HAL_GetTick(), tick);
-		  speed = motorSpeed(&counter, counter2, &tick, htim3);
-	  }
+		  speed = motorSpeed(&counter, &tick, htim3);
+	  } */
 
 
 	 // speed = motorSpeed(counter, htim3);
@@ -203,7 +222,7 @@ int main(void)
 	  fresult=update_file("enc.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate) , &fil, &bw);
 
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	  HAL_Delay(500);
+	  //HAL_Delay(500);
 	  //printf("hello\n");
 
 	  IMU_acc_read(&hspi2, accel_data);
@@ -219,7 +238,7 @@ int main(void)
 	  sprintf(acxstr, "acx - %f ", acx);
 	  sprintf(acystr, "acy - %f ", acy);
 	  sprintf(aczstr, "acz - %f ", acz);
-	  HAL_Delay(100);
+	  //HAL_Delay(100);
 	  update_file("imu_acc.txt", acxstr, get_timestamp(&hrtc, &currentTime, &currentDate), &fil2, &bw2);
 
 	  update_file("imu_acc.txt", acystr, get_timestamp(&hrtc, &currentTime, &currentDate), &fil2, &bw2);
@@ -456,8 +475,8 @@ static void MX_RTC_Init(void)
 
   /** Initialize RTC and set the Time and Date 
   */
-  sTime.Hours = 0x21;
-  sTime.Minutes = 0x7;
+  sTime.Hours = 0x3;
+  sTime.Minutes = 0x0;
   sTime.Seconds = 0x0;
 
   if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
@@ -466,7 +485,7 @@ static void MX_RTC_Init(void)
   }
   DateToUpdate.WeekDay = RTC_WEEKDAY_WEDNESDAY;
   DateToUpdate.Month = RTC_MONTH_JANUARY;
-  DateToUpdate.Date = 0x8;
+  DateToUpdate.Date = 0x13;
   DateToUpdate.Year = 0x0;
 
   if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD) != HAL_OK)
@@ -541,7 +560,7 @@ static void MX_TIM3_Init(void)
   htim3.Init.Period = 65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
@@ -563,6 +582,51 @@ static void MX_TIM3_Init(void)
   /* USER CODE BEGIN TIM3_Init 2 */
 
   /* USER CODE END TIM3_Init 2 */
+
+}
+
+/**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 48000;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 125;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
 
 }
 

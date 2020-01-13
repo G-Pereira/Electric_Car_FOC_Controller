@@ -36,13 +36,16 @@ default.size.stdout \
 OBJDUMP_LIST += \
 fiat_f1.list \
 
+OBJCOPY_BIN += \
+fiat_f1.bin \
+
 
 # All Target
 all: fiat_f1.elf secondary-outputs
 
 # Tool invocations
-fiat_f1.elf: $(OBJS) $(USER_OBJS) C:\Users\Carlos\Desktop\SEAI\git\Electric-FIAT\Electric-FIAT-f103\firmware\STM32F103C8TX_FLASH.ld
-	arm-none-eabi-gcc -o "fiat_f1.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Carlos\Desktop\SEAI\git\Electric-FIAT\Electric-FIAT-f103\firmware\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="fiat_f1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+fiat_f1.elf: $(OBJS) $(USER_OBJS) C:\Users\Catarina\Desktop\SEAI_GitHub3\Electric-FIAT-f103\firmware\STM32F103C8TX_FLASH.ld
+	arm-none-eabi-gcc -o "fiat_f1.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Catarina\Desktop\SEAI_GitHub3\Electric-FIAT-f103\firmware\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="fiat_f1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -56,12 +59,17 @@ fiat_f1.list: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+fiat_f1.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "fiat_f1.bin"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
 	-$(RM) *
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
 .PHONY: all clean dependents
 .SECONDARY:
