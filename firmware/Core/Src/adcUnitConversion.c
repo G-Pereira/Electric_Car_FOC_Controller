@@ -81,7 +81,7 @@ float voltageDC (int adcReading){
 	 * R3 = R10 = 39  <- negligenciar?
 	 */
 
-	int R1 = 300000;
+	int R1 = 250000;
 	int R2 = 2000;
 	int R3 = 39;
 

@@ -176,8 +176,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   //Initialize FOC-IC registers
-  //FP=0,707 ??
-  foc_ic_config(&hspi2);
+  //foc_ic_config(&hspi2);
 
 
 
