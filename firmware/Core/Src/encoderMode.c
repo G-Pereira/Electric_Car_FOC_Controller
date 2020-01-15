@@ -7,9 +7,9 @@
 #include "main.h"
 #include "encoderMode.h"
 
-int motorSpeed (uint32_t *cnt1, uint32_t cnt2, uint32_t *tick, TIM_HandleTypeDef htim2){
+int motorSpeed (uint32_t *cnt1, uint32_t *tick, TIM_HandleTypeDef htim2){
 
-	//uint32_t cnt2 = __HAL_TIM_GET_COUNTER(&htim3);
+	uint32_t cnt2 = __HAL_TIM_GET_COUNTER(&htim3);
 	int diff = 0;
 
 	printf("cnt1 = %lu counter2 = %lu\n",*cnt1,cnt2);
@@ -30,7 +30,7 @@ int motorSpeed (uint32_t *cnt1, uint32_t cnt2, uint32_t *tick, TIM_HandleTypeDef
 
 	printf("diff = %d\n", diff);
 	//float speed = (((float)(diff)/8)*60)*2;  //((diff/8)*60)/0.02;  // change when sysTimer configured
-	float speed = (((float)(diff)/2)*60);
+	float speed = (((float)(diff)/4)*60)/(HAL_GetTick() - *tick)*0.001;
 
 
 	*tick = HAL_GetTick();

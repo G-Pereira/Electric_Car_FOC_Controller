@@ -129,6 +129,19 @@ void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
 	time_subsec=HAL_GetTick();
 }
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+
+	//UNUSED(htim); será preciso?
+
+	//counter2 = __HAL_TIM_GET_COUNTER(&htim2);
+	speed = motorSpeed(&counter1, &tick, htim3);
+
+	/* passa a fazer-se aqui?
+	sprintf(str, "%f ", speed);
+	update_file("encoder_data.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[12]), &bw); */
+
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -173,6 +186,7 @@ int main(void)
   MX_DMA_Init();
   MX_SDIO_SD_Init();
   MX_TIM2_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
   //Initialize FOC-IC registers
@@ -180,14 +194,12 @@ int main(void)
 
 
 
-  HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, RESET);
+  //HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, RESET);
   //HAL_SPI_Transmit(&hspi2, /*reg*/ , /*size*/ , 2000);
-  HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, SET);
+  //HAL_GPIO_WritePin(FOC_IC_CS_GPIO_Port, FOC_IC_CS_Pin, SET);
+
   //Initialize IMU
-
-
-
-  //IMU_config(&hspi2); é para ativar dps
+  IMU_config(&hspi2);
 
   //Initialize data logger
   if(mount_card (&fs) != FR_OK){
@@ -196,6 +208,7 @@ int main(void)
 
 
   HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
+  HAL_TIM_Base_Start_IT(&htim4);
 
   //Initialize encoder mode
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
@@ -290,10 +303,10 @@ int main(void)
 	  //read and convert adc values for encoder
 	  ////counter1 = __HAL_TIM_GET_COUNTER(&htim2);
 	  ///HAL_Delay(500);
-	  if(HAL_GetTick() - tick > 1000L){
+	  /*if(HAL_GetTick() - tick > 1000L){
 		  counter2 = __HAL_TIM_GET_COUNTER(&htim2);
 		  speed = motorSpeed(&counter1, counter2, &tick, htim2);
-	  }
+	  }*/
 
 	  msec_stamp=HAL_GetTick()-time_subsec; //aw shit
 	  sprintf(stamp, "%d", msec_stamp);
