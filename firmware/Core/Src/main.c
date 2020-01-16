@@ -134,7 +134,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	//UNUSED(htim); será preciso?
 
 	//counter2 = __HAL_TIM_GET_COUNTER(&htim2);
-	speed = motorSpeed(&counter1, &tick, htim3);
+	speed = motorSpeed(&counter1, &tick, htim2);
 
 	/* passa a fazer-se aqui?
 	sprintf(str, "%f ", speed);
@@ -200,7 +200,7 @@ int main(void)
 
   //Initialize IMU
   IMU_config(&hspi2);
-
+  //printf("HELLO\n");
   //Initialize data logger
   if(mount_card (&fs) != FR_OK){
 	  printf("ERROR mounting SD Card");
@@ -208,7 +208,7 @@ int main(void)
 
 
   HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
-  HAL_TIM_Base_Start_IT(&htim4);
+  HAL_TIM_Base_Start_IT(&htim6);
 
   //Initialize encoder mode
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
@@ -308,7 +308,7 @@ int main(void)
 		  speed = motorSpeed(&counter1, counter2, &tick, htim2);
 	  }*/
 
-	  msec_stamp=HAL_GetTick()-time_subsec; //aw shit
+	  msec_stamp=HAL_GetTick()-time_subsec;
 	  sprintf(stamp, "%d", msec_stamp);
 	  sprintf(str, "%f ", speed);
 	  update_file("encoder_data.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[12]), &bw);
@@ -407,7 +407,19 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+int __io_putchar(int ch){
+	ITM_SendChar(ch);
+	return ch;
+}
 
+int _write(int file, char *ptr, int len){
+	int DataIdx;
+
+	for(DataIdx = 0; DataIdx < len; DataIdx++){
+		__io_putchar(*ptr++);
+	}
+	return len;
+}
 
 /* USER CODE END 4 */
 

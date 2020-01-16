@@ -9,7 +9,7 @@
 
 int motorSpeed (uint32_t *cnt1, uint32_t *tick, TIM_HandleTypeDef htim2){
 
-	uint32_t cnt2 = __HAL_TIM_GET_COUNTER(&htim3);
+	uint32_t cnt2 = __HAL_TIM_GET_COUNTER(&htim2);
 	int diff = 0;
 
 	printf("cnt1 = %lu counter2 = %lu\n",*cnt1,cnt2);
