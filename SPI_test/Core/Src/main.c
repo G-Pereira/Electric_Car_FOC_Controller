@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -44,7 +45,6 @@
 SPI_HandleTypeDef hspi2;
 
 /* USER CODE BEGIN PV */
-uint8_t str[4];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -78,6 +78,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
+  HAL_GPIO_WritePin(FOC_CS_GPIO_Port, FOC_CS_Pin, SET);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -91,14 +92,17 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t aux[5], aux2[1];
-  aux[0]=0x81;
-  for(int i=1; i<4; i++){
-	  aux[i]=0;
-  }
-  aux2[0]=0x00;
+  uint8_t aux[5], aux2[1], str[5];
+     aux[0]=0b10000001;
+     for(int i=1; i<=4; i++){
+   	  aux[i]=0b00000000;
+     }
+     aux2[0]=0b00000000;
 
 
+  for(int i=0; i<4; i++){
+  	  printf("aux %d - %d\n", i, aux[i]);
+    }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -110,16 +114,22 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 	  HAL_GPIO_TogglePin(Led1_GPIO_Port, Led1_Pin);
-	  HAL_Delay(500);
+	  HAL_Delay(50);
+
 	  HAL_GPIO_WritePin(FOC_CS_GPIO_Port, FOC_CS_Pin, RESET);
-	    HAL_SPI_Transmit(&hspi2, aux, 5, 1000);
-	    HAL_Delay(20);
-	    HAL_SPI_Transmit(&hspi2, aux2, 1, 1000);
-	    HAL_SPI_Receive(&hspi2, str, 4, 1000);
-	    HAL_GPIO_WritePin(FOC_CS_GPIO_Port, FOC_CS_Pin, SET);
-	    //HAL_SPI_Receive(&hspi2, str, 4, 200);
-	    printf("Aquiii\n");
-	    printf("%d %d %d %d\n", str[0], str[1], str[2], str[3]);
+	  HAL_SPI_Transmit(&hspi2, aux, 5, 1000);
+	  HAL_GPIO_WritePin(FOC_CS_GPIO_Port, FOC_CS_Pin, SET);
+	  //HAL_Delay(1);
+
+
+	  HAL_GPIO_WritePin(FOC_CS_GPIO_Port, FOC_CS_Pin, RESET);
+	  HAL_SPI_Transmit(&hspi2, aux2, 1, 1000);
+	  //HAL_Delay(1);
+	  HAL_SPI_Receive(&hspi2, str, 4, 1000);
+	  HAL_GPIO_WritePin(FOC_CS_GPIO_Port, FOC_CS_Pin, SET);
+	  //HAL_SPI_Receive(&hspi2, str, 4, 200);
+	  printf("Aquiii\n");
+	  printf("%d %d %d %d\n", str[0], str[1], str[2], str[3]);
 
 
 
@@ -138,10 +148,13 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -150,12 +163,12 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -184,7 +197,7 @@ static void MX_SPI2_Init(void)
   hspi2.Init.CLKPolarity = SPI_POLARITY_HIGH;
   hspi2.Init.CLKPhase = SPI_PHASE_2EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
