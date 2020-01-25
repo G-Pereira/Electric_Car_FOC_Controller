@@ -39,7 +39,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define	NR_ADC_CHANNELS 3 //Nº de channels adc
+#define	NR_ADC_CHANNELS 7 //Nº de channels adc
 
 /* USER CODE END PD */
 
@@ -88,6 +88,7 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 	int accel_data[3];
 //IMU accelerometer data
 	int gyro_data[3];
+	long int c1;
 
 	float dc_current, current_ph1, current_ph2, current_ph3, dc_voltage, voltage_ph1, voltage_ph2, voltage_ph3,  motor_temp, conv_temp, acc_pedal , brk_pedal;
 
@@ -221,7 +222,8 @@ int main(void)
 
 
 
-  uint8_t aux[5], aux2[1], str[5];
+  uint8_t aux[5], aux2[1], aux3[1], str3[4], str[5];
+  uint8_t ref[5];
     aux[0]=0b10000001;
     for(int i=1; i<=4; i++){
   	  aux[i]=0b00000000;
@@ -236,7 +238,6 @@ int main(void)
     	  printf("aux %d - %d\n", i, aux[i]);
       }
 
-    int t=0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -248,35 +249,37 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 
-	  if(__HAL_TIM_IS_TIM_COUNTING_DOWN(&htim2)){
-		  t=1;
-	  }
-	  else t=0;
-
 	  uint32_t read=adc_dma[0];
 	  motor_temp = motorTemp(read);
-	  //printf("temp %f\n", motor_temp);
+	  printf("temp %f\n", motor_temp);
 	  read=adc_dma[1];
-	  float brk = (float)(read)/4096;
-	  //printf("brk %f", brk);
+	  float brk = pedalPos(read);
+	  printf("brk %f", brk);
 	  read=adc_dma[2];
-	  float acc = (float)(read)/4096;
-	  //printf("acc %f", acc);
+	  float acc = pedalPos(read);
+	  printf("acc %f", acc);
 
+	  read=adc_dma[3];
+	  float c1_f = motorCurrent(read);
+	  c1=c1_f;
+	  printf("current1 %l", c1);
+	  read=adc_dma[4];
+	  float c2 = motorCurrent(read);
+	  read=adc_dma[5];
+	  float c3 = motorCurrent(read);
 
-	  //update_file("teste.txt", "chico da tina", "ah", "ah\n", &fil, &bw);
-	  IMU_acc_read(&hspi2, accel_data);
-	  for(int i=0; i<=2; i++){
-		  sprintf(str2, "%d ", accel_data[i]);
-		  //printf("acc[%d]= %s  ", i, str2);
+	  read=adc_dma[6];
+	  conv_temp = igbtTemp(read);
+	  printf("temp %f\n", conv_temp);
+/*
+	  if(acc>50){
+		  ref[0]
+		  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
+		  HAL_SPI_Transmit(&hspi2, ref, 5, 1000);
+		  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 	  }
+	  else if(brk>50)*/
 
-
-	  IMU_gyro_read(&hspi2, gyro_data);
-	  for(int i=0; i<=2; i++){
-		  sprintf(str2, "%d ", gyro_data[i]);
-		  //printf("gyro[%d]= %s  ", i, str2);
-	  }
 
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
 	  HAL_SPI_Transmit(&hspi2, aux, 5, 1000);
@@ -293,8 +296,52 @@ int main(void)
 	  printf("Aquiii\n");
 	  printf("%d %d %d %d\n", str[0], str[1], str[2], str[3]);
 
-	  printf("speed: %f\n", speed);
-	  printf("counter1 = %lu\n", __HAL_TIM_GET_COUNTER(&htim2));
+
+	  //ler velocidades do tmc
+	  aux3[0]=0x6A;
+	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
+	  HAL_SPI_Transmit(&hspi2, aux3, 1, 1000);
+	  HAL_Delay(1);
+	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
+	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
+	  printf("PID VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
+
+	  aux3[0]=0x22;
+	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
+	  HAL_SPI_Transmit(&hspi2, aux3, 1, 1000);
+	  HAL_Delay(1);
+	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
+	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
+	  printf("OPENLOOP VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
+
+	  aux3[0]=0x41;
+	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
+	  HAL_SPI_Transmit(&hspi2, aux3, 1, 1000);
+	  HAL_Delay(1);
+	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
+	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
+	  printf("AENC DECODER COUNT: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
+
+
+
+
+	  //update_file("teste.txt", "chico da tina", "ah", "ah\n", &fil, &bw);
+	  IMU_acc_read(&hspi2, accel_data);
+	  for(int i=0; i<=2; i++){
+		  sprintf(str2, "%d ", accel_data[i]);
+		  //printf("acc[%d]= %s  ", i, str2);
+	  }
+
+
+	  IMU_gyro_read(&hspi2, gyro_data);
+	  for(int i=0; i<=2; i++){
+		  sprintf(str2, "%d ", gyro_data[i]);
+		  //printf("gyro[%d]= %s  ", i, str2);
+	  }
+
+
+	  //printf("speed: %f\n", speed);
+	  //printf("counter1 = %lu\n", __HAL_TIM_GET_COUNTER(&htim2));
 
 	 //ENCODER
 	 //read and convert adc values for encoder
@@ -389,7 +436,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 3;
+  hadc1.Init.NbrOfConversion = 7;
   hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -417,6 +464,38 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_13;
   sConfig.Rank = 3;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_2;
+  sConfig.Rank = 4;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_10;
+  sConfig.Rank = 5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_11;
+  sConfig.Rank = 6;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_9;
+  sConfig.Rank = 7;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -546,20 +625,20 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 6;
+  htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 65535;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 10;
+  sConfig.IC1Filter = 5;
   sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC2Filter = 10;
+  sConfig.IC2Filter = 5;
   if (HAL_TIM_Encoder_Init(&htim2, &sConfig) != HAL_OK)
   {
     Error_Handler();

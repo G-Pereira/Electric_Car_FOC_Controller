@@ -1,6 +1,6 @@
 adcUnitConversion.c:13:7:adcInt2Volt	24	static
 adcUnitConversion.c:20:7:motorCurrent	24	static
-adcUnitConversion.c:25:7:igbtTemp	56	static
+adcUnitConversion.c:25:7:igbtTemp	64	static
 adcUnitConversion.c:42:7:motorTemp	56	static
 adcUnitConversion.c:60:7:voltageAC	32	static
 adcUnitConversion.c:77:7:voltageDC	40	static

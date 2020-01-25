@@ -31,10 +31,10 @@ float igbtTemp (int adcReading){
 	float m, b, T;
 	m = b = T = 0;
 
-	m = (Tmin-Tmax)/(Vmax-Vmin);
-	b = Tmin - m*Vmax;
+	m = 98.551;//(Tmin-Tmax)/(Vmax-Vmin);
+	b = 20.667;//Tmin - m*Vmax;
 
-	T = m*(adcInt2Volt(adcReading))+b;
+	T = m*(adcInt2Volt(adcReading)/3.3)+b;
 
 	return T;
 }

@@ -58,6 +58,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define curr_u_Pin GPIO_PIN_0
+#define curr_u_GPIO_Port GPIOC
+#define curr_v_Pin GPIO_PIN_1
+#define curr_v_GPIO_Port GPIOC
 #define brk_pedal_Pin GPIO_PIN_2
 #define brk_pedal_GPIO_Port GPIOC
 #define acc_pedal_Pin GPIO_PIN_3
@@ -66,6 +70,8 @@ void Error_Handler(void);
 #define enc_a_GPIO_Port GPIOA
 #define enc_b_Pin GPIO_PIN_1
 #define enc_b_GPIO_Port GPIOA
+#define curr_w_Pin GPIO_PIN_2
+#define curr_w_GPIO_Port GPIOA
 #define Accel_CS_Pin GPIO_PIN_4
 #define Accel_CS_GPIO_Port GPIOA
 #define Gyro_CS_Pin GPIO_PIN_2
