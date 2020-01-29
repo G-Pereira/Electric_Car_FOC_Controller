@@ -69,7 +69,7 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 
 //SD file variables
 	FATFS fs;  // file system
-	FIL fil;  // file
+	FIL fil, fil2, fil3;  // file
 	FRESULT fresult;  // to store the result
 	char buffer[512]; // to store data
 
@@ -91,6 +91,13 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 	long int c1;
 
 	float dc_current, current_ph1, current_ph2, current_ph3, dc_voltage, voltage_ph1, voltage_ph2, voltage_ph3,  motor_temp, conv_temp, acc_pedal , brk_pedal;
+
+//RTC
+	RTC_TimeTypeDef currentTime;
+	RTC_DateTypeDef currentDate;
+	uint32_t time_subsec = 0;
+	uint32_t time_stamp = 0;
+	char stamp[50];
 
 
 /* USER CODE END PV */
@@ -124,6 +131,12 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 	}
 }
 
+void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc){
+
+	printf("Interrupcao\n");
+	time_subsec = HAL_GetTick();
+
+}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
@@ -187,28 +200,27 @@ int main(void)
   HAL_GPIO_WritePin(Magnet_CS_GPIO_Port, Magnet_CS_Pin, SET);
   HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 
-/*
-  if(HAL_GPIO_ReadPin(SD_Det_GPIO_Port, SD_Det_Pin)==SET){
-	  printf("cartao");
+  fresult = f_mount(&fs, "", 0 );
+  if(fresult == FR_OK){
+	  printf("Mount feito\n");
   }
-  else printf("n cartao");
-
-  if(mount_card (&fs) != FR_OK){
-	  printf("ERROR mounting SD Card");
+  fresult = f_open(&fil, "agora17.txt", FA_CREATE_ALWAYS | FA_WRITE);
+  if(fresult != FR_OK){
+  	  printf("agora17.txt fodeu\n");
   }
-  printf("sai\n");
-
-  FRESULT aux=update_file("test.txt", "hey", "", "", &fil, &bw);
-  if(aux!=FR_OK){
-	  printf("ERRO");
+  fresult = f_printf(&fil, "kay\n");
+  if(fresult != FR_OK){
+	  printf("agora17.txt fprintf falhou\n");
   }
+  f_close(&fil);
 
 
-  printf("OLA");*/
-
+  fresult = update_file("test.txt", "hey\n", "", "", &fil, &bw);
+  if(fresult!=FR_OK){
+	  printf("test.txt fodeu\n");
+  }
 
   char str2[30];
-  printf("hallo");
 
   IMU_config(&hspi2);
 
@@ -219,9 +231,6 @@ int main(void)
   tick = HAL_GetTick();
   counter1 = __HAL_TIM_GET_COUNTER(&htim2);
 
-
-
-
   uint8_t aux[5], aux2[1], aux3[1], str3[4], str[5];
   uint8_t ref[5];
     aux[0]=0b10000001;
@@ -231,8 +240,13 @@ int main(void)
     aux2[0]=0b00000000;
 
 
-	  HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
+	HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
 
+
+	fresult = update_file("test2.txt", "hey", "", "", &fil, &bw);
+	if(fresult!=FR_OK){
+		printf("test.txt fodeu\n");
+	 }
 
     for(int i=0; i<4; i++){
     	  printf("aux %d - %d\n", i, aux[i]);
@@ -248,6 +262,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+
+	  printf("time_subsec %lu\n", time_subsec);
 
 	  uint32_t read=adc_dma[0];
 	  motor_temp = motorTemp(read);
@@ -322,14 +338,23 @@ int main(void)
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 	  printf("AENC DECODER COUNT: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
 
-
+	  sprintf(str2,"adeus");
+	  time_stamp = HAL_GetTick()-time_subsec;
+	  sprintf(stamp, "%s", time_stamp);
+	  printf("HAL_GetTick() - %lu  time-subsec - %lu \n", HAL_GetTick(), time_subsec);
+	  FRESULT res = update_file("meio.txt", str2, get_timestamp(&hrtc, &currentTime, &currentDate), stamp , &fil2, &bw);
 
 
 	  //update_file("teste.txt", "chico da tina", "ah", "ah\n", &fil, &bw);
 	  IMU_acc_read(&hspi2, accel_data);
 	  for(int i=0; i<=2; i++){
 		  sprintf(str2, "%d ", accel_data[i]);
-		  //printf("acc[%d]= %s  ", i, str2);
+		  /*res = update_file("acc.txt", str2, get_timestamp(&hrtc, &currentTime, &currentDate), "", &fil2, &bw);
+		  printf("timestamp - %s\n", get_timestamp(&hrtc, &currentTime, &currentDate));
+		  if(res!=FR_OK){
+			  printf("ainda nao\n");
+		  }
+		  //printf("acc[%d]= %s  ", i, str2);*/
 	  }
 
 
@@ -378,10 +403,10 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 15;
-  RCC_OscInitStruct.PLL.PLLN = 144;
+  RCC_OscInitStruct.PLL.PLLM = 25;
+  RCC_OscInitStruct.PLL.PLLN = 336;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 5;
+  RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -393,9 +418,9 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV16;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     Error_Handler();
   }
@@ -428,7 +453,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = ENABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
@@ -518,6 +543,10 @@ static void MX_RTC_Init(void)
 
   /* USER CODE END RTC_Init 0 */
 
+  RTC_TimeTypeDef sTime = {0};
+  RTC_DateTypeDef sDate = {0};
+  RTC_AlarmTypeDef sAlarm = {0};
+
   /* USER CODE BEGIN RTC_Init 1 */
 
   /* USER CODE END RTC_Init 1 */
@@ -531,6 +560,48 @@ static void MX_RTC_Init(void)
   hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
   hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
   if (HAL_RTC_Init(&hrtc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /* USER CODE BEGIN Check_RTC_BKUP */
+    
+  /* USER CODE END Check_RTC_BKUP */
+
+  /** Initialize RTC and set the Time and Date 
+  */
+  sTime.Hours = 0x16;
+  sTime.Minutes = 0x0;
+  sTime.Seconds = 0x0;
+  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
+  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sDate.WeekDay = RTC_WEEKDAY_WEDNESDAY;
+  sDate.Month = RTC_MONTH_JANUARY;
+  sDate.Date = 0x29;
+  sDate.Year = 0x0;
+
+  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BCD) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Enable the Alarm A 
+  */
+  sAlarm.AlarmTime.Hours = 0x0;
+  sAlarm.AlarmTime.Minutes = 0x0;
+  sAlarm.AlarmTime.Seconds = 0x0;
+  sAlarm.AlarmTime.SubSeconds = 0x0;
+  sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+  sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
+  sAlarm.AlarmMask = RTC_ALARMMASK_ALL;
+  sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
+  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
+  sAlarm.AlarmDateWeekDay = 0x1;
+  sAlarm.Alarm = RTC_ALARM_A;
+  if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
   {
     Error_Handler();
   }
@@ -561,7 +632,7 @@ static void MX_SDIO_SD_Init(void)
   hsd.Init.ClockPowerSave = SDIO_CLOCK_POWER_SAVE_DISABLE;
   hsd.Init.BusWide = SDIO_BUS_WIDE_1B;
   hsd.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
-  hsd.Init.ClockDiv = 0;
+  hsd.Init.ClockDiv = 255;
   /* USER CODE BEGIN SDIO_Init 2 */
 
   /* USER CODE END SDIO_Init 2 */

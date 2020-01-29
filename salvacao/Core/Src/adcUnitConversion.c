@@ -31,8 +31,8 @@ float igbtTemp (int adcReading){
 	float m, b, T;
 	m = b = T = 0;
 
-	m = 98.551;//(Tmin-Tmax)/(Vmax-Vmin);
-	b = 20.667;//Tmin - m*Vmax;
+	m = 53.085;//(Tmin-Tmax)/(Vmax-Vmin);
+	b = 22.025;//Tmin - m*Vmax;
 
 	T = m*(adcInt2Volt(adcReading)/3.3)+b;
 
@@ -48,8 +48,10 @@ float motorTemp (unsigned long int adcReading){
 	float m, b, Rt, T;
 	m = b = Rt = T = 0;
 
-	m = (Tmin-Tmax)/(Vmin-Vmax);
-	b = Tmin-Vmin*m;
+	/*m = (Tmin-Tmax)/(Vmin-Vmax);
+	b = Tmin-Vmin*m; */
+	m = -119.81;
+	b = 365.61;
 
 	T = m*(adcInt2Volt(adcReading))+b;
 

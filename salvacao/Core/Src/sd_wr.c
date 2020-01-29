@@ -105,8 +105,8 @@ FRESULT update_file(char *filename, char *data, char *timestamp, char *msec_stam
 	//printf("lib\n");
 	/* Open the file with write access */
 	fresult = f_open(fil, filename, FA_OPEN_APPEND | FA_WRITE);// FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
-	if (fresult==FR_OK){
-		printf("ya \n " );
+	if (fresult!=FR_OK){
+		printf("update_file - f_open fodeu\n " );
 	}
 
 
@@ -114,13 +114,17 @@ FRESULT update_file(char *filename, char *data, char *timestamp, char *msec_stam
 	//fresult = f_lseek(fil, fil->fptr);
 
 	/* write the string to the file */
-	fresult = f_puts(data, fil); //pode precisar de um "\n"
-	//printf("FRESULT %d \n" , fresult );
-
-	f_close (fil);
+	fresult = f_printf(fil, data); //pode precisar de um "\n"
+	if (fresult!=FR_OK){
+			printf("update_file - f_printf fodeu\n " );
+		}
+	fresult = f_close (fil);
+	if(fresult != FR_OK){
+		printf("update_file - f_close fodeu\n " );
+	}
 	return fresult;
 }
-/*
+
 char *get_timestamp(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *currentTime, RTC_DateTypeDef *currentDate){
 
 	time_t timestamp;
@@ -140,5 +144,5 @@ char *get_timestamp(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *currentTime, RTC_D
 	timestamp = mktime(&currTime);
 	return asctime(gmtime(&timestamp));
 
-}*/
+}
 
