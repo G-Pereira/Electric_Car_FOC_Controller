@@ -40,6 +40,7 @@
 /* USER CODE BEGIN PD */
 
 #define	NR_ADC_CHANNELS 7 //Nº de channels adc
+#define TICK_RATE 1 //milisecond
 
 /* USER CODE END PD */
 
@@ -52,8 +53,6 @@
 ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 
-RTC_HandleTypeDef hrtc;
-
 SD_HandleTypeDef hsd;
 
 SPI_HandleTypeDef hspi2;
@@ -63,7 +62,9 @@ TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN PV */
 
-
+volatile unsigned long SystemTick=0;
+volatile unsigned long __unix_ms=0;
+volatile unsigned long __unix_sec=0;
 
 uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 
@@ -93,11 +94,13 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 	float dc_current, current_ph1, current_ph2, current_ph3, dc_voltage, voltage_ph1, voltage_ph2, voltage_ph3,  motor_temp, conv_temp, acc_pedal , brk_pedal;
 
 //RTC
-	RTC_TimeTypeDef currentTime;
+/*	RTC_TimeTypeDef currentTime;
 	RTC_DateTypeDef currentDate;
 	uint32_t time_subsec = 0;
 	uint32_t time_stamp = 0;
 	char stamp[50];
+*/
+
 
 
 /* USER CODE END PV */
@@ -109,7 +112,6 @@ static void MX_DMA_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_SDIO_SD_Init(void);
-static void MX_RTC_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
@@ -131,12 +133,39 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 	}
 }
 
-void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc){
+/*void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc){
 
 	printf("Interrupcao\n");
 	time_subsec = HAL_GetTick();
 
 }
+*/
+/*void SysTick_Handler(void){
+	static uint16_t tick = 0;
+	static uint16_t second = 0;
+	static uint16_t minute = 0;
+	static uint16_t hour = 0;
+	printf("tick %d", tick);
+	switch (tick++) {
+		case 999:
+			tick = 0;
+			if(second==59){
+				second=0;
+				if(minute==59){
+					minute=0;
+					hour++;
+				}
+				else minute++;
+			}
+			else second++;
+	}
+
+}*/
+
+//void SysTick_Handler(void){
+
+	//HAL_IncTick();
+//}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
@@ -190,7 +219,6 @@ int main(void)
   MX_ADC1_Init();
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
-  MX_RTC_Init();
   MX_TIM6_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
@@ -246,11 +274,11 @@ int main(void)
 	fresult = update_file("test2.txt", "hey", "", "", &fil, &bw);
 	if(fresult!=FR_OK){
 		printf("test.txt fodeu\n");
-	 }
+	}
 
     for(int i=0; i<4; i++){
     	  printf("aux %d - %d\n", i, aux[i]);
-      }
+    }
 
   /* USER CODE END 2 */
 
@@ -263,7 +291,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 
-	  printf("time_subsec %lu\n", time_subsec);
+	  //printf("time_subsec %lu\n", time_subsec);
 
 	  uint32_t read=adc_dma[0];
 	  motor_temp = motorTemp(read);
@@ -338,11 +366,13 @@ int main(void)
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 	  printf("AENC DECODER COUNT: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
 
-	  sprintf(str2,"adeus");
-	  time_stamp = HAL_GetTick()-time_subsec;
-	  sprintf(stamp, "%s", time_stamp);
-	  printf("HAL_GetTick() - %lu  time-subsec - %lu \n", HAL_GetTick(), time_subsec);
-	  FRESULT res = update_file("meio.txt", str2, get_timestamp(&hrtc, &currentTime, &currentDate), stamp , &fil2, &bw);
+	  sprintf(str2,"%f ", acc);
+	  //time_stamp = HAL_GetTick()-time_subsec;
+	  //sprintf(stamp, "%s", time_stamp);
+	  //printf("HAL_GetTick() - %lu  time-subsec - %lu \n", HAL_GetTick(), time_subsec);
+	  char stamp[100];
+	  sprintf(stamp, "%d:%d",  __unix_sec,  __unix_ms);
+	  FRESULT res = update_file("meio.txt", str2, stamp, "", &fil2, &bw);
 
 
 	  //update_file("teste.txt", "chico da tina", "ah", "ah\n", &fil, &bw);
@@ -364,6 +394,7 @@ int main(void)
 		  //printf("gyro[%d]= %s  ", i, str2);
 	  }
 
+	  printf("TIME - %d", __unix_sec);
 
 	  //printf("speed: %f\n", speed);
 	  //printf("counter1 = %lu\n", __HAL_TIM_GET_COUNTER(&htim2));
@@ -390,7 +421,6 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage 
   */
@@ -398,9 +428,8 @@ void SystemClock_Config(void)
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 25;
@@ -421,12 +450,6 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
-  PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
@@ -528,86 +551,6 @@ static void MX_ADC1_Init(void)
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
-
-}
-
-/**
-  * @brief RTC Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_RTC_Init(void)
-{
-
-  /* USER CODE BEGIN RTC_Init 0 */
-
-  /* USER CODE END RTC_Init 0 */
-
-  RTC_TimeTypeDef sTime = {0};
-  RTC_DateTypeDef sDate = {0};
-  RTC_AlarmTypeDef sAlarm = {0};
-
-  /* USER CODE BEGIN RTC_Init 1 */
-
-  /* USER CODE END RTC_Init 1 */
-  /** Initialize RTC Only 
-  */
-  hrtc.Instance = RTC;
-  hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
-  hrtc.Init.AsynchPrediv = 127;
-  hrtc.Init.SynchPrediv = 255;
-  hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
-  hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
-  hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
-  if (HAL_RTC_Init(&hrtc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /* USER CODE BEGIN Check_RTC_BKUP */
-    
-  /* USER CODE END Check_RTC_BKUP */
-
-  /** Initialize RTC and set the Time and Date 
-  */
-  sTime.Hours = 0x16;
-  sTime.Minutes = 0x0;
-  sTime.Seconds = 0x0;
-  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sDate.WeekDay = RTC_WEEKDAY_WEDNESDAY;
-  sDate.Month = RTC_MONTH_JANUARY;
-  sDate.Date = 0x29;
-  sDate.Year = 0x0;
-
-  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Enable the Alarm A 
-  */
-  sAlarm.AlarmTime.Hours = 0x0;
-  sAlarm.AlarmTime.Minutes = 0x0;
-  sAlarm.AlarmTime.Seconds = 0x0;
-  sAlarm.AlarmTime.SubSeconds = 0x0;
-  sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  sAlarm.AlarmMask = RTC_ALARMMASK_ALL;
-  sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
-  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
-  sAlarm.AlarmDateWeekDay = 0x1;
-  sAlarm.Alarm = RTC_ALARM_A;
-  if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN RTC_Init 2 */
-
-  /* USER CODE END RTC_Init 2 */
 
 }
 

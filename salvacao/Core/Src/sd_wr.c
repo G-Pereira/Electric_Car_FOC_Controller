@@ -125,7 +125,7 @@ FRESULT update_file(char *filename, char *data, char *timestamp, char *msec_stam
 	return fresult;
 }
 
-char *get_timestamp(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *currentTime, RTC_DateTypeDef *currentDate){
+/*char *get_timestamp(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *currentTime, RTC_DateTypeDef *currentDate){
 
 	time_t timestamp;
 	struct tm currTime;
@@ -144,5 +144,5 @@ char *get_timestamp(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *currentTime, RTC_D
 	timestamp = mktime(&currTime);
 	return asctime(gmtime(&timestamp));
 
-}
+}*/
 
