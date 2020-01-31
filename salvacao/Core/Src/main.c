@@ -39,7 +39,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define	NR_ADC_CHANNELS 7 //Nº de channels adc
+#define	NR_ADC_CHANNELS 12 //Nº de channels adc
 #define TICK_RATE 1 //milisecond
 
 /* USER CODE END PD */
@@ -54,6 +54,8 @@ ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 
 SD_HandleTypeDef hsd;
+DMA_HandleTypeDef hdma_sdio_rx;
+DMA_HandleTypeDef hdma_sdio_tx;
 
 SPI_HandleTypeDef hspi2;
 
@@ -100,6 +102,7 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 	uint32_t time_stamp = 0;
 	char stamp[50];
 */
+	  char stamp[100];
 
 
 
@@ -133,39 +136,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 	}
 }
 
-/*void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc){
 
-	printf("Interrupcao\n");
-	time_subsec = HAL_GetTick();
-
-}
-*/
-/*void SysTick_Handler(void){
-	static uint16_t tick = 0;
-	static uint16_t second = 0;
-	static uint16_t minute = 0;
-	static uint16_t hour = 0;
-	printf("tick %d", tick);
-	switch (tick++) {
-		case 999:
-			tick = 0;
-			if(second==59){
-				second=0;
-				if(minute==59){
-					minute=0;
-					hour++;
-				}
-				else minute++;
-			}
-			else second++;
-	}
-
-}*/
-
-//void SysTick_Handler(void){
-
-	//HAL_IncTick();
-//}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
@@ -304,18 +275,32 @@ int main(void)
 	  printf("acc %f", acc);
 
 	  read=adc_dma[3];
-	  float c1_f = motorCurrent(read);
-	  c1=c1_f;
-	  printf("current1 %l", c1);
+	  current_ph1 = motorCurrent(read);
+	  c1=current_ph1;
+	  printf("current1 %ld", c1);
 	  read=adc_dma[4];
-	  float c2 = motorCurrent(read);
+	  current_ph2 = motorCurrent(read);
 	  read=adc_dma[5];
-	  float c3 = motorCurrent(read);
+	  current_ph3 = motorCurrent(read);
 
 	  read=adc_dma[6];
 	  conv_temp = igbtTemp(read);
 	  printf("temp %f\n", conv_temp);
+	  read=adc_dma[7];
+	  dc_voltage=voltageDC(read);
+	  read=adc_dma[8];
+	  dc_current=motorCurrent(read); //função corrente dc?
+
+	  read=adc_dma[9];
+	  voltage_ph1=voltageAC(read);
+	  read=adc_dma[10];
+	  voltage_ph2=voltageAC(read);
+	  read=adc_dma[11];
+	  voltage_ph3=voltageAC(read);
+
+
 /*
+ *
 	  if(acc>50){
 		  ref[0]
 		  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
@@ -366,35 +351,36 @@ int main(void)
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 	  printf("AENC DECODER COUNT: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
 
+	  sprintf(str2,"%f ", brk);
+	  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
+	  update_file("brake.txt", str2, stamp, "", &fil2, &bw);
+	  stamp[0]='\0';
+
 	  sprintf(str2,"%f ", acc);
-	  //time_stamp = HAL_GetTick()-time_subsec;
-	  //sprintf(stamp, "%s", time_stamp);
-	  //printf("HAL_GetTick() - %lu  time-subsec - %lu \n", HAL_GetTick(), time_subsec);
-	  char stamp[100];
-	  sprintf(stamp, "%d:%d",  __unix_sec,  __unix_ms);
-	  FRESULT res = update_file("meio.txt", str2, stamp, "", &fil2, &bw);
+	  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
+	  update_file("throttle.txt", str2, stamp, "", &fil2, &bw);
+	  stamp[0]='\0';
 
 
 	  //update_file("teste.txt", "chico da tina", "ah", "ah\n", &fil, &bw);
 	  IMU_acc_read(&hspi2, accel_data);
 	  for(int i=0; i<=2; i++){
-		  sprintf(str2, "%d ", accel_data[i]);
-		  /*res = update_file("acc.txt", str2, get_timestamp(&hrtc, &currentTime, &currentDate), "", &fil2, &bw);
-		  printf("timestamp - %s\n", get_timestamp(&hrtc, &currentTime, &currentDate));
-		  if(res!=FR_OK){
-			  printf("ainda nao\n");
-		  }
-		  //printf("acc[%d]= %s  ", i, str2);*/
+		  sprintf(str2, "accel[%d] - %d ", i, accel_data[i]);
+		  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
+		  update_file("acc.txt", str2, stamp, "", &fil2, &bw);
+		  stamp[0]='\0';
 	  }
 
 
 	  IMU_gyro_read(&hspi2, gyro_data);
 	  for(int i=0; i<=2; i++){
-		  sprintf(str2, "%d ", gyro_data[i]);
-		  //printf("gyro[%d]= %s  ", i, str2);
+		  sprintf(str2, "gyro[%d] - %d ", i, gyro_data[i]);
+		  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
+		  update_file("gyro.txt", str2, stamp, "", &fil2, &bw);
+		   stamp[0]='\0';
 	  }
 
-	  printf("TIME - %d", __unix_sec);
+	  printf("TIME - %lu", __unix_sec);
 
 	  //printf("speed: %f\n", speed);
 	  //printf("counter1 = %lu\n", __HAL_TIM_GET_COUNTER(&htim2));
@@ -484,7 +470,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 7;
+  hadc1.Init.NbrOfConversion = 12;
   hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -544,6 +530,46 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_9;
   sConfig.Rank = 7;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_3;
+  sConfig.Rank = 8;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_6;
+  sConfig.Rank = 9;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_7;
+  sConfig.Rank = 10;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_14;
+  sConfig.Rank = 11;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_15;
+  sConfig.Rank = 12;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -641,18 +667,18 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 65535;
+  htim2.Init.Period = 0;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 5;
+  sConfig.IC1Filter = 0;
   sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC2Filter = 5;
+  sConfig.IC2Filter = 0;
   if (HAL_TIM_Encoder_Init(&htim2, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -720,6 +746,12 @@ static void MX_DMA_Init(void)
   /* DMA2_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+  /* DMA2_Stream3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+  /* DMA2_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream6_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream6_IRQn);
 
 }
 
