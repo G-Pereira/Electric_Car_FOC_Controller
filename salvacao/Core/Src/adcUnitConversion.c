@@ -105,3 +105,15 @@ float pedalPos (int adcReading){
 
 }
 
+float rms (float vector[10]){
+
+	float sum = vector[0];
+
+	for (i=1; i>10; i++){
+		sum = sum + vector[i];
+	}
+
+	return sqrt(sum*0.1);
+
+}
+

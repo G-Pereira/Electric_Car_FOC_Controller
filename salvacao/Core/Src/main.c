@@ -95,6 +95,20 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 
 	float dc_current, current_ph1, current_ph2, current_ph3, dc_voltage, voltage_ph1, voltage_ph2, voltage_ph3,  motor_temp, conv_temp, acc_pedal , brk_pedal;
 
+	float rms_current_ph1[10] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+	float rms_current_ph2[10] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+	float rms_current_ph3[10] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+	float rms_voltage[10]     = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+
+	float current1_rms = 0;
+	float current2_rms = 0;
+	float current3_rms = 0;
+	float voltage1_rms = 0;
+	float voltage2_rms = 0;
+	float voltage3_rms = 0;
+
+	int f = 0;
+
 //RTC
 /*	RTC_TimeTypeDef currentTime;
 	RTC_DateTypeDef currentDate;
@@ -103,7 +117,6 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 	char stamp[50];
 */
 	  char stamp[100];
-
 
 
 /* USER CODE END PV */
@@ -205,7 +218,7 @@ int main(void)
   }
   fresult = f_open(&fil, "agora17.txt", FA_CREATE_ALWAYS | FA_WRITE);
   if(fresult != FR_OK){
-  	  printf("agora17.txt fodeu\n");
+  	  printf("agora17.txt falhou\n");
   }
   fresult = f_printf(&fil, "kay\n");
   if(fresult != FR_OK){
@@ -216,7 +229,7 @@ int main(void)
 
   fresult = update_file("test.txt", "hey\n", "", "", &fil, &bw);
   if(fresult!=FR_OK){
-	  printf("test.txt fodeu\n");
+	  printf("test.txt falhou\n");
   }
 
   char str2[30];
@@ -244,7 +257,7 @@ int main(void)
 
 	fresult = update_file("test2.txt", "hey", "", "", &fil, &bw);
 	if(fresult!=FR_OK){
-		printf("test.txt fodeu\n");
+		printf("test.txt falhou\n");
 	}
 
     for(int i=0; i<4; i++){
@@ -276,12 +289,16 @@ int main(void)
 
 	  read=adc_dma[3];
 	  current_ph1 = motorCurrent(read);
-	  c1=current_ph1;
+	  rms_current_ph1[f] = current_ph1*current_ph1;
+
 	  printf("current1 %ld", c1);
 	  read=adc_dma[4];
 	  current_ph2 = motorCurrent(read);
+	  rms_current_ph2[f] = current_ph2*current_ph2;
+
 	  read=adc_dma[5];
 	  current_ph3 = motorCurrent(read);
+	  rms_current_ph3[f] = current_ph3*current_ph3;
 
 	  read=adc_dma[6];
 	  conv_temp = igbtTemp(read);
@@ -298,6 +315,12 @@ int main(void)
 	  read=adc_dma[11];
 	  voltage_ph3=voltageAC(read);
 
+	  if(f==9){
+		  current1_rms = rms(rms_current_ph1);
+		  f=0;
+	  } else {
+		  f++;
+	  }
 
 /*
  *
