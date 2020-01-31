@@ -204,23 +204,7 @@ void SysTick_Handler(void)
 			    __unix_ms -= 1000;
 			    __unix_sec++;
 			  }
-	/*static uint16_t tick = 0;
-		static uint16_t second = 0;
-		static uint16_t minute = 0;
-		static uint16_t hour = 0;
-		switch (tick++) {
-			case 999:
-				tick = 0;
-				if(second==59){
-					second=0;
-					if(minute==59){
-						minute=0;
-						hour++;
-					}
-					else minute++;
-				}
-				else second++;
-		}*/
+
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */

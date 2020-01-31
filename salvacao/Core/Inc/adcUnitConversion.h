@@ -21,4 +21,10 @@ float voltageDC (int adcReading);
 
 float pedalPos (int adcReading);
 
+float rms (float vector[10]); //convert instantaneous current/voltage to their rms value
+
+int stateValue (int adcReading); //"schmitt trigger"
+int determineState(int stateA, int stateB);
+void updateCounter(int stateA, int stateB, int *pstate, int *dir, int *pulses);
+
 #endif /* INC_ADCUNITCONVERSION_H_ */

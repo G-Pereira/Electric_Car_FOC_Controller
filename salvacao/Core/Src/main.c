@@ -109,6 +109,9 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 
 	int f = 0;
 
+//encoder
+	int stateA = 0, stateB = 0, stateM = 0, pstateA = 0, pstateB = 0, pstate = 0, pulses = 0;
+	int dir = 0; // 0 forward -1 otherwise
 //RTC
 /*	RTC_TimeTypeDef currentTime;
 	RTC_DateTypeDef currentDate;
@@ -157,11 +160,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
 	//counter2 = __HAL_TIM_GET_COUNTER(&htim2);
 	//printf("%lu\n", HAL_GetTick());
-	speed = motorSpeed(&counter1, &tick, htim2);
+	//speed = motorSpeed(&counter1, &tick, htim2);
 
 	/* passa a fazer-se aqui?
 	sprintf(str, "%f ", speed);
 	update_file("encoder_data.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[12]), &bw); */
+
+	float T = 0.25; //assumindo que periodo é 250ms
+	speed = ((pulses/8)*60)/T;
+	pulses = 0;
+
+
 
 }
 
@@ -315,7 +324,26 @@ int main(void)
 	  read=adc_dma[11];
 	  voltage_ph3=voltageAC(read);
 
-	  if(f==9){
+	  //leitura do encoder
+	  read = adc_dma[12]; //encoder signal A
+	  stateA = stateValue(read);
+	  read = adc_dma[13]; //encoder signal B
+	  stateB = stateValue(read);
+	  if((stateA != pstateA) || (stateB != pstateB)){
+		  if(stateA != pstateA){
+			  pstateA = stateA;
+		  }
+		  if (stateB != pstateB){
+			  pstateB = stateB;
+		  }
+		  updateCounter(stateA, stateB, &pstate, &dir, &pulses);
+	  }
+
+
+
+
+
+	  if(f==4){
 		  current1_rms = rms(rms_current_ph1);
 		  f=0;
 	  } else {

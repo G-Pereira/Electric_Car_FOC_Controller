@@ -109,11 +109,79 @@ float rms (float vector[10]){
 
 	float sum = vector[0];
 
-	for (i=1; i>10; i++){
+	for (int i=1; i>10; i++){
 		sum = sum + vector[i];
 	}
 
 	return sqrt(sum*0.1);
 
 }
+
+ int stateValue (int adcReading){
+
+	 int state = 0;
+
+	 if (adcInt2Volt(adcReading) > 1.65){ //alterar offset
+		 state = 1;
+	 } else {
+		 state = 0;
+	 }
+
+	 return state;
+
+ }
+
+int determineState(int stateA, int stateB){
+	int stateM;
+
+	if(stateA == 1 && stateB == 1)
+		stateM = 1;
+	if(stateA == 1 && stateB == 0)
+		stateM = 2;
+	if(stateA == 0 && stateB == 0)
+		stateM = 3;
+	if(stateA == 0 && stateB == 1)
+		stateM = 4;
+
+	return stateM;
+
+
+}
+
+void updateCounter(int stateA, int stateB, int *pstate, int *dir, int *pulses){
+
+	int state = determineState(stateA, stateB);
+
+	switch(state){
+		  case 1:
+			  if (pstate == 2)
+				  dir = -1;
+			  if (pstate == 4)
+				  dir = 0;
+			  break;
+		  case 2:
+			  if (pstate == 1)
+				  dir = 0;
+			  if (pstate == 3)
+				  dir = -1;
+			  break;
+		  case 3:
+			  if (pstate == 2)
+				  dir = 0;
+			  if (pstate == 4)
+				  dir = -1;
+			  break;
+		  case 4:
+			  if(pstate == 1)
+				  dir = -1;
+			  if(pstate == 4)
+				  dir = 0;
+		}
+
+	pulses++;
+	pstate = state;
+
+
+}
+
 
