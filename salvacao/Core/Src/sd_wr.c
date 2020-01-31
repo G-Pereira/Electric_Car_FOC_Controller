@@ -28,8 +28,8 @@ void bufclear (char *buffer)  // clear buffer
 /* Mount SD Card */
 FRESULT mount_card (FATFS *fs)
 {
-	printf("mount\n");
-      return f_mount(fs, "", 0);
+	//printf("mount\n");
+	return f_mount(fs, "", 0);
       //if fresult <>
 }
 
@@ -63,7 +63,6 @@ FRESULT create_file (char *filename, FIL *fil){
 		printf("JA EXISTE\n");
 		return fresult;
 	}
-	printf("OLALAO");
 	/* Create second file with read write access and open it */
 	fresult = f_open(fil, filename, FA_CREATE_ALWAYS|FA_READ|FA_WRITE);
 
@@ -116,33 +115,12 @@ FRESULT update_file(char *filename, char *data, char *timestamp, char *msec_stam
 	/* write the string to the file */
 	fresult = f_printf(fil, data); //pode precisar de um "\n"
 	if (fresult!=FR_OK){
-			printf("update_file - f_printf fodeu\n " );
-		}
+		printf("update_file - f_printf fodeu\n " );
+	}
 	fresult = f_close (fil);
 	if(fresult != FR_OK){
 		printf("update_file - f_close fodeu\n " );
 	}
 	return fresult;
 }
-
-/*char *get_timestamp(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *currentTime, RTC_DateTypeDef *currentDate){
-
-	time_t timestamp;
-	struct tm currTime;
-
-	HAL_RTC_GetTime(hrtc, currentTime, RTC_FORMAT_BIN);
-	HAL_RTC_GetDate(hrtc, currentDate, RTC_FORMAT_BIN);
-
-
-	currTime.tm_year = currentDate->Year-16;
-	currTime.tm_mday = currentDate->Date-6;
-	currTime.tm_mon  = currentDate->Month-2;
-	currTime.tm_hour = currentTime->Hours+8;
-	currTime.tm_min  = currentTime->Minutes-23;
-	currTime.tm_sec  = currentTime->Seconds;
-
-	timestamp = mktime(&currTime);
-	return asctime(gmtime(&timestamp));
-
-}*/
 

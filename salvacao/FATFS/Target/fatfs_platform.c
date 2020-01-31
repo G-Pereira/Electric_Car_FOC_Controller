@@ -25,10 +25,10 @@ uint8_t	BSP_PlatformIsDetected(void) {
         status = SD_NOT_PRESENT;
     }
     /* USER CODE BEGIN 1 */
-    printf("s - %u\n", status);
+    //printf("s - %u\n", status);
     if(status == SD_PRESENT) status = SD_NOT_PRESENT;
     else status = SD_PRESENT;
-    printf("s - %u\n", status);
+    //printf("s - %u\n", status);
     /* user code can be inserted here */
     /* USER CODE END 1 */ 
     return status;

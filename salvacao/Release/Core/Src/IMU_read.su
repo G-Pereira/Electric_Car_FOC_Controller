@@ -1,0 +1,4 @@
+IMU_read.c:6:6:IMU_config	32	static
+IMU_read.c:57:6:IMU_acc_read	32	static
+IMU_read.c:90:6:IMU_gyro_read	32	static
+IMU_read.c:123:6:IMU_mag_read	32	static

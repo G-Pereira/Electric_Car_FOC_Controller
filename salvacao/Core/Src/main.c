@@ -39,7 +39,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define	NR_ADC_CHANNELS 12 //Nº de channels adc
+#define	NR_ADC_CHANNELS 14 //Nº de channels adc
 #define TICK_RATE 1 //milisecond
 
 /* USER CODE END PD */
@@ -59,7 +59,6 @@ DMA_HandleTypeDef hdma_sdio_tx;
 
 SPI_HandleTypeDef hspi2;
 
-TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN PV */
@@ -112,14 +111,9 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 //encoder
 	int stateA = 0, stateB = 0, stateM = 0, pstateA = 0, pstateB = 0, pstate = 0, pulses = 0;
 	int dir = 0; // 0 forward -1 otherwise
-//RTC
-/*	RTC_TimeTypeDef currentTime;
-	RTC_DateTypeDef currentDate;
-	uint32_t time_subsec = 0;
-	uint32_t time_stamp = 0;
-	char stamp[50];
-*/
-	  char stamp[100];
+
+
+	char stamp[100];
 
 
 /* USER CODE END PV */
@@ -132,7 +126,6 @@ static void MX_SPI2_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_TIM6_Init(void);
-static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -147,8 +140,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 			{
 				adc_dma[i]=buffer_dma[i];
 			}
-
-		//printf("buff %lu\n", adc_dma[0]);
 	}
 }
 
@@ -200,8 +191,6 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  printf("hallo");
-
 
   /* USER CODE END SysInit */
 
@@ -213,7 +202,6 @@ int main(void)
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
   MX_TIM6_Init();
-  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   HAL_GPIO_WritePin(Accel_CS_GPIO_Port, Accel_CS_Pin, SET);
@@ -221,25 +209,21 @@ int main(void)
   HAL_GPIO_WritePin(Magnet_CS_GPIO_Port, Magnet_CS_Pin, SET);
   HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 
-  fresult = f_mount(&fs, "", 0 );
+  /*fresult = f_mount(&fs, "", 0 );
   if(fresult == FR_OK){
 	  printf("Mount feito\n");
   }
+
   fresult = f_open(&fil, "agora17.txt", FA_CREATE_ALWAYS | FA_WRITE);
   if(fresult != FR_OK){
   	  printf("agora17.txt falhou\n");
   }
   fresult = f_printf(&fil, "kay\n");
   if(fresult != FR_OK){
-	  printf("agora17.txt fprintf falhou\n");
+	  Error_Handler();
   }
-  f_close(&fil);
-
-
-  fresult = update_file("test.txt", "hey\n", "", "", &fil, &bw);
-  if(fresult!=FR_OK){
-	  printf("test.txt falhou\n");
-  }
+  f_close(&fil);*/
+  fresult=mount_card(&fs);
 
   char str2[30];
 
@@ -248,12 +232,12 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim6);
 
   //Initialize encoder mode
-  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  //HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   tick = HAL_GetTick();
-  counter1 = __HAL_TIM_GET_COUNTER(&htim2);
+  //counter1 = __HAL_TIM_GET_COUNTER(&htim2);
 
   uint8_t aux[5], aux2[1], aux3[1], str3[4], str[5];
-  uint8_t ref[5];
+  //uint8_t ref[5];
     aux[0]=0b10000001;
     for(int i=1; i<=4; i++){
   	  aux[i]=0b00000000;
@@ -262,16 +246,6 @@ int main(void)
 
 
 	HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
-
-
-	fresult = update_file("test2.txt", "hey", "", "", &fil, &bw);
-	if(fresult!=FR_OK){
-		printf("test.txt falhou\n");
-	}
-
-    for(int i=0; i<4; i++){
-    	  printf("aux %d - %d\n", i, aux[i]);
-    }
 
   /* USER CODE END 2 */
 
@@ -283,24 +257,19 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-
-	  //printf("time_subsec %lu\n", time_subsec);
-
 	  uint32_t read=adc_dma[0];
 	  motor_temp = motorTemp(read);
-	  printf("temp %f\n", motor_temp);
+
 	  read=adc_dma[1];
-	  float brk = pedalPos(read);
-	  printf("brk %f", brk);
+	  brk_pedal = pedalPos(read);
+
 	  read=adc_dma[2];
-	  float acc = pedalPos(read);
-	  printf("acc %f", acc);
+	  acc_pedal = pedalPos(read);
 
 	  read=adc_dma[3];
 	  current_ph1 = motorCurrent(read);
 	  rms_current_ph1[f] = current_ph1*current_ph1;
 
-	  printf("current1 %ld", c1);
 	  read=adc_dma[4];
 	  current_ph2 = motorCurrent(read);
 	  rms_current_ph2[f] = current_ph2*current_ph2;
@@ -311,24 +280,29 @@ int main(void)
 
 	  read=adc_dma[6];
 	  conv_temp = igbtTemp(read);
-	  printf("temp %f\n", conv_temp);
+
 	  read=adc_dma[7];
 	  dc_voltage=voltageDC(read);
+
 	  read=adc_dma[8];
 	  dc_current=motorCurrent(read); //função corrente dc?
 
 	  read=adc_dma[9];
 	  voltage_ph1=voltageAC(read);
+
 	  read=adc_dma[10];
 	  voltage_ph2=voltageAC(read);
+
 	  read=adc_dma[11];
 	  voltage_ph3=voltageAC(read);
 
 	  //leitura do encoder
 	  read = adc_dma[12]; //encoder signal A
 	  stateA = stateValue(read);
+
 	  read = adc_dma[13]; //encoder signal B
 	  stateB = stateValue(read);
+
 	  if((stateA != pstateA) || (stateB != pstateB)){
 		  if(stateA != pstateA){
 			  pstateA = stateA;
@@ -339,14 +313,11 @@ int main(void)
 		  updateCounter(stateA, stateB, &pstate, &dir, &pulses);
 	  }
 
-
-
-
-
 	  if(f==4){
 		  current1_rms = rms(rms_current_ph1);
 		  f=0;
-	  } else {
+	  }
+	  else{
 		  f++;
 	  }
 
@@ -364,7 +335,6 @@ int main(void)
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
 	  HAL_SPI_Transmit(&hspi2, aux, 5, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-	  HAL_Delay(1);
 
 
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
@@ -372,9 +342,7 @@ int main(void)
 	  HAL_Delay(1);
 	  HAL_SPI_Receive(&hspi2, str, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-	  //HAL_SPI_Receive(&hspi2, str, 4, 200);
-	  printf("Aquiii\n");
-	  printf("%d %d %d %d\n", str[0], str[1], str[2], str[3]);
+	  //printf("%d %d %d %d\n", str[0], str[1], str[2], str[3]);
 
 
 	  //ler velocidades do tmc
@@ -384,7 +352,7 @@ int main(void)
 	  HAL_Delay(1);
 	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-	  printf("PID VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
+	  //printf("PID VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
 
 	  aux3[0]=0x22;
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
@@ -392,7 +360,7 @@ int main(void)
 	  HAL_Delay(1);
 	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-	  printf("OPENLOOP VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
+	  //printf("OPENLOOP VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
 
 	  aux3[0]=0x41;
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
@@ -400,20 +368,18 @@ int main(void)
 	  HAL_Delay(1);
 	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-	  printf("AENC DECODER COUNT: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
+	  //printf("AENC DECODER COUNT: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
 
-	  sprintf(str2,"%f ", brk);
+	  sprintf(str2,"%f ", brk_pedal);
 	  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
 	  update_file("brake.txt", str2, stamp, "", &fil2, &bw);
 	  stamp[0]='\0';
 
-	  sprintf(str2,"%f ", acc);
+	  sprintf(str2,"%f ", acc_pedal);
 	  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
 	  update_file("throttle.txt", str2, stamp, "", &fil2, &bw);
 	  stamp[0]='\0';
 
-
-	  //update_file("teste.txt", "chico da tina", "ah", "ah\n", &fil, &bw);
 	  IMU_acc_read(&hspi2, accel_data);
 	  for(int i=0; i<=2; i++){
 		  sprintf(str2, "accel[%d] - %d ", i, accel_data[i]);
@@ -422,29 +388,13 @@ int main(void)
 		  stamp[0]='\0';
 	  }
 
-
 	  IMU_gyro_read(&hspi2, gyro_data);
 	  for(int i=0; i<=2; i++){
 		  sprintf(str2, "gyro[%d] - %d ", i, gyro_data[i]);
 		  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
 		  update_file("gyro.txt", str2, stamp, "", &fil2, &bw);
-		   stamp[0]='\0';
+		  stamp[0]='\0';
 	  }
-
-	  printf("TIME - %lu", __unix_sec);
-
-	  //printf("speed: %f\n", speed);
-	  //printf("counter1 = %lu\n", __HAL_TIM_GET_COUNTER(&htim2));
-
-	 //ENCODER
-	 //read and convert adc values for encoder
-	 		  ////counter1 = __HAL_TIM_GET_COUNTER(&htim2);
-	 		  ///HAL_Delay(500);
-	 		  /*if(HAL_GetTick() - tick > 1000L){
-	 			  counter2 = __HAL_TIM_GET_COUNTER(&htim2);
-	 			  speed = motorSpeed(&counter1, counter2, &tick, htim2);
-	 		  }*/
-
 
   }
   /* USER CODE END 3 */
@@ -521,7 +471,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 12;
+  hadc1.Init.NbrOfConversion = 14;
   hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -625,6 +575,22 @@ static void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 13;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = 14;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
@@ -694,55 +660,6 @@ static void MX_SPI2_Init(void)
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
-
-}
-
-/**
-  * @brief TIM2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM2_Init(void)
-{
-
-  /* USER CODE BEGIN TIM2_Init 0 */
-
-  /* USER CODE END TIM2_Init 0 */
-
-  TIM_Encoder_InitTypeDef sConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM2_Init 1 */
-
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 0;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
-  sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
-  sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
-  sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
-  sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC2Filter = 0;
-  if (HAL_TIM_Encoder_Init(&htim2, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM2_Init 2 */
-
-  /* USER CODE END TIM2_Init 2 */
 
 }
 

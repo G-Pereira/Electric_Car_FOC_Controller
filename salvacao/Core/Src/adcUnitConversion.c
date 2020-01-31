@@ -24,9 +24,9 @@ float motorCurrent (int adcReading){
 
 float igbtTemp (int adcReading){
 
-	int Rmin = 160, Rmax = 16100;
-	float Vmin = 0.05, Vmax = 3.25;
-	int Tmin = 0, Tmax = 150;
+	//int Rmin = 160, Rmax = 16100;
+	//float Vmin = 0.05, Vmax = 3.25;
+	//int Tmin = 0, Tmax = 150;
 
 	float m, b, T;
 	m = b = T = 0;
@@ -41,9 +41,9 @@ float igbtTemp (int adcReading){
 
 float motorTemp (unsigned long int adcReading){
 
-	int Rmin = 1600, Rmax = 4000;   //resistance
-	float Vmin = 0.05, Vmax = 3.25; //voltage
-	int Tmin=0, Tmax=150;			//temperature
+	//int Rmin = 1600, Rmax = 4000;   //resistance
+	//float Vmin = 0.05, Vmax = 3.25; //voltage
+	//int Tmin=0, Tmax=150;			//temperature
 
 	float m, b, Rt, T;
 	m = b = Rt = T = 0;
@@ -86,7 +86,7 @@ float voltageDC (int adcReading){
 
 	int R1 = 250000;
 	int R2 = 2000;
-	int R3 = 39;
+	//int R3 = 39;
 
 	float Vout = adcInt2Volt(adcReading);
 
@@ -148,7 +148,11 @@ int determineState(int stateA, int stateB){
 
 }
 
-void updateCounter(int stateA, int stateB, int *pstate, int *dir, int *pulses){
+void updateCounter(int stateA, int stateB, int *pstatep, int *dirp, int *counterp ){
+
+	int pstate = *pstatep;
+	int dir = *dirp;
+	int counter = *counterp;
 
 	int state = determineState(stateA, stateB);
 
@@ -178,8 +182,12 @@ void updateCounter(int stateA, int stateB, int *pstate, int *dir, int *pulses){
 				  dir = 0;
 		}
 
-	pulses++;
-	pstate = state;
+	counter++;
+	//pstate = state;
+
+	*pstatep=state;
+	*dirp=dir;
+	*counterp=counter;
 
 
 }
