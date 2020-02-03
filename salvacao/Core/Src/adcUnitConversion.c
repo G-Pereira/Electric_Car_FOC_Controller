@@ -65,12 +65,12 @@ float voltageAC (int adcReading){
 	 * R1 = R28 = 75k
 	 * R2 = R30 = 10k
 	 */
-	int R1 = 75000;
+	int R1 = 1800000;
 	int R2 = 10000;
 
 	float Vout = adcInt2Volt(adcReading);
 
-	float Vin = ((R1*R2)/R2)*Vout;
+	float Vin = ((R1+R2)/R2)*Vout;
 
 	return Vin;
 
@@ -84,13 +84,13 @@ float voltageDC (int adcReading){
 	 * R3 = R10 = 39  <- negligenciar?
 	 */
 
-	int R1 = 250000;
+	int R1 = 300000;
 	int R2 = 2000;
 	//int R3 = 39;
 
 	float Vout = adcInt2Volt(adcReading);
 
-	float Vin = ((R1*R2)/R2)*Vout;
+	float Vin = ((R1+R2)/R2)*Vout;
 
 	return Vin;
 
