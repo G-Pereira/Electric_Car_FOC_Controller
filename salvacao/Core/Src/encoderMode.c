@@ -28,9 +28,9 @@ int motorSpeed (uint32_t *cnt1, uint32_t *tick, TIM_HandleTypeDef htim2){
 
 
 
-	//printf("diff = %d\n", diff);
+	printf("diff = %d\n", diff);
 	//float speed = (((float)(diff)/8)*60)*2;  //((diff/8)*60)/0.02;  // change when sysTimer configured
-	float speed = (((float)(diff)/4)*60)/(HAL_GetTick() - *tick)*0.001;
+	float speed = ((((float)(diff)/4)*60)/((HAL_GetTick() - *tick)*0.001));
 
 
 	*tick = HAL_GetTick();

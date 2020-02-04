@@ -109,8 +109,8 @@ uint32_t adc_dma[NR_ADC_CHANNELS], buffer_dma[NR_ADC_CHANNELS];
 	int f = 0;
 
 //encoder
-	int stateA = 0, stateB = 0, stateM = 0, pstateA = 0, pstateB = 0, pstate = 0, pulses = 0;
-	int dir = 0; // 0 forward -1 otherwise
+/*	int stateA = 0, stateB = 0, stateM = 0, pstateA = 0, pstateB = 0, pstate = 0, pulses = 0;
+	int dir = 0; // 0 forward -1 otherwise*/
 
 
 	char stamp[100];
@@ -151,15 +151,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
 	//counter2 = __HAL_TIM_GET_COUNTER(&htim2);
 	//printf("%lu\n", HAL_GetTick());
-	//speed = motorSpeed(&counter1, &tick, htim2);
+	speed = motorSpeed(&counter1, &tick, htim2);
 
 	/* passa a fazer-se aqui?
 	sprintf(str, "%f ", speed);
 	update_file("encoder_data.txt", str, get_timestamp(&hrtc, &currentTime, &currentDate), stamp, &(fil[12]), &bw); */
 
-	float T = 0.25; //assumindo que periodo é 250ms
+	/*float T = 0.25; //assumindo que periodo é 250ms
 	speed = ((pulses/8)*60)/T;
-	pulses = 0;
+	pulses = 0;*/
 
 
 
@@ -232,9 +232,9 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim6);
 
   //Initialize encoder mode
-  //HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   tick = HAL_GetTick();
-  //counter1 = __HAL_TIM_GET_COUNTER(&htim2);
+  counter1 = __HAL_TIM_GET_COUNTER(&htim2);
 
   uint8_t aux[5], aux2[1], aux3[1], str3[4], str[5];
   //uint8_t ref[5];
@@ -296,7 +296,7 @@ int main(void)
 	  read=adc_dma[11];
 	  voltage_ph3=voltageAC(read);
 
-	  //leitura do encoder
+	 /* //leitura do encoder
 	  read = adc_dma[12]; //encoder signal A
 	  stateA = stateValue(read);
 
@@ -319,7 +319,7 @@ int main(void)
 	  }
 	  else{
 		  f++;
-	  }
+	  }*/
 
 /*
  *
