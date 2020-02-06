@@ -1,3 +1,4 @@
+"Core/Src/FOC_lib.o"
 "Core/Src/IMU_read.o"
 "Core/Src/adcUnitConversion.o"
 "Core/Src/encoderMode.o"
