@@ -114,13 +114,13 @@ FRESULT update_file(char *filename, char *data, char *timestamp, char *msec_stam
 
 	/* write the string to the file */
 	fresult = f_printf(fil, data); //pode precisar de um "\n"
-	if (fresult!=FR_OK){
+	/*if (fresult!=FR_OK){
 		printf("update_file - f_printf fodeu\n " );
-	}
+	}*/
 	fresult = f_close (fil);
-	if(fresult != FR_OK){
+	/*if(fresult != FR_OK){
 		printf("update_file - f_close fodeu\n " );
-	}
+	}*/
 	return fresult;
 }
 

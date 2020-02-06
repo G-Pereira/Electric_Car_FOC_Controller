@@ -1,11 +1,11 @@
 adcUnitConversion.c:13:7:adcInt2Volt	24	static
 adcUnitConversion.c:20:7:motorCurrent	24	static
-adcUnitConversion.c:25:7:igbtTemp	64	static
-adcUnitConversion.c:42:7:motorTemp	56	static
+adcUnitConversion.c:25:7:igbtTemp	40	static
+adcUnitConversion.c:42:7:motorTemp	32	static
 adcUnitConversion.c:62:7:voltageAC	32	static
-adcUnitConversion.c:79:7:voltageDC	40	static
+adcUnitConversion.c:79:7:voltageDC	32	static
 adcUnitConversion.c:100:7:pedalPos	32	static
 adcUnitConversion.c:108:7:rms	32	static
 adcUnitConversion.c:120:6:stateValue	24	static
 adcUnitConversion.c:134:5:determineState	24	static
-adcUnitConversion.c:151:6:updateCounter	32	static
+adcUnitConversion.c:151:6:updateCounter	40	static

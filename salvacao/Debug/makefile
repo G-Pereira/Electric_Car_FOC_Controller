@@ -44,8 +44,8 @@ salvacao.bin \
 all: salvacao.elf secondary-outputs
 
 # Tool invocations
-salvacao.elf: $(OBJS) $(USER_OBJS) C:\Users\Catarina\Desktop\SEAI_Git\salvacao\STM32F405RGTX_FLASH.ld
-	arm-none-eabi-gcc -o "salvacao.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Catarina\Desktop\SEAI_Git\salvacao\STM32F405RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="salvacao.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+salvacao.elf: $(OBJS) $(USER_OBJS) C:\Users\Catarina\Desktop\SEAI\salvacao\STM32F405RGTX_FLASH.ld
+	arm-none-eabi-gcc -o "salvacao.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Catarina\Desktop\SEAI\salvacao\STM32F405RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="salvacao.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
