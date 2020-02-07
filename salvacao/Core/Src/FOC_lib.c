@@ -84,32 +84,34 @@ void foc_ic_config(SPI_HandleTypeDef *hspi){
 }
 
 
-void foc_ic_send_torque(SPI_HandleTypeDef *hspi, uint32_t torque){
+void foc_ic_send_torque(SPI_HandleTypeDef *hspi, int torque, float pos){
 
 
+	uint8_t data[4];
 
-	//TMC_write(hspi, TMC4671_UQ_UD_EXT, 0x0FA00000);
-	if (torque==0){
-		TMC_write(hspi, TMC4671_OPENLOOP_ACCELERATION, 0x0000000F);
+	if (pos!=-1){
+		torque_convertion(torque, &data, pos);
+	} else {
+		memset(data, 0, 4);
 	}
-	else TMC_write(hspi, TMC4671_OPENLOOP_ACCELERATION, 0x00000015);
-	TMC_write(hspi, TMC4671_OPENLOOP_VELOCITY_TARGET, torque);
 
-/*
-	data=torque_convertion(torque);
 	HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
-		HAL_SPI_Transmit(hspi, data, 2, 200);
+	HAL_SPI_Transmit(hspi, data, 2, 200);
 	HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 */
 
 }
 
-uint8_t *torque_convertion(int torque){
+void torque_convertion(int torque, uint8_t* torque_ref, float pos){
 
-	uint8_t torque_ref[4];
+	//uint8_t torque_ref[4];
+
+	int max_ref = 120;
+
+	uint32_t aux = (pos/100)*max_ref;
+	TMC_get_data(torque_ref, aux);
 
 
-	return torque_ref;//??
 }
 
 

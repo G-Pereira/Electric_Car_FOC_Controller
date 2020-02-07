@@ -200,9 +200,9 @@ void TMC_write(SPI_HandleTypeDef *hspi, uint8_t address, uint32_t data);
 
 void foc_ic_config(SPI_HandleTypeDef *hspi);
 
-void foc_ic_send_torque(SPI_HandleTypeDef *hspi, uint32_t torque);
+void foc_ic_send_torque(SPI_HandleTypeDef *hspi, int torque, float pos);
 
-uint8_t * torque_convertion(int torque);
+void torque_convertion(int torque, uint8_t* torque_ref, float pos);
 
 
 
