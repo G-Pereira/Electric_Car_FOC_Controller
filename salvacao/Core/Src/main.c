@@ -240,20 +240,6 @@ int main(void)
   HAL_GPIO_WritePin(Magnet_CS_GPIO_Port, Magnet_CS_Pin, SET);
   HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 
-  /*fresult = f_mount(&fs, "", 0 );
-  if(fresult == FR_OK){
-	  printf("Mount feito\n");
-  }
-
-  fresult = f_open(&fil, "agora17.txt", FA_CREATE_ALWAYS | FA_WRITE);
-  if(fresult != FR_OK){
-  	  printf("agora17.txt falhou\n");
-  }
-  fresult = f_printf(&fil, "kay\n");
-  if(fresult != FR_OK){
-	  Error_Handler();
-  }
-  f_close(&fil);*/
 
   foc_ic_config(&hspi2);
 
@@ -293,7 +279,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  if(brk_pedal > 50){
+	  printf("acc %f\n", acc_pedal);
+	  if(brk_pedal > 15){
 		  foc_ic_send_torque(&hspi2, 0, -1);
 	  }
 	  else{

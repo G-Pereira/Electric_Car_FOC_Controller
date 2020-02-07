@@ -202,9 +202,9 @@ void foc_ic_config(SPI_HandleTypeDef *hspi);
 
 void foc_ic_send_torque(SPI_HandleTypeDef *hspi, int torque, float pos);
 
-void torque_convertion(int torque, uint8_t* torque_ref, float pos);
+void torque_convertion(int torque, uint8_t* vel_ref, uint8_t* torque_ref, uint8_t* acc_ref, float pos);
 
-
+void torque_convertion_brake(uint8_t* acc_ref, float pos);
 
 
 
