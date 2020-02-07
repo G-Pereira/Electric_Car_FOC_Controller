@@ -38,7 +38,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FatFs/src/diskio.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/sd_diskio.h \
  ../Core/Inc/sd_wr.h ../Core/Inc/IMU_read.h ../Core/Inc/encoderMode.h \
- ../Core/Inc/adcUnitConversion.h
+ ../Core/Inc/adcUnitConversion.h ../Core/Inc/FOC_lib.h
 
 ../Core/Inc/main.h:
 
@@ -133,3 +133,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/encoderMode.h:
 
 ../Core/Inc/adcUnitConversion.h:
+
+../Core/Inc/FOC_lib.h:

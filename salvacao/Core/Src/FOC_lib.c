@@ -1,6 +1,7 @@
 /*includes*/
 #include "main.h"
 #include "FOC_lib.h"
+#include "stdio.h"
 
 // use TMC4671 API
 
@@ -14,15 +15,16 @@ void TMC_get_data(uint8_t *data, uint32_t w_data){
 
 }
 
-void TMC_write(SPI_HandleTypeDef *hspi, uint8_t address, uint8_t *data){
+void TMC_write(SPI_HandleTypeDef *hspi, uint8_t address, uint32_t data){
 	uint8_t send_data[5];
 
-	send_data[0]= (address | 0x80);
-	send_data[1]=data[0];
-	send_data[2]=data[1];
-	send_data[3]=data[2];
-	send_data[4]=data[3];
 
+	send_data[0]= (address | 0x80);
+	send_data[1]=(uint8_t)(data>>24);
+	send_data[2]=(uint8_t)(data>>16);
+	send_data[3]=(uint8_t)(data>>8);
+	send_data[4]=(uint8_t)(data | 0x00);
+	printf("%d - %d - %d - %d - %d" , send_data[0], send_data[1], send_data[2], send_data[3], send_data[4]);
 	HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
 	HAL_SPI_Transmit(hspi, send_data, 5, 200);
 	HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
@@ -55,12 +57,12 @@ void foc_ic_config(SPI_HandleTypeDef *hspi){
 
 			// Open loop settings
 	TMC_write(hspi, TMC4671_OPENLOOP_MODE, 0x00000000);
-	TMC_write(hspi, TMC4671_OPENLOOP_ACCELERATION, 0x0000003C);
-	TMC_write(hspi, TMC4671_OPENLOOP_VELOCITY_TARGET, 0xFFFFFFFB);
+	TMC_write(hspi, TMC4671_OPENLOOP_ACCELERATION, 0x00000005);
+	TMC_write(hspi, TMC4671_OPENLOOP_VELOCITY_TARGET, 0x00000000);//0xFFFFFFFB);
 
 			// Feedback selection
 	TMC_write(hspi, TMC4671_PHI_E_SELECTION, 0x00000002);
-	TMC_write(hspi, TMC4671_UQ_UD_EXT, 0x00000001);
+	TMC_write(hspi, TMC4671_UQ_UD_EXT, 0x17700000);
 
 			// ===== Open loop test drive =====
 
@@ -77,22 +79,28 @@ void foc_ic_config(SPI_HandleTypeDef *hspi){
 
 			// Stop
     TMC_write(hspi, TMC4671_OPENLOOP_VELOCITY_TARGET, 0x00000000);
-			HAL_Delay(200);
-	TMC_write(hspi, TMC4671_UQ_UD_EXT, 0x00000000);
+
 
 }
 
 
-void foc_ic_send_torque(SPI_HandleTypeDef *hspi, int torque){
+void foc_ic_send_torque(SPI_HandleTypeDef *hspi, uint32_t torque){
 
 
-	uint8_t* data;
 
+	//TMC_write(hspi, TMC4671_UQ_UD_EXT, 0x0FA00000);
+	if (torque==0){
+		TMC_write(hspi, TMC4671_OPENLOOP_ACCELERATION, 0x0000000F);
+	}
+	else TMC_write(hspi, TMC4671_OPENLOOP_ACCELERATION, 0x00000015);
+	TMC_write(hspi, TMC4671_OPENLOOP_VELOCITY_TARGET, torque);
+
+/*
 	data=torque_convertion(torque);
 	HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
 		HAL_SPI_Transmit(hspi, data, 2, 200);
 	HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-
+*/
 
 }
 

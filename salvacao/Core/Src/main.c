@@ -29,6 +29,7 @@
 #include "IMU_read.h"
 #include "encoderMode.h"
 #include "adcUnitConversion.h"
+#include "FOC_lib.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -253,6 +254,9 @@ int main(void)
 	  Error_Handler();
   }
   f_close(&fil);*/
+
+  foc_ic_config(&hspi2);
+
   fresult=mount_card(&fs);
 
   char str2[30];
@@ -288,6 +292,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  printf("acc %f\n", acc_pedal);
+
+	  if (acc_pedal>50){
+		  printf("ACELERA CARALHO");
+		  foc_ic_send_torque(&hspi2, 0x00000050);
+	  }
+	  if(brk_pedal>50){
+		  foc_ic_send_torque(&hspi2, 0);
+	  }
 
 	  uint32_t time1 = HAL_GetTick();
 
@@ -392,7 +406,7 @@ int main(void)
 	  HAL_SPI_Transmit(&hspi2, aux3, 1, 1000);
 	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-	  //printf("OPENLOOP VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
+	  printf("OPENLOOP VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
 
 	  aux3[0]=0x41;
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
@@ -476,7 +490,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
+  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_2);
 }
 
 /**
