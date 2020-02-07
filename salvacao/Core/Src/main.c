@@ -293,11 +293,11 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  if(acc_pedal > 50){
-		  foc_ic_send_torque(&hspi2, 30000, acc_pedal);
-	  }
 	  if(brk_pedal > 50){
 		  foc_ic_send_torque(&hspi2, 0, -1);
+	  }
+	  else{
+		  foc_ic_send_torque(&hspi2, 30000, acc_pedal);
 	  }
 
 

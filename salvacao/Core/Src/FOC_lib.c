@@ -8,9 +8,9 @@
 //tamanho dos datagramas do ic 5 bytes para escrever MSB é 1
 
 void TMC_get_data(uint8_t *data, uint32_t w_data){
-	data[0]=(uint8_t)(w_data>>3);
-	data[1]=(uint8_t)(w_data>>2);
-	data[2]=(uint8_t)(w_data>>1);
+	data[0]=(uint8_t)(w_data>>24);
+	data[1]=(uint8_t)(w_data>>16);
+	data[2]=(uint8_t)(w_data>>8);
 	data[3]=(uint8_t)(w_data);
 
 }
@@ -57,12 +57,12 @@ void foc_ic_config(SPI_HandleTypeDef *hspi){
 
 			// Open loop settings
 	TMC_write(hspi, TMC4671_OPENLOOP_MODE, 0x00000000);
-	TMC_write(hspi, TMC4671_OPENLOOP_ACCELERATION, 0x00000005);
+	TMC_write(hspi, TMC4671_OPENLOOP_ACCELERATION, 20);
 	TMC_write(hspi, TMC4671_OPENLOOP_VELOCITY_TARGET, 0x00000000);//0xFFFFFFFB);
 
 			// Feedback selection
 	TMC_write(hspi, TMC4671_PHI_E_SELECTION, 0x00000002);
-	TMC_write(hspi, TMC4671_UQ_UD_EXT, 0x17700000);
+	TMC_write(hspi, TMC4671_UQ_UD_EXT, 6000);
 
 			// ===== Open loop test drive =====
 
@@ -88,17 +88,21 @@ void foc_ic_send_torque(SPI_HandleTypeDef *hspi, int torque, float pos){
 
 
 	uint8_t data[4];
+	uint32_t aux;
 
 	if (pos!=-1){
-		torque_convertion(torque, &data, pos);
+		torque_convertion(torque, data, pos);
 	} else {
-		memset(data, 0, 4);
+		//memset(data, 0, 4);
+		data[0]=0;
+		data[1]=0;
+		data[2]=0;
+		data[3]=0;
 	}
 
-	HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
-	HAL_SPI_Transmit(hspi, data, 2, 200);
-	HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-*/
+	aux=(uint32_t)(data[0]<<24 | data[1]<<16 | data[2] << 8 | data[3]);
+	TMC_write(hspi, TMC4671_OPENLOOP_VELOCITY_TARGET, aux);
+
 
 }
 
