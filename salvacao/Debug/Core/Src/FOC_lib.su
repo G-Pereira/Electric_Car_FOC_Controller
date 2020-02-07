@@ -1,5 +1,5 @@
 FOC_lib.c:9:6:TMC_get_data	16	static
 FOC_lib.c:17:6:TMC_write	32	static
 FOC_lib.c:33:6:foc_ic_config	24	static
-FOC_lib.c:86:6:foc_ic_send_torque	24	static
-FOC_lib.c:99:10:torque_convertion	24	static
+FOC_lib.c:86:6:foc_ic_send_torque	32	static
+FOC_lib.c:104:6:torque_convertion	32	static

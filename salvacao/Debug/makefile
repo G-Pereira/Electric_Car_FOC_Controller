@@ -36,16 +36,13 @@ default.size.stdout \
 OBJDUMP_LIST += \
 salvacao.list \
 
-OBJCOPY_BIN += \
-salvacao.bin \
-
 
 # All Target
 all: salvacao.elf secondary-outputs
 
 # Tool invocations
-salvacao.elf: $(OBJS) $(USER_OBJS) C:\Users\Carlos\Desktop\SEAI\Electric_Car_FOC_Controller\salvacao\STM32F405RGTX_FLASH.ld
-	arm-none-eabi-gcc -o "salvacao.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Carlos\Desktop\SEAI\Electric_Car_FOC_Controller\salvacao\STM32F405RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="salvacao.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+salvacao.elf: $(OBJS) $(USER_OBJS) C:\Users\Catarina\Desktop\SEAI_Fim\salvacao\STM32F405RGTX_FLASH.ld
+	arm-none-eabi-gcc -o "salvacao.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Catarina\Desktop\SEAI_Fim\salvacao\STM32F405RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="salvacao.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -59,17 +56,12 @@ salvacao.list: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-salvacao.bin: $(EXECUTABLES)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "salvacao.bin"
-	@echo 'Finished building: $@'
-	@echo ' '
-
 # Other Targets
 clean:
 	-$(RM) *
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
 
 .PHONY: all clean dependents
 .SECONDARY:
