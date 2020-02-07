@@ -61,7 +61,6 @@ SPI_HandleTypeDef hspi2;
 
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim6;
-TIM_HandleTypeDef htim7;
 
 /* USER CODE BEGIN PV */
 
@@ -136,7 +135,6 @@ static void MX_ADC1_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM2_Init(void);
-static void MX_TIM7_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -168,7 +166,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		printf("kay\n");
 		speed = motorSpeed(&counter1, &tick, htim2);
 	}
-	if(htim->Instance == TIM7) {
+	/*if(htim->Instance == TIM7) {
 		//printf("hello7\n");
 		micro++;
 		if(micro >= 1000){
@@ -176,9 +174,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 			if(mili == 999){
 				mili = 0;
 				seg++;
-			} else mili++;
+			}
+			else mili++;
 		}
-	}
+	}*/
 
 
 
@@ -233,7 +232,6 @@ int main(void)
   MX_FATFS_Init();
   MX_TIM6_Init();
   MX_TIM2_Init();
-  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
   HAL_GPIO_WritePin(Accel_CS_GPIO_Port, Accel_CS_Pin, SET);
@@ -262,7 +260,7 @@ int main(void)
   IMU_config(&hspi2);
 
   HAL_TIM_Base_Start_IT(&htim6);
-  HAL_TIM_Base_Start_IT(&htim7);
+  //HAL_TIM_Base_Start_IT(&htim7);
 
   //Initialize encoder mode
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
@@ -280,6 +278,7 @@ int main(void)
     time2 = HAL_GetTick();
 	HAL_ADC_Start_DMA(&hadc1, buffer_dma, NR_ADC_CHANNELS);
 
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -292,7 +291,7 @@ int main(void)
 
 	  uint32_t time1 = HAL_GetTick();
 
-	  printf("Microssegundos = %lu\n", seg);
+	  //printf("Microssegundos = %lu\n", seg);
 	  uint32_t read=adc_dma[0];
 	  motor_temp = motorTemp(read);
 
@@ -375,7 +374,6 @@ int main(void)
 
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
 	  HAL_SPI_Transmit(&hspi2, aux2, 1, 1000);
-	  HAL_Delay(1);
 	  HAL_SPI_Receive(&hspi2, str, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 	  //printf("%d %d %d %d\n", str[0], str[1], str[2], str[3]);
@@ -385,7 +383,6 @@ int main(void)
 	  aux3[0]=0x6A;
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
 	  HAL_SPI_Transmit(&hspi2, aux3, 1, 1000);
-	  HAL_Delay(1);
 	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 	  //printf("PID VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
@@ -393,7 +390,6 @@ int main(void)
 	  aux3[0]=0x22;
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
 	  HAL_SPI_Transmit(&hspi2, aux3, 1, 1000);
-	  HAL_Delay(1);
 	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
 	  //printf("OPENLOOP VELOCITY ACTUAL: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
@@ -401,26 +397,25 @@ int main(void)
 	  aux3[0]=0x41;
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, RESET);
 	  HAL_SPI_Transmit(&hspi2, aux3, 1, 1000);
-	  HAL_Delay(1);
 	  HAL_SPI_Receive(&hspi2, str3, 4, 1000);
 	  HAL_GPIO_WritePin(SPI_CS_FOC_GPIO_Port, SPI_CS_FOC_Pin, SET);
-	  //printf("AENC DECODER COUNT: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);
+	  //printf("AENC DECODER COUNT: %d %d %d %d\n", str3[0], str3[1], str3[2], str3[3]);	   */
 
 	  sprintf(str2,"%f ", brk_pedal);
 	  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
-	  //update_file("brake.txt", str2, stamp, "", &fil2, &bw);
+	  update_file("brake.txt", str2, stamp, "", &fil2, &bw);
 	  stamp[0]='\0';
 
 	  sprintf(str2,"%f ", acc_pedal);
 	  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
-	  //update_file("throttle.txt", str2, stamp, "", &fil2, &bw);
+	  update_file("throttle.txt", str2, stamp, "", &fil2, &bw);
 	  stamp[0]='\0';
 
 	  IMU_acc_read(&hspi2, accel_data);
 	  for(int i=0; i<=2; i++){
 		  sprintf(str2, "accel[%d] - %d ", i, accel_data[i]);
 		  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
-		  //update_file("acc.txt", str2, stamp, "", &fil2, &bw);
+		  update_file("acc.txt", str2, stamp, "", &fil2, &bw);
 		  stamp[0]='\0';
 	  }
 
@@ -428,7 +423,7 @@ int main(void)
 	  for(int i=0; i<=2; i++){
 		  sprintf(str2, "gyro[%d] - %d ", i, gyro_data[i]);
 		  sprintf(stamp, "%lu:%lu",  __unix_sec,  __unix_ms);
-		  //update_file("gyro.txt", str2, stamp, "", &fil2, &bw);
+		  update_file("gyro.txt", str2, stamp, "", &fil2, &bw);
 		  stamp[0]='\0';
 	  }
 
@@ -481,7 +476,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_2);
+  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
 }
 
 /**
@@ -772,44 +767,6 @@ static void MX_TIM6_Init(void)
   /* USER CODE BEGIN TIM6_Init 2 */
 
   /* USER CODE END TIM6_Init 2 */
-
-}
-
-/**
-  * @brief TIM7 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM7_Init(void)
-{
-
-  /* USER CODE BEGIN TIM7_Init 0 */
-
-  /* USER CODE END TIM7_Init 0 */
-
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM7_Init 1 */
-
-  /* USER CODE END TIM7_Init 1 */
-  htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 42;
-  htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 2;
-  htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim7, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM7_Init 2 */
-
-  /* USER CODE END TIM7_Init 2 */
 
 }
 
